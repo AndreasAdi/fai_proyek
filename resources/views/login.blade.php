@@ -13,8 +13,8 @@
     <form action="{{url("/ceklogin")}}" method="POST">
             @csrf
             <div class="form-group">
-              <label>username</label>
-              <input name="username" class="form-control">
+              <label>email</label>
+              <input name="email" class="form-control">
             </div>
             <div class="form-group">
               <label>Password</label>

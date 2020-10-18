@@ -22,9 +22,13 @@
             </div>
             @endif
             <div class="form-group">
-              <label>Username</label>
-              <input name="username" class="form-control">
+              <label>Nama</label>
+              <input name="nama_user" class="form-control">
             </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control">
+              </div>
             <div class="Confirm Password">
                 <label>Password</label>
                 <input name="password" type="password" class="form-control">
@@ -33,11 +37,6 @@
               <label>Confirm Password</label>
               <input name="kpassword" type="password" class="form-control">
             </div>
-
-            <div class="form-group">
-                <label>Profile Pic</label>
-                <input name="profile" placeholder="url gambar" class="form-control">
-              </div>
 
             <button type="submit" class="btn btn-block btn-primary">Register</button>
 

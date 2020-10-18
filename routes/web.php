@@ -14,5 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('home');
+    return view('login');
 });
+
+Route::get('/home','user@home');
+Route::view('/register', 'register');
+Route::post('/cekregister', 'user@register');
+Route::post('/ceklogin', 'user@login');
