@@ -81,7 +81,9 @@
                                                     <li><a href="checkout.html">Product Checkout</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="contact.html">Contact</a></li>
+                                            <li><a href="{{url('/regisMerchant')}}">Register As A Merchant</a></li>
+                                            <li><a href="{{url('/addItem')}}">Add An Item</a></li>
+                                            <li><a href="Catagori.html">Categori</a></li>
                                         </ul>
                                     </nav>
                                 </div>

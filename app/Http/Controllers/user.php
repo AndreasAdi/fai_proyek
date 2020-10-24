@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\merchant as AppMerchant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use App\Models\merchant;
+use App\Models\users;
 
 class user extends Controller
 {
@@ -32,15 +35,14 @@ class user extends Controller
         $email = $validateData["email"];
         $password = $validateData["password"];
 
-        $data = DB::table('users')->where('email',$email)->count();
+        $data = users::where('email',$email)->count();
         if($data<=0){
-            DB::table('users')->insertGetId(
-                [
-                    'nama_user'=> $nama,
-                    'email'=> $email,
-                    'password'=>$password,
-                ]
-            );
+            $insertNewUsers= new users;
+            $insertNewUsers->email= $email;
+            $insertNewUsers->password=$password;
+            $insertNewUsers->nama_user=$nama;
+            $insertNewUsers->saldo=0;
+            $insertNewUsers->save();
             $success = true;
         }
         else{
@@ -60,18 +62,41 @@ class user extends Controller
             if($req->remember==true){
                 Session::put("remember",$email);
             }
+            $dataUser = DB::table('users')->where('email',$email)->where('password',$password)->get();
+            $dataUser=json_decode(json_encode($dataUser),true);
+            Session::put("userId",$dataUser[0]['id']);
             return redirect('home');
-
         }
         else{
             return redirect('/');
         }
-
-
     }
 
     public function home(){
         return view("home");
+    }
+
+    public function regisMerchant(){
+        return view('registerMerchant');
+    }
+
+    public function prosesRegisterMerchant(Request $request){
+        $cekMerchant=merchant::where('id_user',$request->session()->get('userId'))->count();
+        if($cekMerchant>0){
+            return redirect()->back()->with('error','Akun anda sudah terdaftar sebagai merchant');
+        }else{
+            $insertNewMerchant= new merchant;
+            $insertNewMerchant->id_user=$request->session()->get('userId');
+            $insertNewMerchant->nama_merchant=$request->regMerchant_nama;
+            $insertNewMerchant->alamat_merchant=$request->regMerchant_alamat;
+            $insertNewMerchant->rating_merchant='0';
+            $insertNewMerchant->save();
+            if($insertNewMerchant){
+                return redirect()->back()->with('success','Berhasil Mendaftarkan Account Sebagai Merchant');
+            }else{
+                return redirect()->back()->with('error','Gagal Mendaftarkan Account Sebagai Merchant');
+            }
+        }
     }
 }
 
