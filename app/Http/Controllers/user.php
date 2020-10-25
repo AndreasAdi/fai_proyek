@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Models\merchant;
 use App\Models\users;
+use App\Models\barang;
 
 class user extends Controller
 {
@@ -68,16 +69,24 @@ class user extends Controller
             return redirect('home');
         }
         else{
-            return redirect('/');
+            return redirect()->back()->with('error','User Tidak Ditemukan, Cek Kembali Email dan Password Anda');
         }
     }
 
     public function home(){
-        return view("home2");
+        $dataBarang=barang::all();
+        return view("home2",['dataBarang'=>$dataBarang]);
     }
 
     public function regisMerchant(){
         return view('registerMerchant');
+    }
+
+    public function prosesLogout(){
+        Session::forget('userId');
+        Session::forget('remember');
+        Session::forget('active');
+        return redirect('/');
     }
 
     public function prosesRegisterMerchant(Request $request){

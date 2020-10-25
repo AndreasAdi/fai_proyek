@@ -10,6 +10,7 @@
 <body style ="background-color: #f0f2f5">
     <div class="col-4 border rounded mx-auto p-5 bg-white mt-5 " >
         <h1>Login</h1>
+        @include('alert')
     <form action="{{url("/ceklogin")}}" method="POST">
             @csrf
             <div class="form-group">

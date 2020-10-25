@@ -16,12 +16,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('login');
 });
+Route::view('/regisMerchant','registerMerchant');
+Route::view('/register', 'register');
 
 Route::get('/home','user@home');
-Route::view('/register', 'register');
 Route::post('/cekregister', 'user@register');
 Route::post('/ceklogin', 'user@login');
-Route::view('/regisMerchant','registerMerchant');
 Route::post('/prosesRegisterMerchant', 'user@prosesRegisterMerchant');
+Route::get('/prosesLogout','user@prosesLogout');
+
 Route::get('/addItem',"barangController@loadPageTambahBarang");
 Route::post('/prosesTambahBarang', "barangController@prosesTambahBarang");

@@ -22,7 +22,8 @@ class barangController extends Controller
             "namaBarang"=>'required',
             "hargaBarang"=>'required|integer',
             'stokBarang'=>'required|integer',
-            'hargaSale'=>'integer'
+            'hargaSale'=>'integer',
+            'deskripsiBarang'=>'required|max:2000'
         ]);
         $idMerchant=merchant::where('id_user',$request->session()->get('userId'))->first();
         $insertNewItem= new barang;
@@ -31,11 +32,12 @@ class barangController extends Controller
         $insertNewItem->nama_barang=$inputBarang['namaBarang'];
         $insertNewItem->harga=$inputBarang['hargaBarang'];
         $insertNewItem->stok=$inputBarang['stokBarang'];
+        $insertNewItem->deskripsi_barang=$inputBarang['deskripsiBarang'];
         $insertNewItem->harga_sale=$inputBarang['hargaSale'];
-        $insertNewItem->status_barang="aktif";
+        $insertNewItem->status_barang="no-sale";
         $insertNewItem->save();
         if($insertNewItem){
-            $nama = $insertNewItem->id.".".$request->file("gambar")->getClientOriginalExtension();
+            $nama = $insertNewItem->id_barang.".".$request->file("gambar")->getClientOriginalExtension();
             $request->file("gambar")->storeAs("images", $nama, "public");
             $insertNewItem->gambar_barang = $nama;
             $insertNewItem->save();

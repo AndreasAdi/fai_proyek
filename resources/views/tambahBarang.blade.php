@@ -10,7 +10,10 @@ Tambah Barang
     <form action="{{url('/prosesTambahBarang')}}" method="POST" enctype="multipart/form-data">
         @method('POST')
         @csrf
-
+        <div class="mb-3">
+            <label class="form-label">Gambar</label>
+            <input class="form-control" type="file" name="gambar" class="form-control">
+          </div>
         <div class="mb-3">
             <label class="form-label">Nama Barang</label>
             <input class="form-control" type="text"  name="namaBarang" id="">
@@ -23,8 +26,7 @@ Tambah Barang
 
         <div class="mb-3">
             <label class="form-label">Stok</label>
-        <input class="form-control" type="text" name='stokBarang'>
-
+            <input class="form-control" type="text" name='stokBarang'>
         </div>
 
         <div class="mb-3">
@@ -41,12 +43,10 @@ Tambah Barang
                 @endforeach
             </select>
         </div>
-
-        <div class="mb-3">
-            <label class="form-label">Gambar</label>
-            <input class="form-control" type="file" name="gambar" class="form-control">
-          </div>
-
+          <div class="mb-3">
+            <label class="form-label">Deskripsi Barang</label>
+            <textarea class="form-control" name="deskripsiBarang" rows="5"></textarea>
+        </div>
         <button class="btn btn-success float-right" type="submit">Tambahkan Barang</button>
     </form>
 
