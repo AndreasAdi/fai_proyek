@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\merchant;
 use App\Models\users;
 use App\Models\barang;
+use Illuminate\Support\Facades\Hash;
 
 class user extends Controller
 {
@@ -40,36 +41,44 @@ class user extends Controller
         if($data<=0){
             $insertNewUsers= new users;
             $insertNewUsers->email= $email;
-            $insertNewUsers->password=$password;
+            $insertNewUsers->password=password_hash($password, \PASSWORD_DEFAULT);;
             $insertNewUsers->nama_user=$nama;
             $insertNewUsers->saldo=0;
             $insertNewUsers->save();
-            $success = true;
+
+            if($insertNewUsers){
+                return redirect('/home');
+            }else{
+                return redirect()->back()->with('error','Gagal Mendaftar, Silahkan Cek Kembali Form Pendaftaran');
+            }
         }
         else{
-            $success =false;
+            return redirect()->back()->with('error','Email Sudah Terdaftar, Silahkan Gunakan Email Lainnya');
         }
 
-        return(view("login"));
+
     }
     public function login(Request $req)
     {
         $email = $req->email;
         $password = $req->password;
-        $data = DB::table('users')->where('email',$email)->where('password',$password)->count();
-
+        $data = DB::table('users')->where('email',$email)->count();
         if($data>0){
-            Session::put("active",$email);
-            if($req->remember==true){
-                Session::put("remember",$email);
-            }
-            $dataUser = DB::table('users')->where('email',$email)->where('password',$password)->get();
+            $dataUser = DB::table('users')->where('email',$email)->get();
             $dataUser=json_decode(json_encode($dataUser),true);
-            Session::put("userId",$dataUser[0]['id']);
-            return redirect('home');
+            if(Hash::check($password, $dataUser[0]['password'])){
+                Session::put("active",$email);
+                if($req->remember==true){
+                    Session::put("remember",$email);
+                }
+                Session::put("userId",$dataUser[0]['id']);
+                return redirect('home');
+            }else{
+                return redirect()->back()->with('error','Email Atau Password Salah, Silahkan Cek Kembali Email dan Password Anda');
+            }
         }
         else{
-            return redirect()->back()->with('error','User Tidak Ditemukan, Cek Kembali Email dan Password Anda');
+            return redirect()->back()->with('error','User Tidak Ditemukan, Silahkan Cek Kembali Email dan Password Anda');
         }
     }
 
