@@ -35,7 +35,7 @@ class barangController extends Controller
         $insertNewItem->status_barang="aktif";
         $insertNewItem->save();
         if($insertNewItem){
-            $nama = $insertNewItem->nama_barang.".".$request->file("gambar")->getClientOriginalExtension();
+            $nama = $insertNewItem->id.".".$request->file("gambar")->getClientOriginalExtension();
             $request->file("gambar")->storeAs("images", $nama, "public");
             $insertNewItem->gambar_barang = $nama;
             $insertNewItem->save();
