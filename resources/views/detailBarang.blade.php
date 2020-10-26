@@ -5,7 +5,7 @@
 
     <div class="d-flex flex-row ">
 
-        <div class="mr-5" style="height: 400px;width:400px;"">
+        <div class="mr-5" style="height: 400px;width:400px;">
             <img style="height: 400px;width:400px; object-fit: contain;" src="{{asset("/storage/images/".$barang->gambar_barang)}}" alt="">
         </div>
 

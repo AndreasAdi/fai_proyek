@@ -8,7 +8,7 @@
 </head>
 <body>
     @include('alert')
-    <form action="{{url('/prosesRegisterMerchant')}}" method="POST">
+    <form action="{{url('user/prosesRegisterMerchant')}}" method="POST">
         @method('POST')
         @csrf
         Nama Toko: <input type="text" name="regMerchant_nama" id="">

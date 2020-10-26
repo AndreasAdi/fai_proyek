@@ -9,12 +9,39 @@ use Illuminate\Support\Facades\Session;
 use App\Models\merchant;
 use App\Models\users;
 use App\Models\barang;
+use App\Models\kodeverifikasi;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class user extends Controller
 {
     public function register(Request $req){
+        $kode=$req->validate([
+            'verCode'=>'required|size:10'
+        ]);
+        $selectKode=kodeverifikasi::where('kode',$kode['verCode'])->where('status','true')->count();
+        if($selectKode>0){
+            $dataUser=json_decode(json_encode(Session::get('dataUser')),true);
+            $insertNewUsers= new users;
+            $insertNewUsers->email= $dataUser['email'];
+            $insertNewUsers->password=$dataUser['password'];
+            $insertNewUsers->nama_user=$dataUser['nama_user'];
+            $insertNewUsers->saldo=0;
+            $insertNewUsers->save();
+            $updateKode=kodeverifikasi::where('kode',Session::get('verificationCode'))->where('status','true')->first();
+            $updateKode->status='false';
+            $updateKode->save();
+            if($insertNewUsers){
+                return redirect("/")->with('success','Berhasil Mendaftar');
+            }else{
+                return redirect()->back()->with('error','Gagal Mendaftar, Silahkan Cek Kembali Ke-Form Pendaftaran');
+            }
+        }else{
+            return redirect()->back()->with('error','Kode Verifikasi Salah, Silahkan Cek Kembali Kode Verifikasi anda');
+        }
+    }
 
+    public function sendEmail(Request $req){
         $validateData = $req->validate(
             [
                 'email' => 'required|email|unique:users,email',
@@ -32,25 +59,32 @@ class user extends Controller
                 "password.regex"=>"Password minimal 5 character dan mengandung minimal 1 angka"
             ]
         );
-
         $nama = $validateData["nama_user"];
         $email = $validateData["email"];
-        $password = $validateData["password"];
-
+        $kodeVerifikasi="";
         $data = users::where('email',$email)->count();
         if($data<=0){
-            $insertNewUsers= new users;
-            $insertNewUsers->email= $email;
-            $insertNewUsers->password=password_hash($password, \PASSWORD_DEFAULT);;
-            $insertNewUsers->nama_user=$nama;
-            $insertNewUsers->saldo=0;
-            $insertNewUsers->save();
-
-            if($insertNewUsers){
-                return redirect("/")->with('success','Berhasil Mendaftar');
-            }else{
-                return redirect()->back()->with('error','Gagal Mendaftar, Silahkan Cek Kembali Form Pendaftaran');
+            for($i=0;$i<10;$i++){
+                $kodeVerifikasi.=strval(rand(0,9));
             }
+            $verif= new kodeverifikasi;
+            $verif->kode=$kodeVerifikasi;
+            $verif->status="true";
+            $verif->save();
+            Session::put('verificationCode',$kodeVerifikasi);
+            $verifycode=array('kodeVerifikasi'=>$kodeVerifikasi);
+            Mail::send('Mail.mailTemplate', $verifycode, function ($message) use($email,$nama){
+                $message->from('estoreproject2020@gmail.com', 'E-Store');
+                $message->to($email, "Hi,$nama");
+                $message->subject('Account Verification Code');
+            });
+            $dataUser=array(
+                'email'=>$req->email,
+                'password'=>password_hash($req->password, \PASSWORD_DEFAULT),
+                'nama_user'=>$req->nama_user
+            );
+            Session::put('dataUser',$dataUser);
+            return redirect('user/verifikasi')->with('success','Kode Verifikasi Telah Dikirim Ke E-mail Anda,Silahkan Masukan Kode Verifikasi');
         }
         else{
             return redirect()->back()->with('error','Email Sudah Terdaftar, Silahkan Gunakan Email Lainnya');
@@ -68,11 +102,17 @@ class user extends Controller
             $dataUser=json_decode(json_encode($dataUser),true);
             if(Hash::check($password, $dataUser[0]['password'])){
                 Session::put("active",$email);
+                $cekAccMerchant=merchant::where("id_user",$dataUser[0]["id"])->count();
+                if($cekAccMerchant>0){
+                    Session::put("isMerchant",true);
+                }else{
+                    Session::put("isMerchant",false);
+                }
                 if($req->remember==true){
                     Session::put("remember",$email);
                 }
                 Session::put("userId",$dataUser[0]['id']);
-                return redirect('home');
+                return redirect('user/home');
             }else{
                 return redirect()->back()->with('error','Email Atau Password Salah, Silahkan Cek Kembali Email dan Password Anda');
             }
@@ -82,8 +122,13 @@ class user extends Controller
         }
     }
 
-    public function home(){
-        $dataBarang=barang::paginate(6);
+    public function home(Request $req){
+        if($req->session()->get('isMerchant')===false){
+            $dataBarang=barang::paginate(6);
+        }else{
+            $dataMechant=merchant::where("id_user","!=",$req->session()->get("userId"))->first();
+            $dataBarang=barang::where("id_merchant",$dataMechant->id_merchant)->paginate(6);
+        }
         return view("home2",['dataBarang'=>$dataBarang]);
     }
 

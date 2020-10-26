@@ -10,7 +10,7 @@
 <body style ="background-color: #f0f2f5">
     <div class="col-4 border rounded mx-auto p-5 bg-white mt-5 " >
         <h1>Register</h1>
-    <form action="{{url("/cekregister")}}" method="POST">
+    <form action="{{url("user/cekregister")}}" method="POST">
             @csrf
             @if ($errors->any())
             <div class="alert alert-danger">
@@ -37,9 +37,7 @@
               <label>Confirm Password</label>
               <input name="kpassword" type="password" class="form-control">
             </div>
-
             <button type="submit" class="btn btn-block btn-primary">Register</button>
-
           </form>
     </div>
 

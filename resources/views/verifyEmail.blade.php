@@ -4,30 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login</title>
+    <title>Register</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
 <body style ="background-color: #f0f2f5">
     <div class="col-4 border rounded mx-auto p-5 bg-white mt-5 " >
-        <h1>Login</h1>
-        @include('alert')
-    <form action="{{url("user/ceklogin")}}" method="POST">
+        <h1>Register</h1>
+    <form action="{{url("user/prosesRegister")}}" method="POST">
             @csrf
-            <div class="form-group">
-              <label>email</label>
-              <input name="email" class="form-control">
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
+            @endif
             <div class="form-group">
-              <label>Password</label>
-              <input name="password" type="password" class="form-control">
-            </div>
-            <div class="form-group">
-
-                <input name="remember" type="checkbox">
-                <label>Remember me </label>
+                <label>Kode Verifikasi</label>
+                <input name="verCode" type="text" class="form-control">
               </div>
-            <button type="submit" class="btn btn-block btn-primary">Login</button>
-            <a href="{{url('user/register')}}" class="text-primary mt-5">Create Account</a>
+            <button type="submit" class="btn btn-block btn-primary">Verify</button>
           </form>
     </div>
 
