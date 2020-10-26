@@ -16,15 +16,23 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('login');
 });
-Route::view('/regisMerchant','registerMerchant');
-Route::view('/register', 'register');
 
-Route::get('/home','user@home');
-Route::post('/cekregister', 'user@register');
-Route::post('/ceklogin', 'user@login');
-Route::post('/prosesRegisterMerchant', 'user@prosesRegisterMerchant');
-Route::get('/prosesLogout','user@prosesLogout');
+Route::prefix('user')->group(function(){
+    Route::view('/register', 'register');
+    Route::get('/home','user@home');
+    Route::post('/cekregister', 'user@sendEmail');
+    Route::view('/verifikasi', 'verifyEmail');
+    Route::post('/prosesRegister', 'user@register');
+    Route::post('/ceklogin', 'user@login');
+    Route::view('/regisMerchant','registerMerchant');
+    Route::post('/prosesRegisterMerchant', 'user@prosesRegisterMerchant');
+    Route::get('/prosesLogout','user@prosesLogout');
+});
 
-Route::get('/addItem',"barangController@loadPageTambahBarang");
-Route::post('/prosesTambahBarang', "barangController@prosesTambahBarang");
-Route::get('/detailBarang/{id}','barangController@detail');
+
+Route::prefix('barang')->group(function(){
+    Route::get('/addItem',"barangController@loadPageTambahBarang");
+    Route::post('/prosesTambahBarang', "barangController@prosesTambahBarang");
+    Route::get('/detailBarang/{id}','barangController@detail');
+    Route::post('/searchBarang','barangController@searchBarang');
+});

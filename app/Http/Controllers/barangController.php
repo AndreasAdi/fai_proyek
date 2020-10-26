@@ -48,18 +48,21 @@ class barangController extends Controller
         }else{
             return redirect()->back()->with('error','Gagal Menambah Barang');
         }
-
-
-
-
     }
 
     public function detail ($id){
         $barang = DB::table('barang')->where("id_barang",$id)
         ->Join('merchant', 'barang.id_merchant', '=', 'merchant.id_merchant')->first();
-
-
-
         return view("detailBarang",["barang" =>$barang]);
+    }
+
+    public function searchBarang(Request $request){
+        $dataSearch=barang::query()->
+        where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")
+        ->paginate(6);
+        //dd($dataSearch);
+        return view('searchBarang',[
+            'dataBarang'=>$dataSearch
+        ]);
     }
 }
