@@ -87,6 +87,7 @@ class user extends Controller
         return view("home2",['dataBarang'=>$dataBarang]);
     }
 
+
     public function regisMerchant(){
         return view('registerMerchant');
     }

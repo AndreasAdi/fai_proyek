@@ -18,22 +18,15 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
+
+
                 <li>
                     <a class="nav-link" href="{{url('/regisMerchant')}}">Register As A Merchant</a>
                 </li>
                 <li>{{-- nanti di hide kalau loginnya bukan akun merchant--}}
                     <a class="nav-link" href="{{url('/addItem')}}">Add An Item</a>
                 </li>
-                <li> <a href="{{url('/cart')}}" class="btn btn-success mr-3">Cart</a></li>
+                <li> <a href="{{url('/cart')}}" class="nav-link">Cart</a></li>
             </ul>
           </div>
           <div class="form-inline my-2 my-lg-0">

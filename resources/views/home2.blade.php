@@ -11,13 +11,13 @@ home
         <button class="btn btn-success" type="submit">Cari</button>
       </form>
       <h2>Featured Item</h2>
-      <div class='d-flex flex-row'>
+      <div class='d-flex  flex-wrap'>
         @foreach ($dataBarang as $item)
             <div class="card m-3" style="width: 18rem;">
-            <img src="{{asset("/storage/images/".$item->gambar_barang)}}" class="card-img-top" alt="...">
+            <img style="height: 200px;object-fit: scale-down;"  src="{{asset("/storage/images/".$item->gambar_barang)}}" class="card-img-top" alt="...">
                 <div class="card-body">
-                <p class="card-text">{{$item->nama_barang}}</p>
-                <p class="card-text">Rp. {{number_format($item->harga),2,",","."}}</p>
+                <p class="card-text text-truncate">{{$item->nama_barang}}</p>
+                <p class="card-text"><b>Rp. {{number_format($item->harga),2,",","."}}</b></p>
                 <a href="{{url("/detailBarang/$item->id_barang")}}" class="btn btn-block btn-success">Lihat Barang</a>
                 </div>
             </div>

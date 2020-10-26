@@ -6,6 +6,9 @@ use App\Models\barang;
 use App\Models\kategoribarang;
 use App\Models\merchant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
 
 class barangController extends Controller
 {
@@ -49,5 +52,14 @@ class barangController extends Controller
 
 
 
+    }
+
+    public function detail ($id){
+        $barang = DB::table('barang')->where("id_barang",$id)
+        ->Join('merchant', 'barang.id_merchant', '=', 'merchant.id_merchant')->first();
+
+
+
+        return view("detailBarang",["barang" =>$barang]);
     }
 }
