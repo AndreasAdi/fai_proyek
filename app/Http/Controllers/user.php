@@ -55,8 +55,6 @@ class user extends Controller
         else{
             return redirect()->back()->with('error','Email Sudah Terdaftar, Silahkan Gunakan Email Lainnya');
         }
-
-
     }
     public function login(Request $req)
     {
