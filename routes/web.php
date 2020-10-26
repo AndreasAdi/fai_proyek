@@ -27,3 +27,4 @@ Route::get('/prosesLogout','user@prosesLogout');
 
 Route::get('/addItem',"barangController@loadPageTambahBarang");
 Route::post('/prosesTambahBarang', "barangController@prosesTambahBarang");
+Route::get('/detailBarang/{id}','barangController@detail');
