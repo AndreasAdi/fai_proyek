@@ -5,7 +5,10 @@
 
     <div class="d-flex flex-row ">
 
-        <img class="img-fluid mr-5" style="height: 400px; object-fit: contain;" src="{{asset("/storage/images/".$barang->gambar_barang)}}" alt="">
+        <div class="mr-5" style="height: 400px;width:400px;"">
+            <img style="height: 400px;width:400px; object-fit: contain;" src="{{asset("/storage/images/".$barang->gambar_barang)}}" alt="">
+        </div>
+
 
         <div class="m-3">
         <h3>{{$barang->nama_barang}}</h3>
