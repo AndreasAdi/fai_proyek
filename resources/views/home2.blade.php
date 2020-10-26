@@ -11,7 +11,7 @@ home
         <button class="btn btn-success" type="submit">Cari</button>
       </form>
       <h2>Featured Item</h2>
-      <div class='d-flex  flex-wrap'>
+      <div class='d-flex justify-content-center  flex-wrap'>
         @foreach ($dataBarang as $item)
             <div class="card m-3" style="width: 18rem;">
             <img style="height: 200px;object-fit: scale-down;"  src="{{asset("/storage/images/".$item->gambar_barang)}}" class="card-img-top" alt="...">
@@ -23,5 +23,10 @@ home
             </div>
         @endforeach
     </div>
+<div class="d-flex justify-content-center">
+    {{$dataBarang->links()}}
 </div>
+
+</div>
+
 @endsection

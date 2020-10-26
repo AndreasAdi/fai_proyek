@@ -45,11 +45,24 @@ Tambah Barang
         </div>
           <div class="mb-3">
             <label class="form-label">Deskripsi Barang</label>
-            <textarea class="form-control" name="deskripsiBarang" rows="5"></textarea>
+            <textarea class="form-control" name="deskripsiBarang" id="deskripsiBarang" rows="5"></textarea>
         </div>
         <button class="btn btn-success float-right" type="submit">Tambahkan Barang</button>
     </form>
 
 </div>
+    @section('script')
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
+    <script>
+    ClassicEditor
+    .create( document.querySelector( '#deskripsiBarang' ) )
+    .then( editor => {
+        console.log( editor );
+    } )
+    .catch( error => {
+        console.error( error );
+    } );
+    </script>
+    @endsection
 @endsection
 

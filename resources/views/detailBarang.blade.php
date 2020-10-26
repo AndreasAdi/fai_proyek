@@ -12,8 +12,11 @@
         <hr>
         <h4>Rp. {{number_format($barang->harga),2,",","."}}</h4>
         <hr>
-        <p>{{$barang->deskripsi_barang}}</p>
+        <h4>Stock : {{$barang->stok}}</h4>
+        <hr>
         <button class="btn btn-success">Add To Cart</button>
+        <p>{!!$barang->deskripsi_barang!!}</p>
+
         </div>
 
     </div>

@@ -47,7 +47,7 @@ class user extends Controller
             $insertNewUsers->save();
 
             if($insertNewUsers){
-                return redirect('/home');
+                return redirect("/")->with('success','Berhasil Mendaftar');
             }else{
                 return redirect()->back()->with('error','Gagal Mendaftar, Silahkan Cek Kembali Form Pendaftaran');
             }
@@ -83,7 +83,7 @@ class user extends Controller
     }
 
     public function home(){
-        $dataBarang=barang::all();
+        $dataBarang=barang::paginate(6);
         return view("home2",['dataBarang'=>$dataBarang]);
     }
 
