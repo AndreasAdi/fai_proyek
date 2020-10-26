@@ -24,6 +24,11 @@ home
     background-color: #198754; //your color
     border-color: #198754; //your color
 }
+.page-link:hover{
+    z-index: 1;
+    color: #198754;
+    border-color: #198754; //your color
+}
 
 @endsection
 @section('isi')
