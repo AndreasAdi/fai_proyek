@@ -69,39 +69,49 @@ class barangController extends Controller
 
     public function AddToCart(Request $request){
         $userLogin=Session::get("userId");
-        if(!Session::has("cart_$userLogin")){
-            $cart=array(
-                "0"=>[
-                    "idBarang"=>$request->idBarang,
-                    "idMerchant"=>$request->idMerchant,
-                    "jumlah"=>$request->jumlah,
-                    "namaBarang"=>$request->nama,
-                    "harga"=>$request->harga
-            ]);
-            Session::put("cart_$userLogin",$cart);
-        }else{
-            $existingCart=Session::get("cart_$userLogin");
-            $existingCart=json_decode(json_encode($existingCart),true);
-            $itemKembar=false;
-            foreach($existingCart as $key =>$item){
-                if($item['idBarang']==$request->idBarang){
-                    $existingCart[$key]['jumlah']=$item['jumlah']+$request->jumlah;
-                    $itemKembar=true;
-                }
-            }
-            if(!$itemKembar){
+        if($request->jumlah<=$request->stok){
+            if(!Session::has("cart_$userLogin")){
                 $cart=array(
-                    "idBarang"=>$request->idBarang,
-                    "idMerchant"=>$request->idMerchant,
-                    "jumlah"=>$request->jumlah,
-                    "namaBarang"=>$request->nama,
-                    "harga"=>$request->harga
-                );
-                $existingCart[]=$cart;
+                    "0"=>[
+                        "idBarang"=>$request->idBarang,
+                        "idMerchant"=>$request->idMerchant,
+                        "jumlah"=>$request->jumlah,
+                        "namaBarang"=>$request->nama,
+                        "harga"=>$request->harga
+                ]);
+                Session::put("cart_$userLogin",$cart);
+            }else{
+                $existingCart=Session::get("cart_$userLogin");
+                $existingCart=json_decode(json_encode($existingCart),true);
+                $itemKembar=false;
+                foreach($existingCart as $key =>$item){
+                    if($item['idBarang']==$request->idBarang){
+                        if($item['jumlah']+$request->jumlah<=$request->stok){
+                            $existingCart[$key]['jumlah']=$item['jumlah']+$request->jumlah;
+                            $itemKembar=true;
+                        }else{
+                            return redirect("barang/detailBarang/$request->idBarang")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+                        }
+                    }
+                }
+                if(!$itemKembar){
+                    $cart=array(
+                        "idBarang"=>$request->idBarang,
+                        "idMerchant"=>$request->idMerchant,
+                        "jumlah"=>$request->jumlah,
+                        "namaBarang"=>$request->nama,
+                        "harga"=>$request->harga
+                    );
+                    $existingCart[]=$cart;
+                }
+                Session::put("cart_$userLogin",$existingCart);
             }
-            Session::put("cart_$userLogin",$existingCart);
+            return redirect("barang/detailBarang/$request->idBarang")->with('success','Berhasil Menambahkan Barang Kedalam Cart');
+        }else{
+            return redirect("barang/detailBarang/$request->idBarang")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
         }
-        return redirect("barang/detailBarang/$request->idBarang")->with('success','Berhasil Menambahkan Barang Kedalam Cart');
+
+
     }
     public function loadCart(Request $request){
         $userLogin=Session::get("userId");

@@ -53,11 +53,11 @@
                     <h2>Tidak Ada Barang Dalam Cart</h2>
                 @endif
             </tbody>
-        </table>
-        <form action="{{url('user/checkOut')}}">
-            <button class="btn btn-success" type="submit">Check Out</button>
-        </form>
+        </table><br>
     </div>
+    <form action="{{url('user/checkOut')}}">
+        <button class="btn btn-success" type="submit">Check Out</button>
+    </form>
 </div>
 
 @endsection

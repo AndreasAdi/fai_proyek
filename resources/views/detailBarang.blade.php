@@ -16,6 +16,7 @@
                 <input type="hidden" name="idMerchant" value="{{$barang->id_merchant}}">
                 <input type="hidden" name='nama' value="{{$barang->nama_barang}}">
                 <input type="hidden" value="{{$barang->harga}}" name='harga'>
+                <input type="hidden" value="{{$barang->stok}}" name='stok'>
                 <h3>{{$barang->nama_barang}}</h3>
                 <hr>
                     <h4>Rp. {{number_format($barang->harga),2,",","."}}</h4>
