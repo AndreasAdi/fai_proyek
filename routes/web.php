@@ -35,4 +35,6 @@ Route::prefix('barang')->group(function(){
     Route::post('/prosesTambahBarang', "barangController@prosesTambahBarang");
     Route::get('/detailBarang/{id}','barangController@detail');
     Route::post('/searchBarang','barangController@searchBarang');
+    Route::get('/cart',"barangController@loadCart");
+    Route::post('/addToCart',"barangController@AddToCart");
 });

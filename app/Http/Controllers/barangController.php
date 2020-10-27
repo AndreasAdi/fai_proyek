@@ -7,6 +7,7 @@ use App\Models\kategoribarang;
 use App\Models\merchant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 
@@ -63,6 +64,51 @@ class barangController extends Controller
         //dd($dataSearch);
         return view('searchBarang',[
             'dataBarang'=>$dataSearch
+        ]);
+    }
+
+    public function AddToCart(Request $request){
+        $userLogin=Session::get("userId");
+        if(!Session::has("cart_$userLogin")){
+            $cart=array(
+                "0"=>[
+                    "idBarang"=>$request->idBarang,
+                    "idMerchant"=>$request->idMerchant,
+                    "jumlah"=>$request->jumlah,
+                    "namaBarang"=>$request->nama,
+                    "harga"=>$request->harga
+            ]);
+            Session::put("cart_$userLogin",$cart);
+        }else{
+            $existingCart=Session::get("cart_$userLogin");
+            $existingCart=json_decode(json_encode($existingCart),true);
+            $itemKembar=false;
+            foreach($existingCart as $key =>$item){
+                if($item['idBarang']==$request->idBarang){
+                    $existingCart[$key]['jumlah']=$item['jumlah']+$request->jumlah;
+                    $itemKembar=true;
+                }
+            }
+            if(!$itemKembar){
+                $cart=array(
+                    "idBarang"=>$request->idBarang,
+                    "idMerchant"=>$request->idMerchant,
+                    "jumlah"=>$request->jumlah,
+                    "namaBarang"=>$request->nama,
+                    "harga"=>$request->harga
+                );
+                $existingCart[]=$cart;
+            }
+            Session::put("cart_$userLogin",$existingCart);
+        }
+        return redirect("barang/detailBarang/$request->idBarang")->with('success','Berhasil Menambahkan Barang Kedalam Cart');
+    }
+    public function loadCart(Request $request){
+        $userLogin=Session::get("userId");
+        $customerCart= Session::get("cart_$userLogin");
+        $customerCart= json_decode(json_encode($customerCart),true);
+        return view('cart',[
+            "dataCart"=>$customerCart
         ]);
     }
 }
