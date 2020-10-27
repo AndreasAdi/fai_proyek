@@ -12,7 +12,7 @@
     <title>@yield('judul')</title>
 </head>
 <body>
-    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-success">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-success shadow">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{url('user/home')}}"> <h3> E-Store</h3> </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
