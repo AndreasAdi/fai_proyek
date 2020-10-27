@@ -75,7 +75,7 @@ class user extends Controller
             $verifycode=array('kodeVerifikasi'=>$kodeVerifikasi);
             Mail::send('Mail.mailTemplate', $verifycode, function ($message) use($email,$nama){
                 $message->from('estoreproject2020@gmail.com', 'E-Store');
-                $message->to($email, "Hi,$nama");
+                $message->to($email, $nama);
                 $message->subject('Account Verification Code');
             });
             $dataUser=array(
