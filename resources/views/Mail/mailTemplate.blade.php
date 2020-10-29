@@ -7,6 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-    Your Verification Code is {{session()->get('verificationCode')}}.
+    <div>
+    <h1>Account Verification</h1>
+    Your Verification Code is <b>{{session()->get('verificationCode')}}.
+    </div>
+
 </body>
 </html>
