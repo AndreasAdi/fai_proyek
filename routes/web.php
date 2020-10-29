@@ -36,5 +36,10 @@ Route::prefix('barang')->group(function(){
     Route::get('/detailBarang/{id}','barangController@detail');
     Route::post('/searchBarang','barangController@searchBarang');
     Route::get('/cart',"barangController@loadCart");
+    Route::get('/yourItem',"barangController@loadItem");
+    Route::get('/editBarang/{id}','barangController@editBarang');
+    Route::patch('/prosesEditBarang','barangController@prosesEditBarang');
     Route::post('/addToCart',"barangController@AddToCart");
+    Route::delete('/NonAktifBarang/{id}','barangController@deleteBarang');
+    Route::patch('/aktifkanBarang/{id}','barangController@aktifkanBarang');
 });

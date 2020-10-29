@@ -23,6 +23,7 @@
                 @if (session()->get("isMerchant")==true)
                 <li>{{-- nanti di hide kalau loginnya bukan akun merchant--}}
                     <a class="nav-link" href="{{url('barang/addItem')}}">Add An Item</a>
+                    <a class="nav-link" href="{{url('barang/yourItem')}}">Your Item</a>
                 </li>
                 @else
                 <li>
