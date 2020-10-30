@@ -26,6 +26,7 @@
                     Jumlah:<input type="number" name='jumlah'>
                 <hr>
                 <button class="btn btn-success" type="submit">Add To Cart</button>
+                <a class="btn btn-primary" href="{{url('user/makeChatroom')}}">Chat Merchant</a>
                 <p>{!!$barang->deskripsi_barang!!}</p>
             </div>
         </form>
