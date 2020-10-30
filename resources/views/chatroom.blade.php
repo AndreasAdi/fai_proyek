@@ -10,9 +10,9 @@ Chat Room
     <h1>Chat List</h1>
 <table class='table table-dark'>
     <thead>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th>Reciver</th>
+        <th>Last Message</th>
+        <th>Action</th>
     </thead>
     <tbody>
         @foreach ($headerChat as $item)
@@ -26,7 +26,7 @@ Chat Room
 
             </td>
             <td>{{$item['updated_at']}}</td>
-            <td><a href="{{url("user/loadDetailChat/$item[id_chatroom]/$item[id_recepient]/$item[id_sender]")}}">View Chat</a></td>
+            <td><a href="{{url("user/loadDetailChat/$item[id_chatroom]")}}" class="btn btn-primary">View Chat</a></td>
         </tr>
         @endforeach
 
@@ -34,5 +34,4 @@ Chat Room
 </table>
 </div>
     @endsection
-@endsection
 

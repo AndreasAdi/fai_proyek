@@ -28,6 +28,8 @@ Route::prefix('user')->group(function(){
     Route::post('/prosesRegisterMerchant', 'user@prosesRegisterMerchant');
     Route::get('/prosesLogout','user@prosesLogout');
     Route::get('/makeChatroom/{idMerchant}','user@makeChatroom');
+    Route::get('/loadDetailChat/{id_chatroom}','user@loadDetailChat');
+    Route::post('/insertDetail','user@sendChat');
     Route::get('/loadChatroom','user@loadChatroom');
 });
 

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\merchant;
 use App\Models\users;
 use App\Models\barang;
+use App\Models\chat;
 use App\Models\chatroom;
 use App\Models\kodeverifikasi;
 use Illuminate\Support\Facades\Hash;
@@ -179,7 +180,37 @@ class user extends Controller
     public function loadChatroom(){
         $dataChatroom=chatroom::where('id_sender',Session::get('userId'))->orWhere('id_recepient',Session::get('userId'))->get();
         $dataChatroom=json_decode(json_encode($dataChatroom),true);
-        return view('chatroom',['']);
+        return view('chatroom',['headerChat'=>$dataChatroom]);
+    }
+
+    public function loadDetailChat($id_chatroom){
+        $chatDetail=chat::where('id_chatroom',$id_chatroom)->get();
+        $chatDetail=json_decode(json_encode($chatDetail),true);
+        $chatroom=chatroom::where('id_chatroom',$id_chatroom)->first();
+        $recepient=users::where('id',$chatroom->id_recepient)->first();
+        $sender=users::where('id',$chatroom->id_sender)->first();
+
+        return view('chatDetail',[
+            'detailChat'=>$chatDetail,
+            'idChatroom'=>$id_chatroom,
+            'id_sender'=>$chatroom->id_sender,
+            'id_recepient'=>$chatroom->id_recepient,
+            'namaSender'=>$sender->nama_user,
+            'namaRecepient'=>$recepient->nama_user
+        ]);
+    }
+
+    public function sendChat(Request $request){
+        $chatDetail=new chat;
+        $chatDetail->id_chatroom=$request->idChatroom;
+        $chatDetail->id_user=Session::get('userId');
+        $chatDetail->chat=$request->message;
+        $chatDetail->save();
+        if($chatDetail){
+            return redirect("user/loadDetailChat/$request->idChatroom")->with('success','Chat Berhasil Di Buat');
+        }else{
+            return redirect("user/loadDetailChat/$request->idChatroom")->with('error','Chat Gagal Di Buat');
+        }
     }
 }
 
