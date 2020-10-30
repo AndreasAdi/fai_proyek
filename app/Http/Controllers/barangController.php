@@ -126,7 +126,7 @@ class barangController extends Controller
 
         $dataItem=barang::withTrashed()->where('id_merchant',$idMerchant->id_merchant)->get();
 
-        $dataItem=json_decode(json_encode($dataItem),true);
+        //$dataItem=json_decode(json_encode($dataItem),true);
         return view('listItem',[
             'dataItem'=>$dataItem
         ]);
