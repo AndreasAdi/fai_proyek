@@ -3,7 +3,7 @@
 
 <div class="container mt-5">
     @include('alert')
-    <div class="d-flex flex-row ">
+    <div class="">
 
         <form action="{{url('barang/addToCart')}}" method="POST">
             @method('POST')
@@ -29,8 +29,12 @@
                     <button class="btn btn-success" type="submit" id="button-addon2">Add To Cart</button>
                   </div>
                 <hr>
+                @if (isset($wishlist))
+                <a class="btn btn-danger mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}">Remove</a>
+                @else
+                <a class="btn btn-danger mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}">Add to Wishlist</a>
+                @endif
 
-                <a class="btn btn-danger mb-5" href="{{"/addToWishlist"}}">Add to Wishlist</a>
                 <a class="btn btn-primary mb-5" href="{{url('user/makeChatroom')}}">Chat Merchant</a><br>
                 <b class="mt-5">Deskripsi {{$barang->nama_barang}}</b>
                 <p>{!!$barang->deskripsi_barang!!}</p>

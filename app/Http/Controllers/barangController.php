@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\barang;
 use App\Models\kategoribarang;
 use App\Models\merchant;
+use App\Models\wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -52,9 +53,19 @@ class barangController extends Controller
     }
 
     public function detail ($id){
+        $userLogin=Session::get("userId");
         $barang = DB::table('barang')->where("id_barang",$id)
         ->Join('merchant', 'barang.id_merchant', '=', 'merchant.id_merchant')->first();
-        return view("detailBarang",["barang" =>$barang]);
+        $wishlist = wishlist::where('id_user',$userLogin)->where('id_barang',$id)->get();
+        if (count($wishlist)==0){
+            //dd($wishlist);
+            return view("detailBarang",["barang" =>$barang]);
+        }
+        else if(count($wishlist)==1){
+            return view("detailBarang",["barang" =>$barang,"wishlist"=>$wishlist]);
+        }
+
+
     }
 
     public function searchBarang(Request $request){
@@ -113,6 +124,23 @@ class barangController extends Controller
 
 
     }
+
+    public function AddToWishlist($id_barang){
+        $userLogin=Session::get("userId");
+        $addwishlist= new wishlist;
+        $addwishlist->id_user = $userLogin;
+        $addwishlist->id_barang = $id_barang;
+        $success = $addwishlist->save();
+
+        if ($success){
+            return redirect()->back()->with('success','Berhasil Menambahkan Barang Ke Wishlists');
+        }
+        else{
+            return redirect()->back()->with('error','Gagal Menambahkan Barang Ke Wishlists');
+        }
+
+    }
+
     public function loadCart(Request $request){
         $userLogin=Session::get("userId");
         $customerCart= Session::get("cart_$userLogin");
