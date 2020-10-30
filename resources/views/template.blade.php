@@ -31,6 +31,9 @@
                 </li>
                 @endif
                 <li> <a href="{{url('barang/cart')}}" class="nav-link">Cart</a></li>
+                <li>
+                    <a class="nav-link" href="{{url('user/loadChatroom')}}">Chat Room</a>
+                </li>
             </ul>
           </div>
           <div class="form-inline my-2 my-lg-0">

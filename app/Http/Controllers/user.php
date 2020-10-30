@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\merchant;
 use App\Models\users;
 use App\Models\barang;
+use App\Models\chatroom;
 use App\Models\kodeverifikasi;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -161,6 +162,24 @@ class user extends Controller
                 return redirect()->back()->with('error','Gagal Mendaftarkan Account Sebagai Merchant');
             }
         }
+    }
+
+    public function makeChatroom($idMerchant){
+        $makeChatroom=new chatroom;
+        $makeChatroom->id_sender=Session::get('userId');
+        $makeChatroom->id_recepient=$idMerchant;
+        $makeChatroom->save();
+        if($makeChatroom){
+            return redirect()->back()->with('success','Chat Room Berhasil Di Buat');
+        }else{
+            return redirect()->back()->with('error','Chat Room Gagal Di buat');
+        }
+    }
+
+    public function loadChatroom(){
+        $dataChatroom=chatroom::where('id_sender',Session::get('userId'))->orWhere('id_recepient',Session::get('userId'))->get();
+        $dataChatroom=json_decode(json_encode($dataChatroom),true);
+        return view('chatroom',['']);
     }
 }
 

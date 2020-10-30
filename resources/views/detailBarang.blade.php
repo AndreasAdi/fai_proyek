@@ -31,7 +31,7 @@
                 <hr>
 
                 <a class="btn btn-danger mb-5" href="{{"/addToWishlist"}}">Add to Wishlist</a>
-                <a class="btn btn-primary mb-5" href="{{url('user/makeChatroom')}}">Chat Merchant</a><br>
+                <a class="btn btn-primary mb-5" href="{{url("user/makeChatroom/$barang->id_merchant")}}">Chat Merchant</a><br>
                 <b class="mt-5">Deskripsi {{$barang->nama_barang}}</b>
                 <p>{!!$barang->deskripsi_barang!!}</p>
             </div>

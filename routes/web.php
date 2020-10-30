@@ -27,6 +27,8 @@ Route::prefix('user')->group(function(){
     Route::view('/regisMerchant','registerMerchant');
     Route::post('/prosesRegisterMerchant', 'user@prosesRegisterMerchant');
     Route::get('/prosesLogout','user@prosesLogout');
+    Route::get('/makeChatroom/{idMerchant}','user@makeChatroom');
+    Route::get('/loadChatroom','user@loadChatroom');
 });
 
 
