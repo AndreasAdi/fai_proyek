@@ -12,6 +12,7 @@ use App\Models\barang;
 use App\Models\chat;
 use App\Models\chatroom;
 use App\Models\kodeverifikasi;
+use App\Models\voucher;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -121,8 +122,10 @@ class user extends Controller
                     $cekAccMerchant=merchant::where("id_user",$dataUser[0]["id"])->count();
                     if($cekAccMerchant>0){
                         Session::put("isMerchant",true);
+                        Session::put("isAdmin",false);
                     }else{
                         Session::put("isMerchant",false);
+                        Session::put("isAdmin",false);
                     }
                     if($req->remember==true){
                         Session::put("remember",$email);
@@ -137,11 +140,15 @@ class user extends Controller
                 return redirect()->back()->with('error','User Tidak Ditemukan, Silahkan Cek Kembali Email dan Password Anda');
             }
         }else{
+            Session::put("isAdmin",true);
             return redirect('admin/home');
         }
 
     }
-
+    public function loadListVoucher(){
+        $listVoucher=voucher::all();
+        return view('listVoucherUser',['listVoucher'=>$listVoucher]);
+    }
     public function home(Request $req){
         if($req->session()->get('isMerchant')===false){
             $dataBarang=barang::paginate(6);

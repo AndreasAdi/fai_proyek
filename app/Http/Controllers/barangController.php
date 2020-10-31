@@ -121,8 +121,6 @@ class barangController extends Controller
         }else{
             return redirect("barang/detailBarang/$request->idBarang")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
         }
-
-
     }
 
     public function AddToWishlist($id_barang){

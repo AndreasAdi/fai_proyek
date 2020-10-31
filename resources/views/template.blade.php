@@ -23,27 +23,34 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 @if (session()->get("isMerchant")==true)
-                <li>{{-- nanti di hide kalau loginnya bukan akun merchant--}}
-                    <a class="nav-link" href="{{url('barang/addItem')}}">Add An Item</a>
-                </li>
+                    <li>{{-- nanti di hide kalau loginnya bukan akun merchant--}}
+                        <a class="nav-link" href="{{url('barang/addItem')}}">Add An Item</a>
+                    </li>
                 <li> <a class="nav-link" href="{{url('barang/yourItem')}}">Your Item</a></li>
                 @else
-                <li>
-                    <a class="nav-link" href="{{url('user/regisMerchant')}}">Register As A Merchant</a>
-                </li>
+                    @if (session()->get('isAdmin')==false)
+                        <li>
+                            <a class="nav-link" href="{{url('user/regisMerchant')}}">Register As A Merchant</a>
+                        </li>
+                    @endif
                 @endif
                 @if (session()->get("isAdmin")==true)
-                <li> <a href="{{url('voucher/addVoucher')}}" class="nav-link">Voucher</a></li>
-                <li>
-                    <a class="nav-link" href="{{url('sale/addSale')}}">Sale</a>
-                </li>
+                    <li> <a href="{{url('voucher/addVoucher')}}" class="nav-link">Voucher</a></li>
+                    <li>
+                        <a class="nav-link" href="{{url('sale/addSale')}}">Sale</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{url('admin/listVoucher')}}">Lihat Voucher</a>
+                    </li>
                 @else
-                <li> <a href="{{url('barang/cart')}}" class="nav-link">Cart</a></li>
-                <li>
-                    <a class="nav-link" href="{{url('user/loadChatroom')}}">Chat Room</a>
-                </li>
+                    <li> <a href="{{url('barang/cart')}}" class="nav-link">Cart</a></li>
+                    <li>
+                        <a class="nav-link" href="{{url('user/loadChatroom')}}">Chat Room</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{url('user/listVoucher')}}">Lihat Voucher</a>
+                    </li>
                 @endif
-
             </ul>
           </div>
           <div class="form-inline my-2 my-lg-0">

@@ -32,6 +32,7 @@ Route::prefix('user')->group(function(){
     Route::post('/insertDetail','user@sendChat');
     Route::get('/loadChatroom','user@loadChatroom');
     Route::get('/loadtoko/{id}','user@loadtoko');
+    Route::get('/listVoucher','user@loadListVoucher');
 });
 
 
@@ -53,6 +54,13 @@ Route::prefix('barang')->group(function(){
 
 Route::prefix('admin')->group(function(){
     Route::view('/home','adminHome');
-    Route::view('/addVoucher','addVoucher');
+    Route::get('/listVoucher','VoucherController@loadListVoucher');
     Route::view('/addSale','addSale');
+});
+
+Route::prefix('voucher')->group(function(){
+    Route::get('/addVoucher','VoucherController@loadAddVoucher');
+    Route::patch('/AktifkanVoucher/{id_voucher}','VoucherController@aktifkanVoucher');
+    Route::delete('/NonAktifkanVoucher/{id_voucher}','VoucherController@deleteVoucher');
+    Route::post('/TambahVoucher','VoucherController@makeVoucher');
 });
