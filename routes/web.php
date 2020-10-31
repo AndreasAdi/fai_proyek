@@ -44,6 +44,7 @@ Route::prefix('barang')->group(function(){
     Route::get('/yourItem',"barangController@loadItem");
     Route::get('/editBarang/{id}','barangController@editBarang');
     Route::get('/addToWishlist/{id_barang}','barangController@AddToWishlist');
+    Route::get('/RemoveFromWishlist/{id_barang}','barangController@RemoveFromWishlist');
     Route::patch('/prosesEditBarang','barangController@prosesEditBarang');
     Route::post('/addToCart',"barangController@AddToCart");
     Route::delete('/NonAktifBarang/{id}','barangController@deleteBarang');

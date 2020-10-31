@@ -30,7 +30,7 @@
                   </div>
                 <hr>
                 @if (isset($wishlist))
-                <a class="btn btn-danger mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}"> <i class="far fa-heart"></i> Remove From WishLists</a>
+                <a class="btn btn-danger mb-5" href="{{url("barang/RemoveFromWishlist/".$barang->id_barang)}}"> <i class="far fa-heart"></i> Remove From WishLists</a>
                 @else
                 <a class="btn btn-danger mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}"><i class="far fa-heart"></i> Add to Wishlist</a>
                 @endif

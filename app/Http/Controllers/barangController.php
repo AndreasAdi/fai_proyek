@@ -141,21 +141,18 @@ class barangController extends Controller
 
     }
 
-    // public function RemoveFromWishlist($id_barang){
-    //     $userLogin=Session::get("userId");
-    //     $addwishlist= new wishlist;
-    //     $addwishlist->id_user = $userLogin;
-    //     $addwishlist->id_barang = $id_barang;
-    //     $success = $addwishlist->save();
+    public function RemoveFromWishlist($id_barang){
+        $userLogin=Session::get("userId");
+        $success = wishlist::where('id_user',$userLogin)->where('id_barang',$id_barang)->delete();
 
-    //     if ($success){
-    //         return redirect()->back()->with('success','Berhasil Menambahkan Barang Ke Wishlists');
-    //     }
-    //     else{
-    //         return redirect()->back()->with('error','Gagal Menambahkan Barang Ke Wishlists');
-    //     }
+        if ($success){
+            return redirect()->back()->with('success','Berhasil Menghapus Barang Ke Wishlists');
+        }
+        else{
+            return redirect()->back()->with('error','Gagal Menghapus Barang Ke Wishlists');
+        }
 
-    // }
+    }
 
     public function loadCart(Request $request){
         $userLogin=Session::get("userId");
