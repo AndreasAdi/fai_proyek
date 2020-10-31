@@ -109,32 +109,37 @@ class user extends Controller
 
     public function login(Request $req)
     {
-        $email = $req->email;
-        $password = $req->password;
-        $data = DB::table('users')->where('email',$email)->count();
-        if($data>0){
-            $dataUser = DB::table('users')->where('email',$email)->get();
-            $dataUser=json_decode(json_encode($dataUser),true);
-            if(Hash::check($password, $dataUser[0]['password'])){
-                Session::put("active",$email);
-                $cekAccMerchant=merchant::where("id_user",$dataUser[0]["id"])->count();
-                if($cekAccMerchant>0){
-                    Session::put("isMerchant",true);
+        if($req->email!='admin'&&$req->password!='admin'){
+            $email = $req->email;
+            $password = $req->password;
+            $data = DB::table('users')->where('email',$email)->count();
+            if($data>0){
+                $dataUser = DB::table('users')->where('email',$email)->get();
+                $dataUser=json_decode(json_encode($dataUser),true);
+                if(Hash::check($password, $dataUser[0]['password'])){
+                    Session::put("active",$email);
+                    $cekAccMerchant=merchant::where("id_user",$dataUser[0]["id"])->count();
+                    if($cekAccMerchant>0){
+                        Session::put("isMerchant",true);
+                    }else{
+                        Session::put("isMerchant",false);
+                    }
+                    if($req->remember==true){
+                        Session::put("remember",$email);
+                    }
+                    Session::put("userId",$dataUser[0]['id']);
+                    return redirect('user/home');
                 }else{
-                    Session::put("isMerchant",false);
+                    return redirect()->back()->with('error','Email Atau Password Salah, Silahkan Cek Kembali Email dan Password Anda');
                 }
-                if($req->remember==true){
-                    Session::put("remember",$email);
-                }
-                Session::put("userId",$dataUser[0]['id']);
-                return redirect('user/home');
-            }else{
-                return redirect()->back()->with('error','Email Atau Password Salah, Silahkan Cek Kembali Email dan Password Anda');
             }
+            else{
+                return redirect()->back()->with('error','User Tidak Ditemukan, Silahkan Cek Kembali Email dan Password Anda');
+            }
+        }else{
+            return redirect('admin/home');
         }
-        else{
-            return redirect()->back()->with('error','User Tidak Ditemukan, Silahkan Cek Kembali Email dan Password Anda');
-        }
+
     }
 
     public function home(Request $req){

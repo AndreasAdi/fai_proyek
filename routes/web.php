@@ -49,3 +49,9 @@ Route::prefix('barang')->group(function(){
     Route::delete('/NonAktifBarang/{id}','barangController@deleteBarang');
     Route::patch('/aktifkanBarang/{id}','barangController@aktifkanBarang');
 });
+
+Route::prefix('admin')->group(function(){
+    Route::view('/home','adminHome');
+    Route::view('/addVoucher','addVoucher');
+    Route::view('/addSale','addSale');
+});

@@ -35,7 +35,7 @@
                 <a class="btn btn-danger mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}"><i class="far fa-heart"></i> Add to Wishlist</a>
                 @endif
 
-                <a class="btn btn-primary mb-5" href="{{url('user/makeChatroom')}}"><i class="far fa-comment"></i> Chat Merchant</a>
+                <a class="btn btn-primary mb-5" href="{{url("user/makeChatroom/$barang->id_merchant")}}"><i class="far fa-comment"></i> Chat Merchant</a>
                 <a class="btn btn-success mb-5" href="{{url("user/loadtoko/".$barang->id_merchant)}}"><i class="fas fa-store"></i> Lihat Toko</a><br>
                 <b class="mt-5">Deskripsi {{$barang->nama_barang}}</b>
                 <p>{!!$barang->deskripsi_barang!!}</p>

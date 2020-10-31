@@ -32,10 +32,18 @@
                     <a class="nav-link" href="{{url('user/regisMerchant')}}">Register As A Merchant</a>
                 </li>
                 @endif
+                @if (session()->get("isAdmin")==true)
+                <li> <a href="{{url('voucher/addVoucher')}}" class="nav-link">Voucher</a></li>
+                <li>
+                    <a class="nav-link" href="{{url('sale/addSale')}}">Sale</a>
+                </li>
+                @else
                 <li> <a href="{{url('barang/cart')}}" class="nav-link">Cart</a></li>
                 <li>
                     <a class="nav-link" href="{{url('user/loadChatroom')}}">Chat Room</a>
                 </li>
+                @endif
+
             </ul>
           </div>
           <div class="form-inline my-2 my-lg-0">
