@@ -141,6 +141,22 @@ class barangController extends Controller
 
     }
 
+    // public function RemoveFromWishlist($id_barang){
+    //     $userLogin=Session::get("userId");
+    //     $addwishlist= new wishlist;
+    //     $addwishlist->id_user = $userLogin;
+    //     $addwishlist->id_barang = $id_barang;
+    //     $success = $addwishlist->save();
+
+    //     if ($success){
+    //         return redirect()->back()->with('success','Berhasil Menambahkan Barang Ke Wishlists');
+    //     }
+    //     else{
+    //         return redirect()->back()->with('error','Gagal Menambahkan Barang Ke Wishlists');
+    //     }
+
+    // }
+
     public function loadCart(Request $request){
         $userLogin=Session::get("userId");
         $customerCart= Session::get("cart_$userLogin");
