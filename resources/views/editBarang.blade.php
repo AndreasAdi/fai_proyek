@@ -13,7 +13,7 @@ Tambah Barang
         <div class="mb-3">
             <input type="hidden" value="{{$dataEdit['id_barang']}}" name='idBarang'>
             <label class="form-label">Gambar</label>
-            <input class="form-control" type="file" name="gambar" class="form-control">
+        <input class="form-control" type="file" name="gambar" class="form-control" value="{{$dataEdit['gambar_barang']}}">
           </div>
         <div class="mb-3">
             <label class="form-label">Nama Barang</label>
@@ -46,7 +46,7 @@ Tambah Barang
         </div>
           <div class="mb-3">
             <label class="form-label">Deskripsi Barang</label>
-            <textarea class="form-control" name="deskripsiBarang" id="deskripsiBarang" rows="5" value="{{$dataEdit['deskripsi_barang']}}"></textarea>
+            <textarea class="form-control" name="deskripsiBarang" id="deskripsiBarang" rows="5" value="">{{$dataEdit['deskripsi_barang']}}</textarea>
         </div>
         <button class="btn btn-success float-right" type="submit">Edit Barang</button>
     </form>

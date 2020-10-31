@@ -94,6 +94,19 @@ class user extends Controller
 
 
     }
+
+    public function loadtoko($id){
+        $idMerchant=merchant::where('id_user',$id)->first();
+
+        $dataItem=barang::where('id_merchant',$idMerchant->id_merchant)->get();
+
+        //$dataItem=json_decode(json_encode($dataItem),true);
+        return view('halamanToko',[
+            'dataItem'=>$dataItem,
+            'dataMerchant'=>$idMerchant
+        ]);
+    }
+
     public function login(Request $req)
     {
         $email = $req->email;

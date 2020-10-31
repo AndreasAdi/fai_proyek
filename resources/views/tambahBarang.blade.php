@@ -6,7 +6,7 @@ Tambah Barang
 @include('alert')
 
 <div class="container mt-5 col-6">
-    <h1>Tambah Barang</h1>
+    <h1 class="text-success">Tambah Barang</h1>
     <form action="{{url('barang/prosesTambahBarang')}}" method="POST" enctype="multipart/form-data">
         @method('POST')
         @csrf

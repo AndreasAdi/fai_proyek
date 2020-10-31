@@ -42,7 +42,7 @@ home
         <button class="btn btn-success" type="submit">Cari</button>
     </form>
 
-      <h2>Featured Item</h2>
+      <h2 class="text-success">Featured Item</h2>
       <div class='d-flex justify-content-center  flex-wrap'>
         @foreach ($dataBarang as $item)
             <div class="card m-3 shadow" style="width: 18rem;">

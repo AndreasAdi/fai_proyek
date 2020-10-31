@@ -7,7 +7,7 @@ Chat Room
 
 
 <div class="container mt-5 col-6">
-    <h1>Chat List</h1>
+    <h1 class="text-success">Chat List</h1>
 <table class='table table-dark'>
     <thead>
         <th>Reciver</th>

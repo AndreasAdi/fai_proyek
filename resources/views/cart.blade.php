@@ -1,10 +1,10 @@
 @extends('template')
 @section('isi')
 
-<div class="container mt-5">
-    <h1>Your </h1>
-    <div class="d-flex flex-row ">
-        <table class="table table-dark">
+<div class="container mt-5  text-success">
+    <h1>Your Cart</h1>
+    <div class="d-flex flex-row">
+        <table class="table table-striped">
             <thead>
                 <th>
                     Nama
@@ -50,7 +50,15 @@
                         <td>Total: Rp. {{number_format($total),2,",","."}}</td>
                     </tr>
                 @else
-                    <h2>Tidak Ada Barang Dalam Cart</h2>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <h2>Tidak Ada Barang Dalam Cart</h2>
+                        </td>
+                    </tr>
+
                 @endif
             </tbody>
         </table><br>

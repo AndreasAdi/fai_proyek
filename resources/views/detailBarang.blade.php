@@ -26,16 +26,17 @@
 
                 <div class="input-group mb-3" style = "width : 300px">
                     <input class="form-control col-xs-2" type="number" name='jumlah' placeholder="Jumlah">
-                    <button class="btn btn-success" type="submit" id="button-addon2">Add To Cart</button>
+                    <button class="btn btn-success" type="submit" id="button-addon2"><i class="fas fa-plus"></i> Add To Cart</button>
                   </div>
                 <hr>
                 @if (isset($wishlist))
-                <a class="btn btn-danger mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}">Remove</a>
+                <a class="btn btn-danger mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}"> <i class="far fa-heart"></i> Remove From WishLists</a>
                 @else
-                <a class="btn btn-danger mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}">Add to Wishlist</a>
+                <a class="btn btn-danger mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}"><i class="far fa-heart"></i> Add to Wishlist</a>
                 @endif
 
-                <a class="btn btn-primary mb-5" href="{{url('user/makeChatroom')}}">Chat Merchant</a><br>
+                <a class="btn btn-primary mb-5" href="{{url('user/makeChatroom')}}"><i class="far fa-comment"></i> Chat Merchant</a>
+                <a class="btn btn-success mb-5" href="{{url("user/loadtoko/".$barang->id_merchant)}}"><i class="fas fa-store"></i> Lihat Toko</a><br>
                 <b class="mt-5">Deskripsi {{$barang->nama_barang}}</b>
                 <p>{!!$barang->deskripsi_barang!!}</p>
             </div>

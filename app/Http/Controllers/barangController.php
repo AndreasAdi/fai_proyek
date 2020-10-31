@@ -154,20 +154,22 @@ class barangController extends Controller
 
         $dataItem=barang::withTrashed()->where('id_merchant',$idMerchant->id_merchant)->get();
 
-        $dataItem=json_decode(json_encode($dataItem),true);
+        //$dataItem=json_decode(json_encode($dataItem),true);
         return view('listItem',[
-            'dataItem'=>$dataItem
+            'dataItem'=>$dataItem,
+            'dataMerchant'=>$idMerchant
         ]);
     }
+
     public function editBarang($id){
-        $dataEdit=barang::where('id_barang',$id)->first();
+        $dataEdit=barang::withTrashed()->where('id_barang',$id)->first();
         $dataEdit=json_decode(json_encode($dataEdit),true);
         $dataKategori=kategoribarang::all();
         $dataKategori=json_decode(json_encode($dataKategori),true);
         return view('editBarang',['dataEdit'=>$dataEdit, 'dataKategori'=>$dataKategori]);
     }
     public function prosesEditBarang(Request $request){
-        $dataBarang=barang::where('id_barang',$request->idBarang)->first();
+        $dataBarang=barang::withTrashed()->where('id_barang',$request->idBarang)->first();
         $dataBarang->nama_barang=$request->namaBarang;
         $dataBarang->harga=$request->hargaBarang;
         $dataBarang->stok=$request->stokBarang;
@@ -175,10 +177,17 @@ class barangController extends Controller
         $dataBarang->deskripsi_barang=$request->deskripsiBarang;
         $dataBarang->save();
         if($dataBarang){
+            if($request->gambar!=null){
+                $nama = $dataBarang->id_barang.".".$request->file("gambar")->getClientOriginalExtension();
+                $request->file("gambar")->storeAs("images", $nama, "public");
+                $dataBarang->gambar_barang = $nama;
+                $dataBarang->save();
+            }
+
             return redirect('barang/yourItem')->with("success",'Barang Berhasil Di Edit');
         }
         else{
-            return redirect('barang/yourItem')->with("Error",'Barang Gagal Di Edit');
+            return redirect('barang/yourItem')->with("error",'Barang Gagal Di Edit');
         }
     }
     public function deleteBarang($id){

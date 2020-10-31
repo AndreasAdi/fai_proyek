@@ -31,6 +31,7 @@ Route::prefix('user')->group(function(){
     Route::get('/loadDetailChat/{id_chatroom}','user@loadDetailChat');
     Route::post('/insertDetail','user@sendChat');
     Route::get('/loadChatroom','user@loadChatroom');
+    Route::get('/loadtoko/{id}','user@loadtoko');
 });
 
 
