@@ -194,3 +194,11 @@ button {
     background: none; } }
 
 /*# sourceMappingURL=style.css.map */
+
+.alreadySignUp{
+  color: dodgerblue;
+}
+.alreadySignUp:hover{
+  color: midnightblue;
+  text-decoration: underline;
+}
