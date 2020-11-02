@@ -13,6 +13,7 @@ use App\Models\chat;
 use App\Models\chatroom;
 use App\Models\kodeverifikasi;
 use App\Models\voucher;
+use App\Models\kategoribarang;
 use App\Models\wishlist;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -132,7 +133,9 @@ class user extends Controller
                     Session::put("active",$email);
                     $cekAccMerchant=merchant::where("id_user",$dataUser[0]["id"])->count();
                     if($cekAccMerchant>0){
+                        $cekIdMerchant=merchant::where("id_user",$dataUser[0]["id"])->first();
                         Session::put("isMerchant",true);
+                        Session::put('MerchantId',$cekIdMerchant->id_merchant);
                         Session::put("isAdmin",false);
                     }else{
                         Session::put("isMerchant",false);
@@ -164,10 +167,11 @@ class user extends Controller
         if($req->session()->get('isMerchant')===false){
             $dataBarang=barang::paginate(6);
         }else{
-            $dataMechant=merchant::where("id_user","!=",$req->session()->get("userId"))->first();
-            $dataBarang=barang::where("id_merchant",$dataMechant->id_merchant)->paginate(6);
+            $dataMechant=merchant::where("id_user",$req->session()->get("userId"))->first();
+            $dataBarang=barang::where("id_merchant","!=",$dataMechant->id_merchant)->paginate(6);
         }
-        return view("home2",['dataBarang'=>$dataBarang]);
+        $dataCategori= kategoribarang::all();
+        return view("home2",['dataBarang'=>$dataBarang,'dataKategori'=>$dataCategori]);
     }
 
 
@@ -207,7 +211,8 @@ class user extends Controller
         $makeChatroom->id_recepient=$idMerchant;
         $makeChatroom->save();
         if($makeChatroom){
-            return redirect()->back()->with('success','Chat Room Berhasil Di Buat');
+            $id_chatroom=chatroom::where('id_sender',Session::get('userId'))->where('id_recepient',$idMerchant)->first();
+            return redirect("user/loadDetailChat/$id_chatroom->id_chatroom")->with('success','Chat Room Berhasil Di Buat');
         }else{
             return redirect()->back()->with('error','Chat Room Gagal Di buat');
         }

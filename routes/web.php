@@ -51,6 +51,9 @@ Route::prefix('barang')->group(function(){
     Route::post('/addToCart',"barangController@AddToCart");
     Route::delete('/NonAktifBarang/{id}','barangController@deleteBarang');
     Route::patch('/aktifkanBarang/{id}','barangController@aktifkanBarang');
+    Route::get('/removeItemCart/{id}',"barangController@removeItemCart");
+    Route::get('/editItemCart/{id}',"barangController@editItemCart");
+    Route::post('/filterBarang',"barangController@Filter");
 });
 
 Route::prefix('admin')->group(function(){

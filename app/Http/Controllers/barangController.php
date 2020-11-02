@@ -64,14 +64,20 @@ class barangController extends Controller
         else if(count($wishlist)==1){
             return view("detailBarang",["barang" =>$barang,"wishlist"=>$wishlist]);
         }
-
-
     }
 
     public function searchBarang(Request $request){
-        $dataSearch=barang::query()->
-        where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")
-        ->paginate(6);
+        if(Session::get("isMerchant")===false){
+            $dataSearch=barang::query()->
+            where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")
+            ->paginate(6);
+        }else{
+            $dataSearch=barang::query()->
+            where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")->
+            where('id_merchant',"!=",Session::get('MerchantId'))
+            ->paginate(6);
+        }
+
         //dd($dataSearch);
         return view('searchBarang',[
             'dataBarang'=>$dataSearch
@@ -122,7 +128,26 @@ class barangController extends Controller
             return redirect("barang/detailBarang/$request->idBarang")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
         }
     }
-
+    public function removeItemCart($id){
+        $userLogin=Session::get("userId");
+        $cartUser=Session::get("cart_$userLogin");
+        unset($cartUser[$id]);
+        if(count($cartUser)<1){
+            Session::forget("cart_$userLogin");
+        }else{
+            Session::put("cart_$userLogin",$cartUser);
+        }
+        return redirect("barang/cart")->with('success','Berhasil Menghapus Barang Dari Cart');
+    }
+    public function editItemCart(Request $request,$id){
+        $userLogin=Session::get("userId");
+        $cartUser=Session::get("cart_$userLogin");
+        $cartTemp=$cartUser[$id];
+        $cartTemp['jumlah']=$request->jumlah;
+        $cartUser[$id]=$cartTemp;
+        Session::put("cart_$userLogin",$cartUser);
+        return redirect("barang/cart")->with('success','Berhasil Edit Barang Dari Cart');
+    }
     public function AddToWishlist($id_barang){
         $userLogin=Session::get("userId");
         $addwishlist= new wishlist;
@@ -219,5 +244,11 @@ class barangController extends Controller
         else{
             return redirect()->back()->with("error",'Barang Gagal Di Aktifkan');
         }
+    }
+
+    public function Filter(Request $request){
+        $filterResult=barang::where('id_kategori',$request->selectedKategori)->where('id_merchant',"!=",Session::get('MerchantId'))->paginate(6);
+        $dataCategori= kategoribarang::all();
+        return view("home2",['dataBarang'=>$filterResult,'dataKategori'=>$dataCategori]);
     }
 }

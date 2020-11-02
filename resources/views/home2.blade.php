@@ -41,7 +41,20 @@ home
         <input class="form-control mr-2 align-middle" name='searchKeyword' type="search" placeholder="Ketikan Nama Barang Di Sini..." aria-label="Search">
         <button class="btn btn-success" type="submit">Cari</button>
     </form>
-
+    <form action="{{url("barang/filterBarang")}}" method="POST">
+        @method('POST')
+        @csrf
+        <select name="selectedKategori" aria-placeholder="Kategori" >
+            @if (isset($dataKategori))
+                @foreach ($dataKategori as $item)
+                    <option value="{{$item->id_kategori}}">{{$item->nama_kategori}}</option>
+                @endforeach
+            @else
+                <option value="">Tidak Ada Kategori</option>
+            @endif
+        </select>
+        <button class="btn btn-success" type="submit">Filter</button>
+    </form>
       <h2 class="text-success">Featured Item</h2>
       <div class='d-flex justify-content-center  flex-wrap'>
         @foreach ($dataBarang as $item)
