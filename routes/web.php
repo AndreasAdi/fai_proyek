@@ -33,6 +33,7 @@ Route::prefix('user')->group(function(){
     Route::get('/loadChatroom','user@loadChatroom');
     Route::get('/loadtoko/{id}','user@loadtoko');
     Route::get('/listVoucher','user@loadListVoucher');
+    Route::get('/wishlist','user@loadwishlist');
 });
 
 

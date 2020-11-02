@@ -34,6 +34,7 @@
                         </li>
                     @endif
                 @endif
+                <a class="nav-link" href="{{url('user/wishlist')}}">Wishlist</a>
                 @if (session()->get("isAdmin")==true)
                     <li> <a href="{{url('voucher/addVoucher')}}" class="nav-link">Voucher</a></li>
                     <li>

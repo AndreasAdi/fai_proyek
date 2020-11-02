@@ -13,6 +13,7 @@ use App\Models\chat;
 use App\Models\chatroom;
 use App\Models\kodeverifikasi;
 use App\Models\voucher;
+use App\Models\wishlist;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -94,6 +95,16 @@ class user extends Controller
         }
 
 
+    }
+
+    public function loadwishlist(){
+        $userLogin=Session::get("userId");
+        $listwishlist =wishlist::where("id_user",$userLogin)->join('barang', 'wishlist.id_barang', '=', 'barang.id_barang')->get();
+
+        //dd($listwishlist);
+        return view('wishlist',[
+            "wishlist"=>$listwishlist
+        ]);
     }
 
     public function loadtoko($id){
