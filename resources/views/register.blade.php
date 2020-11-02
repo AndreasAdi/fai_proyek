@@ -37,7 +37,7 @@
               <label>Confirm Password</label>
               <input name="kpassword" type="password" class="form-control">
             </div>
-            <a href="{{url('/')}}" class="text-primary mt-5">Already Sign Up</a>
+            <a href="{{url('/')}}" class="text-info mt-5">Already Sign Up</a> 
             <button type="submit" class="btn btn-block btn-primary">Register</button>
           </form>
     </div>
