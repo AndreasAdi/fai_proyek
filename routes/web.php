@@ -34,8 +34,9 @@ Route::prefix('user')->group(function(){
     Route::get('/loadtoko/{id}','user@loadtoko');
     Route::get('/listVoucher','user@loadListVoucher');
     Route::get('/wishlist','user@loadwishlist');
+    Route::get('/listSale','user@loadListSale');
+    Route::get('/loadPageSale/{id_kategori}','user@loadPageSale');
 });
-
 
 Route::prefix('barang')->group(function(){
     Route::get('/addItem',"barangController@loadPageTambahBarang");
@@ -59,7 +60,7 @@ Route::prefix('barang')->group(function(){
 Route::prefix('admin')->group(function(){
     Route::view('/home','adminHome');
     Route::get('/listVoucher','VoucherController@loadListVoucher');
-    Route::view('/addSale','addSale');
+    Route::get('/listSale','saleController@loadListSale');
 });
 
 Route::prefix('voucher')->group(function(){
@@ -67,4 +68,11 @@ Route::prefix('voucher')->group(function(){
     Route::patch('/AktifkanVoucher/{id_voucher}','VoucherController@aktifkanVoucher');
     Route::delete('/NonAktifkanVoucher/{id_voucher}','VoucherController@deleteVoucher');
     Route::post('/TambahVoucher','VoucherController@makeVoucher');
+});
+
+Route::prefix('sale')->group(function(){
+    Route::get('/addSale','saleController@loadAddSale');
+    Route::patch('/AktifkanSale/{id_sale}','saleController@aktifkanSale');
+    Route::delete('/NonAktifkanSale/{id_sale}','saleController@deleteSale');
+    Route::post('/TambahSale','saleController@addSale');
 });

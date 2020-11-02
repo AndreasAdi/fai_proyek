@@ -14,6 +14,7 @@ use App\Models\chatroom;
 use App\Models\kodeverifikasi;
 use App\Models\voucher;
 use App\Models\kategoribarang;
+use App\Models\sale;
 use App\Models\wishlist;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -253,6 +254,16 @@ class user extends Controller
             return redirect("user/loadDetailChat/$request->idChatroom")->with('error','Chat Gagal Di Buat');
         }
     }
+    public function loadListSale(){
+        $listSale=sale::all();
+        return view('listSaleUser',['listSale'=>$listSale]);
+    }
+    public function loadPageSale($id_kategori){
+        $barangSale=barang::where('id_kategori',$id_kategori)->paginate(6);
+        return view('pageSaleUser',['listBarangSale'=>$barangSale]);
+    }
 }
+
+
 
 

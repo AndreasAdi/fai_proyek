@@ -43,6 +43,9 @@
                     <li>
                         <a class="nav-link" href="{{url('admin/listVoucher')}}">Lihat Voucher</a>
                     </li>
+                    <li>
+                        <a class="nav-link" href="{{url('admin/listSale')}}">Lihat Sale</a>
+                    </li>
                 @else
                     <li> <a href="{{url('barang/cart')}}" class="nav-link">Cart</a></li>
                     <li>
@@ -50,6 +53,9 @@
                     </li>
                     <li>
                         <a class="nav-link" href="{{url('user/listVoucher')}}">Lihat Voucher</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{url('user/listSale')}}">Lihat Sale</a>
                     </li>
                 @endif
             </ul>
