@@ -13,9 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::get('/', function () {
+//     return view('login');
+// });
+
+
 Route::get('/', function () {
-    return view('login');
+    return view('loginBaru');
 });
+
+// Route::get('/', function () {
+//     return view('registerBaru');
+// });
 
 Route::prefix('user')->group(function(){
     Route::view('/register', 'register');
