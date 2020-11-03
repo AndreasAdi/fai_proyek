@@ -11,21 +11,25 @@ Chat Room
 <table class='table table-dark'>
     <thead>
         <th>Reciver</th>
+        <th>Nama</th>
         <th>Last Message</th>
         <th>Action</th>
     </thead>
     <tbody>
-        @foreach ($headerChat as $item)
+        @foreach ($headerChat as $key => $item)
         <tr>
             <td>
-                @if ($item['id_sender']==Session::get('userId'))
-                    {{$item['id_recepient']}}
+                @if ($item->id_sender==Session::get('userId'))
+                    {{$item->id_recepient}}
                 @else
-                    {{$item['id_sender']}}
+                    {{$item->id_sender}}
                 @endif
 
             </td>
-            <td>{{$item['updated_at']}}</td>
+            <td>
+                {{$nama[$key]['nama_user']}}
+            </td>
+            <td>{{$item->updated_at->format('Y-m-d H:i:s')}}</td>
             <td><a href="{{url("user/loadDetailChat/$item[id_chatroom]")}}" class="btn btn-primary">View Chat</a></td>
         </tr>
         @endforeach

@@ -110,8 +110,8 @@ class user extends Controller
     }
 
     public function loadtoko($id){
-        $idMerchant=merchant::where('id_user',$id)->first();
-
+        $idMerchant=merchant::where('id_merchant',$id)->first();
+        //dd($idMerchant);
         $dataItem=barang::where('id_merchant',$idMerchant->id_merchant)->get();
 
         //$dataItem=json_decode(json_encode($dataItem),true);
@@ -207,6 +207,10 @@ class user extends Controller
     }
 
     public function makeChatroom($idMerchant){
+        $dataChatRoom = chatroom::where('id_sender',Session::get('userId'))->where('id_recepient',$idMerchant)->orWhere('id_sender',$idMerchant)->where('id_recepient',Session::get('userId'))->first();
+        if ($dataChatRoom != null) {
+            return redirect("user/loadDetailChat/$dataChatRoom->id_chatroom");
+        }
         $makeChatroom=new chatroom;
         $makeChatroom->id_sender=Session::get('userId');
         $makeChatroom->id_recepient=$idMerchant;
@@ -221,8 +225,25 @@ class user extends Controller
 
     public function loadChatroom(){
         $dataChatroom=chatroom::where('id_sender',Session::get('userId'))->orWhere('id_recepient',Session::get('userId'))->get();
-        $dataChatroom=json_decode(json_encode($dataChatroom),true);
-        return view('chatroom',['headerChat'=>$dataChatroom]);
+        $count = count($dataChatroom);
+        $datanama = [];
+        for ($i=0; $i < $count; $i++) { 
+            if(users::find($dataChatroom[$i]->id_sender)->id == Session::get('userId')) {
+                $dataNama[] = users::find($dataChatroom[$i]->id_recepient);
+            }
+            else {
+                $dataNama[] = users::find($dataChatroom[$i]->id_sender);
+            }
+        }
+        //$dataChatroom=json_decode(json_encode($dataChatroom),true);
+        if (isset($dataNama)) {
+            $dataNama=json_decode(json_encode($dataNama),true);
+            return view('chatroom',['headerChat'=>$dataChatroom, 'nama'=>$dataNama]);
+        }
+        else {
+            return view('chatroom',['headerChat'=>$dataChatroom]);
+        }
+        
     }
 
     public function loadDetailChat($id_chatroom){
