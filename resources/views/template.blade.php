@@ -27,13 +27,25 @@
                         <a class="nav-link" href="{{url('barang/addItem')}}">Add An Item</a>
                     </li>
                 <li> <a class="nav-link" href="{{url('barang/yourItem')}}">Your Item</a></li>
+                <li>
+                    <a class="nav-link" href="{{url('user/penjualan')}}">Daftar Penjualan</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="{{url('user/pembelian')}}">Daftar Pembelian</a>
+                </li>
                 @else
                     @if (session()->get('isAdmin')==false)
                         <li>
                             <a class="nav-link" href="{{url('user/regisMerchant')}}">Register As A Merchant</a>
                         </li>
+                        <li>
+                            <a class="nav-link" href="{{url('user/pembelian')}}">Daftar Pembelian</a>
+                        </li>
                     @endif
                 @endif
+                <li>
+                    <a class="nav-link" href="{{url('user/alamat')}}">Alamat</a>
+                </li>
                 <a class="nav-link" href="{{url('user/wishlist')}}">Wishlist</a>
                 @if (session()->get("isAdmin")==true)
                     <li> <a href="{{url('voucher/addVoucher')}}" class="nav-link">Voucher</a></li>
@@ -51,6 +63,7 @@
                     <li>
                         <a class="nav-link" href="{{url('user/loadChatroom')}}">Chat Room</a>
                     </li>
+                    
                     <li>
                         <a class="nav-link" href="{{url('user/listVoucher')}}">Lihat Voucher</a>
                     </li>

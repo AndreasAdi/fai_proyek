@@ -9,12 +9,16 @@ use Illuminate\Support\Facades\Session;
 use App\Models\merchant;
 use App\Models\users;
 use App\Models\barang;
+use App\Models\horder;
+use App\Models\alamatpengiriman;
+use App\Models\dorder;
 use App\Models\chat;
 use App\Models\chatroom;
 use App\Models\kodeverifikasi;
 use App\Models\voucher;
 use App\Models\kategoribarang;
 use App\Models\sale;
+use App\Models\statusorder;
 use App\Models\wishlist;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -207,16 +211,18 @@ class user extends Controller
     }
 
     public function makeChatroom($idMerchant){
-        $dataChatRoom = chatroom::where('id_sender',Session::get('userId'))->where('id_recepient',$idMerchant)->orWhere('id_sender',$idMerchant)->where('id_recepient',Session::get('userId'))->first();
+        $iduser = merchant::find($idMerchant);
+        $iduser = $iduser->id_user;
+        $dataChatRoom = chatroom::where('id_sender',Session::get('userId'))->where('id_recepient',$iduser)->orWhere('id_sender',$iduser)->where('id_recepient',Session::get('userId'))->first();
         if ($dataChatRoom != null) {
             return redirect("user/loadDetailChat/$dataChatRoom->id_chatroom");
         }
         $makeChatroom=new chatroom;
         $makeChatroom->id_sender=Session::get('userId');
-        $makeChatroom->id_recepient=$idMerchant;
+        $makeChatroom->id_recepient=$iduser;
         $makeChatroom->save();
         if($makeChatroom){
-            $id_chatroom=chatroom::where('id_sender',Session::get('userId'))->where('id_recepient',$idMerchant)->first();
+            $id_chatroom=chatroom::where('id_sender',Session::get('userId'))->where('id_recepient',$iduser)->first();
             return redirect("user/loadDetailChat/$id_chatroom->id_chatroom")->with('success','Chat Room Berhasil Di Buat');
         }else{
             return redirect()->back()->with('error','Chat Room Gagal Di buat');
@@ -282,6 +288,91 @@ class user extends Controller
     public function loadPageSale($id_kategori){
         $barangSale=barang::where('id_kategori',$id_kategori)->paginate(6);
         return view('pageSaleUser',['listBarangSale'=>$barangSale]);
+    }
+    public function checkOut(Request $request) {
+        $userLogin=Session::get("userId");
+        $dataCart = Session::get("cart_$userLogin");
+        $jumlahtotal = 0;
+        foreach ($dataCart as $key => $value) {
+            $jumlahtotal = $jumlahtotal + ($value["jumlah"] * $value["harga"]);
+        }
+        DB::beginTransaction();
+        $alamat = alamatpengiriman::find($request->alamat);
+        $Horder = new horder;
+        $Horder->id_alamat = $request->alamat;
+        $Horder->alamat = $alamat->alamat;
+        $Horder->id_user = Session::get("userId");
+        $Horder->jumlah_total = $jumlahtotal;
+        $Horder->status = "belum dibayar";
+        $Horder->save();
+        $lastid = $Horder->id_horder;
+        if($Horder){
+            foreach ($dataCart as $key => $value) {
+                $barang = barang::find($value["idBarang"]);
+                $namamerchant = merchant::find($value["idMerchant"])->nama_merchant;
+                $Dorder = new dorder;
+                $Dorder->id_horder = $lastid;
+                $Dorder->id_merchant = $value["idMerchant"];
+                $Dorder->nama_merchant = $namamerchant;
+                //$Dorder->id_voucher = null;
+                $Dorder->id_barang = $value["idBarang"];
+                $Dorder->nama_barang = $barang->nama_barang;
+                $Dorder->jumlah_barang = $value["jumlah"];
+                $Dorder->harga_barang = $barang->harga;
+                $Dorder->jumlah_total = $value["jumlah"] * $value["harga"];
+                $Dorder->status = "belum dibayar";
+                $Dorder->save();
+                $statusOrder = new statusorder;
+                $statusOrder->id_dorder = $Dorder->id_dorder;
+                $statusOrder->status = "belum dibayar";
+                $statusOrder->save();
+            }
+            DB::commit();
+            Session::forget("cart_$userLogin");
+            return redirect()->back()->with('success','Berhasil Di Checkout, silahkan melakukan pembayaran');
+        }else{
+            DB::rollBack();
+            return redirect()->back()->with('error','Gagal checkout');
+        }
+        //return view('checkOut',['dataCart'=>$dataCart]);
+    }
+    public function alamat() {
+        $iduser = Session::get("userId");
+        $alamat = alamatpengiriman::where('id_user', $iduser)->get();
+        return view('alamat',['alamat'=>$alamat]);
+    }
+    public function tambahAlamat(Request $request) {
+        $validateData = $request->validate(
+            [
+                'namapenerima' => 'required',
+                'alamat'=>'required',
+                'telepon'=>'required',
+            ],
+            [
+                "namapenerima.required" =>"username tidak boleh kosong",
+                "alamat.required" => "alamat tidak boleh kosong",
+                "telepon.required" =>"telepon tidak boleh kosong",
+            ]
+        );
+        $iduser = Session::get("userId");
+        $alamat = new alamatpengiriman;
+        $alamat->id_user = $iduser;
+        $alamat->alamat = $request->alamat;
+        $alamat->nama_penerima = $request->namapenerima;
+        $alamat->telepon = $request->telepon;
+        $alamat->save();
+
+        return $this->alamat();
+    }
+    public function pembelian() {
+        $iduser = Session::get("userId");
+        $horder = horder::where('id_user', $iduser)->get();
+        //$dorder = $horder->dorders()->get();
+        return view('pembelian',['horder'=>$horder]);
+    }
+    public function detailPembelian($idhorder) {
+        $dorder = dorder::where('id_horder', $idhorder)->get();
+        return view("detailPembelian", ['dorder'=>$dorder]);
     }
 }
 

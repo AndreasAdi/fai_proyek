@@ -16,4 +16,7 @@ class horder extends Model
     const UPDATED_AT='updated_at';
     const DELETED_AT='deleted_at';
     public $incrementing=true;
+    public function dorders() {
+        return $this->hasMany('App\Models\dorder','id_horder');
+    }
 }

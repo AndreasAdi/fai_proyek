@@ -77,9 +77,50 @@
 
             </tbody>
         </table><br>
+        
     </div>
-    <form action="{{url('user/checkOut')}}">
-        <button class="btn btn-success" type="submit">Check Out</button>
+    
+    <form action="{{url('user/checkOut')}}" method="POST">
+        @csrf
+    <!-- Button trigger modal -->
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
+            Checkout
+        </button>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Konfirmasi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <h2>Pilih Alamat</h2>
+                    @if (isset($alamat))
+                        <select name="alamat" id="">
+                            @foreach ($alamat as $item)
+                                <option value="{{$item->id_alamat}}">{{$item->alamat ." - ". $item->nama_penerima}}</option>
+                            @endforeach
+                        </select>
+                        <br><br>
+                    @else
+                        Tidak ada alamat, silahkan tambah alamat terlebih dahulu <br>
+                        <form action="user/alamat">
+                            <button type="submit">Alamat</button>
+                        </form>
+                    @endif
+                    <h3>Yakin checkout?</h2>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-success" type="submit">CheckOut</button>
+                </div>
+            </div>
+            </div>
+        </div>
     </form>
 </div>
 

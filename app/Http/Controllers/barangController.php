@@ -6,6 +6,7 @@ use App\Models\barang;
 use App\Models\kategoribarang;
 use App\Models\merchant;
 use App\Models\wishlist;
+use App\Models\alamatpengiriman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -180,9 +181,11 @@ class barangController extends Controller
     public function loadCart(Request $request){
         $userLogin=Session::get("userId");
         $customerCart= Session::get("cart_$userLogin");
+        $alamat = alamatpengiriman::where('id_user',$userLogin)->get();
         $customerCart= json_decode(json_encode($customerCart),true);
         return view('cart',[
-            "dataCart"=>$customerCart
+            "dataCart"=>$customerCart,
+            "alamat"=>$alamat
         ]);
     }
     public function loadItem(){

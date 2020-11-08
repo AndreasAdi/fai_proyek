@@ -45,6 +45,11 @@ Route::prefix('user')->group(function(){
     Route::get('/wishlist','user@loadwishlist');
     Route::get('/listSale','user@loadListSale');
     Route::get('/loadPageSale/{id_kategori}','user@loadPageSale');
+    Route::post('/checkOut','user@checkOut');
+    Route::get('/alamat','user@alamat');
+    Route::post('/tambahAlamat','user@tambahAlamat');
+    Route::get('/pembelian','user@pembelian');
+    Route::get('/pembelian/{idhorder}','user@detailPembelian');
 });
 
 Route::prefix('barang')->group(function(){
