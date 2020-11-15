@@ -15,7 +15,10 @@
                     Total Harga
                 </th>
                 <th>
-                    Status
+                    Tanggal Pemesanan
+                </th>
+                <th>
+                    Status Pembayaran
                 </th>
                 <th>
                     Action
@@ -34,6 +37,9 @@
                             </td>
                             <td>
                                 {{$item->jumlah_total}}
+                            </td>
+                            <td>
+                                {{$item->created_at}}
                             </td>
                             <td>
                                 {{$item->status}}

@@ -17,6 +17,7 @@ use App\Models\chatroom;
 use App\Models\kodeverifikasi;
 use App\Models\voucher;
 use App\Models\kategoribarang;
+use App\Models\reviewmerchant;
 use App\Models\sale;
 use App\Models\statusorder;
 use App\Models\wishlist;
@@ -291,6 +292,7 @@ class user extends Controller
     }
     public function checkOut(Request $request) {
         $userLogin=Session::get("userId");
+        $user = users::find($userLogin)->nama_user;
         $dataCart = Session::get("cart_$userLogin");
         $jumlahtotal = 0;
         foreach ($dataCart as $key => $value) {
@@ -302,6 +304,7 @@ class user extends Controller
         $Horder->id_alamat = $request->alamat;
         $Horder->alamat = $alamat->alamat;
         $Horder->id_user = Session::get("userId");
+        $Horder->nama_user = $user;
         $Horder->jumlah_total = $jumlahtotal;
         $Horder->status = "belum dibayar";
         $Horder->save();
@@ -372,7 +375,129 @@ class user extends Controller
     }
     public function detailPembelian($idhorder) {
         $dorder = dorder::where('id_horder', $idhorder)->get();
-        return view("detailPembelian", ['dorder'=>$dorder]);
+        $horder = horder::find($idhorder);
+        $horder = $horder->status;
+        $count = count($dorder);
+        $databarang = [];
+        $total = 0;
+        for ($i=0; $i < $count; $i++) { 
+            $databarang[] = Barang::where('id_barang',$dorder[$i]->id_barang)->first();
+            $total = $total + $dorder[$i]->jumlah_total;
+        }
+        return view("detailPembelian", ['dorder'=>$dorder, 'barang'=>$databarang, 'id_horder'=> $idhorder, 'status'=>$horder, 'total'=>$total]);
+    }
+    public function bayar(Request $request, $idhorder) {
+        $validateData = $request->validate(
+            [
+                'gambar' => 'required',
+            ],
+            [
+                "gambar.required" =>"Bukti tidak boleh kosong",
+            ]
+        );
+        $horder = horder::find($idhorder);
+        $nama = $horder->id_horder.".".$request->file("gambar")->getClientOriginalExtension();
+        $request->file("gambar")->storeAs("images_bukti", $nama, "public");
+        $horder->bukti_pembayaran = $nama;
+        $horder->status = "sudah dibayar";
+        $horder->save();
+
+        dorder::where('id_horder', $idhorder)
+          ->update(['status' => 'sudah dibayar']);
+        
+        $dorder = dorder::where('id_horder', $idhorder)->get();
+        foreach ($dorder as $key => $value) {
+            $statusorder = new statusorder;
+            $statusorder->id_dorder = $value->id_dorder;
+            $statusorder->status = "sudah dibayar";
+            $statusorder->save();
+        }
+        return redirect()->back();
+    }
+    public function penjualan() {
+        $merchant = merchant::where('id_user', Session::get('userId'))->first();
+        $merchant = $merchant->id_merchant;
+        $dorder = dorder::where('id_merchant', $merchant)->get();
+        //dd($dorder);
+        $count = count($dorder);
+        $datahorder = [];
+        for ($i=0; $i < $count; $i++) { 
+            $datahorder[] = horder::where('id_horder',$dorder[$i]->id_horder)->first();
+        }
+        return view('penjualan', ['dorder'=>$dorder, 'datahorder'=>$datahorder]);
+    }
+    public function kirim(Request $request,$iddorder) {
+        $validateData = $request->validate(
+            [
+                'nomor_resi' => 'required',
+            ],
+            [
+                "nomor_resi.required" =>"Resi Tidak Boleh Kosong",
+            ]
+        );
+        $dorder = dorder::find($iddorder);
+        $dorder->status = "sudah dikirim";
+        $dorder->resi_pengiriman = $request->nomor_resi;
+        $dorder->save();
+
+        $status = new statusorder;
+        $status->id_dorder = $iddorder;
+        $status->status = "sudah dikirim";
+        $status->save();
+
+        return redirect()->back();
+    }
+    public function terima($iddorder) {
+        $dorder = dorder::find($iddorder);
+        $dorder->status = "selesai";
+        $dorder->save();
+
+        $merchant = merchant::find($dorder->id_merchant);
+        $user = users::find($merchant->id_user);
+        $user->saldo = $user->saldo + $dorder->jumlah_total;
+        $user->save();
+
+        $status = new statusorder;
+        $status->id_dorder = $iddorder;
+        $status->status = "selesai";
+        $status->save();
+
+        return redirect()->back();
+    }
+    public function review(Request $request, $idmerchant, $iddorder) {
+        $userLogin=Session::get("userId");
+
+        $score = $request->score;
+        $isi = $request->isi;
+        $review = new reviewmerchant;
+        $review->id_dorder = $iddorder;
+        $review->id_user = $userLogin;
+        $review->id_merchant = $idmerchant;
+        $review->score = $score;
+        $review->isi_review = $isi;
+        $review->save();
+
+        $dorder = dorder::find($iddorder);
+        $dorder->status = "reviewed";
+        $dorder->save();
+
+        $status = new statusorder;
+        $status->id_dorder = $iddorder;
+        $status->status = "reviewed";
+        $status->save();
+
+        return redirect()->back();
+    }
+    public function reviewMerchant($idmerchant) {
+        $review = reviewmerchant::where('id_merchant', $idmerchant)->get();
+
+        $count = count($review);
+        $dataUser = [];
+        for ($i=0; $i < $count; $i++) { 
+            $dataUser[] = users::where('id',$review[$i]->id_user)->first();
+        }
+
+        return view("reviewMerchant",['dataReview'=> $review, 'dataUser'=>$dataUser]);
     }
 }
 

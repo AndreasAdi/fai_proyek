@@ -75,6 +75,9 @@
                     <li>
                         <a class="nav-link" href="{{url('admin/listSale')}}">Lihat Sale</a>
                     </li>
+                    <li>
+                        <a class="nav-link" href="{{url('admin/konfirmasi')}}">Konfirmasi Pembayaran</a>
+                    </li>
                     @else
 
                     <li>
@@ -87,6 +90,7 @@
                     <li>
                         <a class="nav-link" href="{{url('user/listSale')}}">Lihat Sale</a>
                     </li>
+                    
 
                     <li> <a href="{{url('barang/cart')}}" class="nav-link ml-auto">Cart</a></li>
                     @endif

@@ -9,6 +9,7 @@
             @method('POST')
             @csrf
             <div class="mx-auto" style="height: 400px;width:400px;">
+                <input type="hidden" name='gambar' value="{{$barang->gambar_barang}}">
                 <img style="height: 400px;width:400px; object-fit: contain;" src="{{asset("/storage/images/".$barang->gambar_barang)}}" alt="">
             </div>
             <div class="m-3">

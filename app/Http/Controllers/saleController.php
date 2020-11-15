@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\dorder;
+use App\Models\horder;
 use App\Models\sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\kategoribarang;
+use App\Models\statusorder;
 
 class saleController extends Controller
 {
@@ -54,5 +57,28 @@ class saleController extends Controller
         }else{
             return redirect()->back()->with('error','Sale Gagal Di Aktifkan');
         }
+    }
+    public function konfirmasi() {
+        $horder = horder::where('status', 'sudah dibayar')->get();
+        
+        return view('konfirmasiAdmin', ['horder'=> $horder]);
+    }
+    public function konfirmasiOrder($idhorder) {
+        $horder = horder::find($idhorder);
+        $horder->status = "sudah dikonfirmasi";
+        $horder->save();
+
+        dorder::where('id_horder', $idhorder)
+          ->update(['status' => 'sudah dikonfirmasi']);
+        
+        $dorder = dorder::where('id_horder', $idhorder)->get();
+        foreach ($dorder as $key => $value) {
+            $statusorder = new statusorder;
+            $statusorder->id_dorder = $value->id_dorder;
+            $statusorder->status = "sudah dikonfirmasi";
+            $statusorder->save();
+        }
+
+        return redirect()->back();
     }
 }

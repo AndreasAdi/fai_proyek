@@ -13,6 +13,9 @@
                     Jumlah
                 </th>
                 <th>
+                    Gambar
+                </th>
+                <th>
                     Harga
                 </th>
                 <th>
@@ -40,6 +43,9 @@
                                <input type="number" min='0' class='w-25' size="3" maxlength='3' value="{{$item['jumlah']}}" name="jumlah">
                             </td>
                             <td>
+                                <img src="{{asset("/storage/images/".$item['gambar'])}}" width="200px">
+                             </td>
+                            <td>
                                 Rp. {{number_format($item['harga']),2,",","."}}
                             </td>
                             <td>
@@ -60,10 +66,12 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <td>Total: Rp. {{number_format($total),2,",","."}}</td>
                     </tr>
                 @else
                     <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

@@ -94,6 +94,7 @@ class barangController extends Controller
                         "idBarang"=>$request->idBarang,
                         "idMerchant"=>$request->idMerchant,
                         "jumlah"=>$request->jumlah,
+                        "gambar"=>$request->gambar,
                         "namaBarang"=>$request->nama,
                         "harga"=>$request->harga
                 ]);
@@ -117,6 +118,7 @@ class barangController extends Controller
                         "idBarang"=>$request->idBarang,
                         "idMerchant"=>$request->idMerchant,
                         "jumlah"=>$request->jumlah,
+                        "gambar"=>$request->gambar,
                         "namaBarang"=>$request->nama,
                         "harga"=>$request->harga
                     );

@@ -41,6 +41,7 @@ Route::prefix('user')->group(function(){
     Route::post('/insertDetail','user@sendChat');
     Route::get('/loadChatroom','user@loadChatroom');
     Route::get('/loadtoko/{id}','user@loadtoko');
+    Route::get('/reviewMerchant/{idmerchant}','user@reviewMerchant');
     Route::get('/listVoucher','user@loadListVoucher');
     Route::get('/wishlist','user@loadwishlist');
     Route::get('/listSale','user@loadListSale');
@@ -50,6 +51,11 @@ Route::prefix('user')->group(function(){
     Route::post('/tambahAlamat','user@tambahAlamat');
     Route::get('/pembelian','user@pembelian');
     Route::get('/pembelian/{idhorder}','user@detailPembelian');
+    Route::post('/bayar/{idhorder}','user@bayar');
+    Route::get('/terima/{iddorder}','user@terima');
+    Route::post('/review/{idmerchant}/{iddorder}','user@review');
+    Route::get('/penjualan','user@penjualan');
+    Route::post('/kirim/{iddorder}','user@kirim');
 });
 
 Route::prefix('barang')->group(function(){
@@ -75,6 +81,8 @@ Route::prefix('admin')->group(function(){
     Route::view('/home','adminHome');
     Route::get('/listVoucher','VoucherController@loadListVoucher');
     Route::get('/listSale','saleController@loadListSale');
+    Route::get('/konfirmasi','saleController@konfirmasi');
+    Route::get('/konfirmasi/{idhorder}','saleController@konfirmasiOrder');
 });
 
 Route::prefix('voucher')->group(function(){

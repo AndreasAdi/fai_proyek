@@ -17,8 +17,15 @@
             <i style="color: gold" class="fas fa-star icon"></i>
             @endfor
         </h4>
+        <form action="/user/reviewMerchant/{{$dataMerchant->id_merchant}}">
+            <button type="submit" class="btn btn-warning">Lihat Review</button>
+        </form>
+        
         @else
         <h4>Belum Ada Rating</h4>
+        <form action="/user/reviewMerchant/{{$dataMerchant->id_merchant}}">
+            <button type="submit" class="btn btn-warning">Lihat Review</button>
+        </form>
         @endif
 
     </h4>
