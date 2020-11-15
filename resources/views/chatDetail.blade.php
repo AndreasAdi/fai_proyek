@@ -11,7 +11,7 @@ Chat Room
                 <h1 class='text-success'>{{$namaSender}}</h1>
             @endif
             <hr>
-            <div style="height: 250px;overflow-y: scroll;" class="container mt-5">
+            <div style="height: 350px;overflow-y: scroll;" class="container mt-5">
                 <form action='{{url("user/insertDetail")}}' method="POST">
                     @method('POST')
                     @csrf
