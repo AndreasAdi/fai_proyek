@@ -8,14 +8,14 @@ Chat Room
 
 <div class="container mt-5 col-6">
     <h1 class="text-success">Chat List</h1>
-<table class='table table-dark'>
-    <thead>
+<table class='table table-hover'>
+    <thead class="bg-success text-light text-center">
         <th>Reciver</th>
         <th>Nama</th>
         <th>Last Message</th>
         <th>Action</th>
     </thead>
-    <tbody>
+    <tbody class="text-center">
         @foreach ($headerChat as $key => $item)
         <tr>
             <td>
