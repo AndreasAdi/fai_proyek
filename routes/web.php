@@ -22,9 +22,9 @@ Route::get('/', function () {
     return view('loginBaru');
 });
 
-// Route::get('/', function () {
-//     return view('registerBaru');
-// });
+Route::get('/a', function () {
+    return view('verifyEmail');
+});
 
 Route::prefix('user')->group(function(){
     Route::view('/register', 'register');
