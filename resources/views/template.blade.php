@@ -113,28 +113,10 @@
                         </ul>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{url('user/isian')}}">Konfirmasi Pembayaran</a>
-                    </li>
-                    <li>
                         <a class="nav-link" href="{{url('admin/konfirmasi')}}">Konfirmasi Pembayaran</a>
                     </li>
                     @else
 
-<<<<<<< HEAD
-                    <li>
-                        <a class="nav-link" href="{{url('user/loadChatroom')}}">Chat Room</a>
-                    </li>
-
-                    <li>
-                        <a class="nav-link" href="{{url('user/listVoucher')}}">Lihat Voucher</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{{url('user/listSale')}}">Lihat Sale</a>
-                    </li>
-                    
-
-=======
->>>>>>> 5e594d8c8a30303e591b659709061b5f5bef7c5f
                     <li> <a href="{{url('barang/cart')}}" class="nav-link ml-auto">Cart</a></li>
                     @endif
                 </ul>
