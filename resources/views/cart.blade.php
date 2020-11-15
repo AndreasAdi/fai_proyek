@@ -85,16 +85,18 @@
 
             </tbody>
         </table><br>
-        
+
+
+
     </div>
-    
+
     <form action="{{url('user/checkOut')}}" method="POST">
         @csrf
     <!-- Button trigger modal -->
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
             Checkout
         </button>
-        
+
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
