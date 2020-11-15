@@ -34,7 +34,7 @@
                         {{-- nanti di hide kalau loginnya bukan akun merchant--}}
                     <li class="nav-item dropdown float-right">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-                          Menu Merchant
+                          Toko Saya
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li>
@@ -44,11 +44,35 @@
                             <li>
                                 <a class="dropdown-item" href="{{url('user/penjualan')}}">Daftar Penjualan</a>
                             </li>
-
                         </ul>
-                      </li>
-                      <li>
-                        <a class="nav-link" href="{{url('user/pembelian')}}">Daftar Pembelian</a>
+                    </li>
+                    <li class="nav-item dropdown float-right">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                            aria-expanded="false">
+                            Menu User
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{url('user/wishlist')}}">Wishlist</a>
+                            </li>
+                            <div class="dropdown-divider"></div>
+                            <li>
+                                <a class="dropdown-item" href="{{url('user/pembelian')}}">History Pembelian</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{url('user/alamat')}}">Alamat Saya</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{url('user/loadChatroom')}}">Chat</a>
+                            </li>
+                            <div class="dropdown-divider"></div>
+                            <li>
+                                <a class="dropdown-item" href="{{url('user/listVoucher')}}">Lihat Voucher</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{url('user/listSale')}}">Lihat Sale</a>
+                            </li>
+                        </ul>
                     </li>
                     @else
                     @if (session()->get('isAdmin')==false)
@@ -60,33 +84,38 @@
                     </li>
                     @endif
                     @endif
-                    <li>
-                        <a class="nav-link" href="{{url('user/alamat')}}">Alamat</a>
-                    </li>
-                    <a class="nav-link" href="{{url('user/wishlist')}}">Wishlist</a>
+
                     @if (session()->get("isAdmin")==true)
-                    <li> <a href="{{url('voucher/addVoucher')}}" class="nav-link">Voucher</a></li>
-                    <li>
-                        <a class="nav-link" href="{{url('sale/addSale')}}">Sale</a>
+                    <li class="nav-item dropdown float-right">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                            aria-expanded="false">
+                            Menu Sale
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{url('sale/addSale')}}">Add Sale</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{url('admin/listSale')}}">Lihat Sale</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown float-right">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                            aria-expanded="false">
+                            Menu Voucher
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li> <a href="{{url('voucher/addVoucher')}}" class="dropdown-item">Add Voucher</a></li>
+                            <li>
+                                <a class="dropdown-item" href="{{url('admin/listVoucher')}}">Lihat Voucher</a>
+                            </li>
+                        </ul>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{url('admin/listVoucher')}}">Lihat Voucher</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{{url('admin/listSale')}}">Lihat Sale</a>
+                        <a class="nav-link" href="{{url('user/isian')}}">Konfirmasi Pembayaran</a>
                     </li>
                     @else
-
-                    <li>
-                        <a class="nav-link" href="{{url('user/loadChatroom')}}">Chat Room</a>
-                    </li>
-
-                    <li>
-                        <a class="nav-link" href="{{url('user/listVoucher')}}">Lihat Voucher</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{{url('user/listSale')}}">Lihat Sale</a>
-                    </li>
 
                     <li> <a href="{{url('barang/cart')}}" class="nav-link ml-auto">Cart</a></li>
                     @endif
