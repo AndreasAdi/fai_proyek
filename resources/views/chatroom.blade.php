@@ -8,34 +8,20 @@ Chat Room
 
 <div class="container mt-5 col-6">
     <h1 class="text-success">Chat List</h1>
-<table class='table table-dark'>
-    <thead>
-        <th>Reciver</th>
-        <th>Nama</th>
-        <th>Last Message</th>
-        <th>Action</th>
-    </thead>
-    <tbody>
-        @foreach ($headerChat as $key => $item)
-        <tr>
-            <td>
-                @if ($item->id_sender==Session::get('userId'))
-                    {{$item->id_recepient}}
-                @else
-                    {{$item->id_sender}}
-                @endif
 
-            </td>
-            <td>
-                {{$nama[$key]['nama_user']}}
-            </td>
-            <td>{{$item->updated_at->format('Y-m-d H:i:s')}}</td>
-            <td><a href="{{url("user/loadDetailChat/$item[id_chatroom]")}}" class="btn btn-primary">View Chat</a></td>
-        </tr>
+
+<div class="d-flex flex-column">
+    @foreach ($headerChat as $key => $item)
+
+        <div class="shadow rounded p-3 mb-3">
+           <b> {{$nama[$key]['nama_user']}}</b>
+            <span class="ml-3 text text-secondary"> {{$item->last_message}}</span>
+            <a href="{{url("user/loadDetailChat/$item[id_chatroom]")}}" class="btn btn-primary float-right">View Chat</a>
+        </div>
+
+
         @endforeach
-
-    </tbody>
-</table>
+</div>
 </div>
     @endsection
 
