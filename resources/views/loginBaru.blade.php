@@ -87,7 +87,7 @@
                             {{-- <a class="txt1" href="#">
                                 Forgot Password?
                             </a> --}}
-                            <a href="{{url('user/register')}}" class="text-primary mt-5">Create Account</a>
+                            <a href="{{url('user/register')}}" class="mt-5" style="color: white;">Create Account</a>
                         </div>
                     
                 {{-- </form> --}}
