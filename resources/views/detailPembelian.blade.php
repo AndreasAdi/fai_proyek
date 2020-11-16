@@ -30,7 +30,7 @@
             <tbody>
                 @if (isset($dorder))
                     @foreach ($dorder as $key => $item)
-                        
+
                         <tr>
                             <td>
                                 {{$item->nama_barang}}
@@ -49,7 +49,7 @@
                             </td>
                             <td>
                                 Rp. {{number_format($item->jumlah_total),2,",","."}}
-                                
+
                             </td>
                             <td>
                                 {{$item->status}}
@@ -60,7 +60,7 @@
                                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#no{{$item->id_dorder}}">
                                             Barang Telah Diterima
                                           </button>
-                                          
+
                                           <!-- Modal -->
                                           <div class="modal fade" id="no{{$item->id_dorder}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -85,11 +85,11 @@
                                     <br><br>
                                     <form method="POST" action="/user/review/{{$item->id_merchant}}/{{$item->id_dorder}}">
                                         @csrf
-                                        
+
                                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#no{{$item->id_dorder}}">
                                             Review
                                           </button>
-                                          
+
                                           <!-- Modal -->
                                           <div class="modal fade" id="no{{$item->id_dorder}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -105,7 +105,7 @@
                                                     <label>Nilai (1 - 5) : </label><br>
                                                     <input type="number" class='w-25 form-control' min="1" max="5" name="score">
                                                     <label>Isi Review : </label>
-                                                    <input type="text" class="form-control" name="isi">
+                                                    <textarea class="form-control" name="isi">
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-success">Review</button>
@@ -117,7 +117,7 @@
                                 @endif
                             </td>
                         </tr>
-                        
+
                     @endforeach
                     <tr>
                         <td></td>
@@ -173,10 +173,10 @@
               </div>
         </div>
     </form>
-    @elseif ($status == "sudah dibayar")   
+    @elseif ($status == "sudah dibayar")
         <h2>Status Pembayaran : </h2>
         <p>Sedang dalam proses verifikasi</p>
-    @elseif ($status == "sudah dikonfirmasi")   
+    @elseif ($status == "sudah dikonfirmasi")
         <h2>Status Pembayaran : </h2>
         <p>Pembayaran telah dikonfirmasi dan diteruskan ke penjual</p>
     @endif
