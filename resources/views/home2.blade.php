@@ -44,17 +44,23 @@ home
     <form action="{{url("barang/filterBarang")}}" method="POST">
         @method('POST')
         @csrf
-        <select name="selectedKategori" aria-placeholder="Kategori" >
-            @if (isset($dataKategori))
+
+        <div class="input-group">
+            <select class="custom-select rounded-left" id="inputGroupSelect04"  name="selectedKategori">
+                @if (isset($dataKategori))
                 @foreach ($dataKategori as $item)
                     <option value="{{$item->id_kategori}}">{{$item->nama_kategori}}</option>
                 @endforeach
-            @else
-                <option value="">Tidak Ada Kategori</option>
-            @endif
-        </select>
-        <button class="btn btn-success" type="submit">Filter</button>
+                @else
+                    <option value="">Tidak Ada Kategori</option>
+                @endif
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-outline-success rounded-left" type="submit">Filter</button>
+            </div>
+        </div>
     </form>
+
       <h2 class="text-success">Featured Item</h2>
       <div class='d-flex justify-content-center  flex-wrap'>
         @foreach ($dataBarang as $item)

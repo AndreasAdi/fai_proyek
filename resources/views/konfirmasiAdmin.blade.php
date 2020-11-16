@@ -35,7 +35,7 @@
                             </td>
 
                             <td>
-                                {{$item->jumlah_total}}
+                               Rp. {{number_format($item->jumlah_total),2,",","."}}
                             </td>
                             <td>
                                 <img src="{{asset("/storage/images_bukti/".$item->bukti_pembayaran)}}" width="300px">
@@ -46,7 +46,7 @@
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
                                         Konfirmasi
                                       </button>
-                                      
+
                                       <!-- Modal -->
                                       <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">

@@ -7,8 +7,18 @@ Chat Room
 
 
 <div class="container mt-5 col-6">
-    <h1 class="text-success">Chat List</h1>
-
+    <h1 class="text-success">Chat Room</h1>
+        <form action={{url("user/searchChat")}} method="POST">
+            @method('POST')
+            @csrf
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Nama User"  name="KeySearchNamaUser" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </div>
+              </div>
+        </form>
+        <a href='{{url("user/loadChatroom")}}' class="btn btn-success mb-3 form-control">Reset</a>
 
 <div class="d-flex flex-column">
     @foreach ($headerChat as $key => $item)

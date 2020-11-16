@@ -1,7 +1,7 @@
 @extends('template')
 @section('isi')
 <div class="container mt-5  text-success">
-    <h1>Daftar Pembelian</h1>
+    <h1>Detail Pembelian</h1>
     <div class="d-flex flex-row">
         <table class="table table-striped">
             <thead>
@@ -45,7 +45,7 @@
                                 {{$item->jumlah_barang}}
                             </td>
                             <td>
-                                <img src="{{asset("/storage/images/".$barang[$key]->gambar_barang)}}" width="200px">
+                                <a href='{{url("barang/detailBarang/$item->id_barang")}}'><img src="{{asset("/storage/images/".$barang[$key]->gambar_barang)}}" width="200px"></a>
                             </td>
                             <td>
                                 Rp. {{number_format($item->jumlah_total),2,",","."}}
@@ -55,7 +55,7 @@
                                 {{$item->status}}
                                 @if ($item->status == "sudah dikirim")
                                 <br><br>
-                                    <form method="GET" action="/user/terima/{{$item->id_dorder}}">
+                                    <form method="GET" action='{{url("/user/terima/$item->id_dorder")}}'>
                                         <label>Konfirmasi Penerimaan Barang : </label>
                                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#no{{$item->id_dorder}}">
                                             Barang Telah Diterima
@@ -83,10 +83,10 @@
                                     </form>
                                     @elseif ($item->status == "selesai")
                                     <br><br>
-                                    <form method="POST" action="/user/review/{{$item->id_merchant}}/{{$item->id_dorder}}">
+                                    <form method="POST" action='{{url("/user/review/$item->id_merchant/$item->id_dorder")}}'>
                                         @csrf
 
-                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#no{{$item->id_dorder}}">
+                                        <button type="button" class="btn-success" data-toggle="modal" data-target="#no{{$item->id_dorder}}">
                                             Review
                                           </button>
 
@@ -105,7 +105,7 @@
                                                     <label>Nilai (1 - 5) : </label><br>
                                                     <input type="number" class='w-25 form-control' min="1" max="5" name="score">
                                                     <label>Isi Review : </label>
-                                                    <textarea class="form-control" name="isi">
+                                                    <textarea class="form-control" name="isi" rows="3"></textarea>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-success">Review</button>
@@ -135,7 +135,7 @@
     @if ($status == "belum dibayar")
     <h2>Pembayaran</h2>
     <p>Rekening BCA <br> No Rekening : 1231 1232 12321</p>
-    <form action="/user/bayar/{{$id_horder}}" method="POST" enctype="multipart/form-data">
+    <form action='{{url("/user/bayar/$id_horder")}}' method="POST" enctype="multipart/form-data">
         @csrf
         @if ($errors->any())
             <div class="alert alert-danger">

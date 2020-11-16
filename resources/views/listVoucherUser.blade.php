@@ -10,7 +10,7 @@
                     Nama
                 </th>
                 <th>
-                    Id Voucher
+                    Kode Voucher
                 </th>
                 <th>
                     Diskon

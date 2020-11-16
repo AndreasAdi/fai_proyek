@@ -20,10 +20,10 @@
                 </th>
                 <th>
                     Jumlah Total
-                </th>   
+                </th>
                 <th>
                     Status
-                </th>   
+                </th>
                 <th>
                     Action
                 </th>
@@ -31,7 +31,7 @@
             <tbody>
                 @if (isset($dorder))
                     @foreach ($dorder as $key => $item)
-                        
+
                         <tr>
                             <td>
                                 {{$datahorder[$key]->nama_user}}
@@ -43,10 +43,10 @@
                                 {{$item->jumlah_barang}}
                             </td>
                             <td>
-                                {{$item->harga_barang}}
+                                Rp. {{number_format($item->harga_barang),2,",","."}}
                             </td>
                             <td>
-                                {{$item->jumlah_total}}
+                                Rp. {{number_format($item->jumlah_total),2,",","."}}
                             </td>
                             <td>
                                 {{$item->status}}
@@ -55,7 +55,7 @@
                                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#no{{$item->id_dorder}}">
                                     Detail
                                   </button>
-                                  
+
                                   <!-- Modal -->
                                   <div class="modal fade" id="no{{$item->id_dorder}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -71,13 +71,13 @@
                                           <p>{{$item->status}}</p>
                                           @if ($item->status == 'sudah dikonfirmasi')
                                             <h3>Kirim Barang</h3>
-                                            <form action="/user/kirim/{{$item->id_dorder}}" method="POST">
+                                            <form action="{{url("/user/kirim/$item->id_dorder")}}" method="POST">
                                                 @csrf
                                                 Nomor Resi : <input class="form-control" type="text" name="nomor_resi" id="">
                                                 <button type="submit" class="btn btn-success">Kirim</button>
                                             </form>
                                           @endif
-                                          
+
                                         </div>
                                         <div class="modal-footer">
                                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

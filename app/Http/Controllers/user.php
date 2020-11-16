@@ -147,6 +147,7 @@ class user extends Controller
                     }else{
                         Session::put("isMerchant",false);
                         Session::put("isAdmin",false);
+                        Session::put('MerchantId',0);
                     }
                     if($req->remember==true){
                         Session::put("remember",$email);
@@ -389,7 +390,7 @@ class user extends Controller
         $count = count($dorder);
         $databarang = [];
         $total = 0;
-        for ($i=0; $i < $count; $i++) { 
+        for ($i=0; $i < $count; $i++) {
             $databarang[] = Barang::where('id_barang',$dorder[$i]->id_barang)->first();
             $total = $total + $dorder[$i]->jumlah_total;
         }
@@ -413,7 +414,7 @@ class user extends Controller
 
         dorder::where('id_horder', $idhorder)
           ->update(['status' => 'sudah dibayar']);
-        
+
         $dorder = dorder::where('id_horder', $idhorder)->get();
         foreach ($dorder as $key => $value) {
             $statusorder = new statusorder;
@@ -430,7 +431,7 @@ class user extends Controller
         //dd($dorder);
         $count = count($dorder);
         $datahorder = [];
-        for ($i=0; $i < $count; $i++) { 
+        for ($i=0; $i < $count; $i++) {
             $datahorder[] = horder::where('id_horder',$dorder[$i]->id_horder)->first();
         }
         return view('penjualan', ['dorder'=>$dorder, 'datahorder'=>$datahorder]);
@@ -502,11 +503,48 @@ class user extends Controller
 
         $count = count($review);
         $dataUser = [];
-        for ($i=0; $i < $count; $i++) { 
+        for ($i=0; $i < $count; $i++) {
             $dataUser[] = users::where('id',$review[$i]->id_user)->first();
         }
 
         return view("reviewMerchant",['dataReview'=> $review, 'dataUser'=>$dataUser]);
+    }
+
+    public function filterPembelian(Request $request){
+        $strToDate= strtotime($request->filterTanggal);
+        $date=date('Y-m-d 00:00:00',$strToDate);
+        $filterResult=horder::where('created_at',$date)->where('id_user',Session::get('userId'))->get();
+
+        return view('pembelian',[
+            "horder"=>$filterResult
+            ]);
+    }
+
+    public function searchChat(Request $request){
+        $idUserDiCari=users::where('nama_user',$request->KeySearchNamaUser)->first();
+
+        $hasilCari=chatroom::whereRaw('id_sender = ? AND id_recepient = ?',array(Session::get('userId'),$idUserDiCari->id))->
+        orWhereRaw("id_recepient = ? AND id_sender = ?",array(Session::get('userId'),$idUserDiCari->id))->get();
+
+        $count = count($hasilCari);
+        $datanama = [];
+
+        for ($i=0; $i < $count; $i++) {
+            if(users::find($hasilCari[$i]->id_sender)->id == Session::get('userId')) {
+                $dataNama[] = users::find($hasilCari[$i]->id_recepient);
+            }
+            else {
+                $dataNama[] = users::find($hasilCari[$i]->id_sender);
+            }
+        }
+        //$dataChatroom=json_decode(json_encode($dataChatroom),true);
+        if (isset($dataNama)) {
+            $dataNama=json_decode(json_encode($dataNama),true);
+            return view('chatroom',['headerChat'=>$hasilCari, 'nama'=>$dataNama]);
+        }
+        else {
+            return view('chatroom',['headerChat'=>$hasilCari]);
+        }
     }
 }
 

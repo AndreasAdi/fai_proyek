@@ -56,6 +56,8 @@ Route::prefix('user')->group(function(){
     Route::post('/review/{idmerchant}/{iddorder}','user@review');
     Route::get('/penjualan','user@penjualan');
     Route::post('/kirim/{iddorder}','user@kirim');
+    Route::post('/filterDaftarPembelian',"user@filterPembelian");
+    Route::post('/searchChat',"user@searchChat");
 });
 
 Route::prefix('barang')->group(function(){
