@@ -113,7 +113,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{url('admin/konfirmasi')}}">Konfirmasi Pembayaran</a>
+                        <a class="nav-link" href="{{url('user/isian')}}">Konfirmasi Pembayaran</a>
                     </li>
                     @else
 

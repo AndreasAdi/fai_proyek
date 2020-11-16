@@ -189,6 +189,8 @@ class user extends Controller
     public function prosesLogout(){
         Session::forget('userId');
         Session::forget('remember');
+        Session::forget('isMerchant');
+        Session::forget('isAdmin');
         Session::forget('active');
         return redirect('/');
     }
