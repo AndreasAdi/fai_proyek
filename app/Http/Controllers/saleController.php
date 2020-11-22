@@ -8,6 +8,9 @@ use App\Models\sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\kategoribarang;
+use App\Models\merchant;
+use App\Models\notifikasi;
+use App\Models\report;
 use App\Models\statusorder;
 
 class saleController extends Controller
@@ -68,6 +71,14 @@ class saleController extends Controller
         $horder->status = "sudah dikonfirmasi";
         $horder->save();
 
+        $notifikasi = new notifikasi;
+        $notifikasi->id_user = $horder->id_user;
+        $notifikasi->isi = "Pembayaran telah dikonfirmasi";
+        $notifikasi->status = "unread";
+        $notifikasi->save();
+
+        
+
         dorder::where('id_horder', $idhorder)
           ->update(['status' => 'sudah dikonfirmasi']);
         
@@ -77,6 +88,91 @@ class saleController extends Controller
             $statusorder->id_dorder = $value->id_dorder;
             $statusorder->status = "sudah dikonfirmasi";
             $statusorder->save();
+            
+            $idpenjual = merchant::where('id_merchant', $value['id_merchant'])->first()->id_user;
+            $notifikasi = new notifikasi;
+            $notifikasi->id_user = $idpenjual;
+            $notifikasi->isi = "Penjualan telah dibayar dan dikonfirmasi, segera kirim pesanan";
+            $notifikasi->status = "unread";
+            $notifikasi->save();
+        }
+
+        return redirect()->back();
+    }
+    public function konfirmasiReport() {
+        $report = report::where('status', 'new')->get();
+        $count = count($report);
+        $datamerchant = [];
+        for ($i=0; $i < $count; $i++) {
+            $datamerchant[] = merchant::where('id_merchant',$report[$i]->id_merchant)->first();
+        }
+        return view('konfirmasiReportAdmin', ['report'=> $report, 'datamerchant'=> $datamerchant]);
+    }
+    public function konfirmReport($idreport, $idhorder) {
+        $horder = horder::find($idhorder);
+
+        $report = report::find($idreport);
+        $report->status = "confirmed";
+        $report->save();
+
+        $notifikasi = new notifikasi;
+        $notifikasi->id_user = $horder->id_user;
+        $notifikasi->isi = "Report pesanan sudah dikonfirmasi";
+        $notifikasi->status = "unread";
+        $notifikasi->save();
+
+        
+
+        dorder::where('id_horder', $idhorder)
+          ->update(['status' => 'report sudah dikonfirmasi']);
+        
+        $dorder = dorder::where('id_horder', $idhorder)->get();
+        foreach ($dorder as $key => $value) {
+            $statusorder = new statusorder;
+            $statusorder->id_dorder = $value->id_dorder;
+            $statusorder->status = "report sudah dikonfirmasi";
+            $statusorder->save();
+            
+            $idpenjual = merchant::where('id_merchant', $value['id_merchant'])->first()->id_user;
+            $notifikasi = new notifikasi;
+            $notifikasi->id_user = $idpenjual;
+            $notifikasi->isi = "Report penjualan sudah dikonfirmasi";
+            $notifikasi->status = "unread";
+            $notifikasi->save();
+        }
+
+        return redirect()->back();
+    }
+    public function rejectReport($idreport, $idhorder) {
+        $horder = horder::find($idhorder);
+
+        $report = report::find($idreport);
+        $report->status = "rejected";
+        $report->save();
+
+        $notifikasi = new notifikasi;
+        $notifikasi->id_user = $horder->id_user;
+        $notifikasi->isi = "Report pesanan rejected";
+        $notifikasi->status = "unread";
+        $notifikasi->save();
+        
+
+        dorder::where('id_horder', $idhorder)
+          ->update(['status' => 'report rejected']);
+        
+        $dorder = dorder::where('id_horder', $idhorder)->get();
+        foreach ($dorder as $key => $value) {
+            $statusorder = new statusorder;
+            $statusorder->id_dorder = $value->id_dorder;
+            $statusorder->status = "report rejected";
+            $statusorder->save();
+            
+            $idpenjual = merchant::where('id_merchant', $value['id_merchant'])->first()->id_user;
+            $notifikasi = new notifikasi;
+            $notifikasi->id_user = $idpenjual;
+            $notifikasi->isi = "Report penjualan rejected";
+            $notifikasi->status = "unread";
+            $notifikasi->save();
         }
 
         return redirect()->back();

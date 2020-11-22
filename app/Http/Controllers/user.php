@@ -21,6 +21,8 @@ use App\Models\reviewmerchant;
 use App\Models\sale;
 use App\Models\statusorder;
 use App\Models\wishlist;
+use App\Models\notifikasi;
+use App\Models\report;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -172,6 +174,7 @@ class user extends Controller
         return view('listVoucherUser',['listVoucher'=>$listVoucher]);
     }
     public function home(Request $req){
+        $userLogin=Session::get("userId");
         if($req->session()->get('isMerchant')===false){
             $dataBarang=barang::paginate(6);
         }else{
@@ -179,7 +182,8 @@ class user extends Controller
             $dataBarang=barang::where("id_merchant","!=",$dataMechant->id_merchant)->paginate(6);
         }
         $dataCategori= kategoribarang::all();
-        return view("home2",['dataBarang'=>$dataBarang,'dataKategori'=>$dataCategori]);
+        $dataNotifikasi = notifikasi::where('id_user',$userLogin)->where('status','unread')->get();
+        return view("home2",['dataBarang'=>$dataBarang,'dataKategori'=>$dataCategori,'dataNotifikasi'=>$dataNotifikasi]);
     }
 
 
@@ -306,7 +310,7 @@ class user extends Controller
         $dataCart = Session::get("cart_$userLogin");
         $jumlahtotal = 0;
         foreach ($dataCart as $key => $value) {
-            $jumlahtotal = $jumlahtotal + ($value["jumlah"] * $value["harga"]);
+            $jumlahtotal = $jumlahtotal + ($value["jumlah"] * $value["harga"] + 20000 * $value['jumlah']);
         }
         DB::beginTransaction();
         $alamat = alamatpengiriman::find($request->alamat);
@@ -318,6 +322,11 @@ class user extends Controller
         $Horder->jumlah_total = $jumlahtotal;
         $Horder->status = "belum dibayar";
         $Horder->save();
+        $notifikasipembeli = new notifikasi;
+        $notifikasipembeli->id_user = $userLogin;
+        $notifikasipembeli->isi = "Ada pembelian baru, segera lakukan pembayaran";
+        $notifikasipembeli->status = "unread";
+        $notifikasipembeli->save();
         $lastid = $Horder->id_horder;
         if($Horder){
             foreach ($dataCart as $key => $value) {
@@ -331,18 +340,24 @@ class user extends Controller
                 $Dorder->id_barang = $value["idBarang"];
                 $Dorder->nama_barang = $barang->nama_barang;
                 $Dorder->jumlah_barang = $value["jumlah"];
-                $Dorder->harga_barang = $barang->harga;
-                $Dorder->jumlah_total = $value["jumlah"] * $value["harga"];
+                $Dorder->harga_barang = $value['harga'];
+                $Dorder->jumlah_total = $value["jumlah"] * $value["harga"] + 20000 *  $value['jumlah'];
                 $Dorder->status = "belum dibayar";
                 $Dorder->save();
                 $statusOrder = new statusorder;
                 $statusOrder->id_dorder = $Dorder->id_dorder;
                 $statusOrder->status = "belum dibayar";
                 $statusOrder->save();
+                $iduserMerchant = merchant::find($value["idMerchant"])->id_user;
+                $notifikasipenjual = new notifikasi;
+                $notifikasipenjual->id_user = $iduserMerchant;
+                $notifikasipenjual->isi = "Ada penjualan baru";
+                $notifikasipenjual->status = "unread";
+                $notifikasipenjual->save();
             }
             DB::commit();
             Session::forget("cart_$userLogin");
-            return redirect()->back()->with('success','Berhasil Di Checkout, silahkan melakukan pembayaran');
+            return $this->home($request);
         }else{
             DB::rollBack();
             return redirect()->back()->with('error','Gagal checkout');
@@ -455,6 +470,11 @@ class user extends Controller
         $status->status = "sudah dikirim";
         $status->save();
 
+        $idpembeli = horder::where('id_horder',$dorder->id_horder)->first()->id_user;
+        $notifikasi = new notifikasi;
+        $notifikasi->id_user = $idpembeli;
+        $notifikasi->isi = "Pesanan telah dikirim oleh penjual";
+
         return redirect()->back();
     }
     public function terima($iddorder) {
@@ -471,6 +491,12 @@ class user extends Controller
         $status->id_dorder = $iddorder;
         $status->status = "selesai";
         $status->save();
+
+        $notifikasi = new notifikasi;
+        $notifikasi->id_user = $user->id;
+        $notifikasi->isi = "Penjualan Selesai";
+        $notifikasi->status = "unread";
+        $notifikasi->save();
 
         return redirect()->back();
     }
@@ -545,6 +571,75 @@ class user extends Controller
         else {
             return view('chatroom',['headerChat'=>$hasilCari]);
         }
+    }
+    public function useVoucher(Request $req) {
+        $userLogin=Session::get("userId");
+        $dataCart = Session::get("cart_$userLogin");
+
+        $kodeVoucher = $req->codevoucher;
+        $voucher = voucher::find($kodeVoucher);
+        if ($voucher) {
+            //dd($dataCart);
+            $cek = false;
+            foreach ($dataCart as $key => $value) {
+                $idKategori = barang::where('id_barang', $value['idBarang'])->first()->id_kategori;
+                if ($idKategori == $voucher->id_kategori) {
+                    $dataCart[$key]['harga'] = $value['harga'] - $voucher->diskon;
+                    $cek = true;
+                }
+            }
+            if ($cek) {
+                Session::put("cart_$userLogin",$dataCart);
+                return redirect()->back()->with('success','Kode Voucher Ditambahkan');
+            }
+            else {
+                return redirect()->back()->with('error','Kode Voucher Tidak Berlaku');
+            }       
+            
+        }
+        else {
+            return redirect()->back()->with('error','Kode Voucher tidak ditemukan');
+        }
+    }
+    public function markAsRead($idnotifikasi) {
+        $notifikasi = notifikasi::find($idnotifikasi);
+        $notifikasi->status = "read";
+        $notifikasi->save();
+
+        return redirect()->back();
+    }
+    public function report($idmerchant, $iddorder, Request $req) {
+        $validateData = $req->validate(
+            [
+                'gambar' => 'required',
+            ],
+            [
+                "gambar.required" =>"Bukti tidak boleh kosong",
+            ]
+        );
+        $dorder = dorder::where('id_dorder',$iddorder)->first();
+        
+        $report = new report;
+        $report->id_horder = $dorder->id_horder;
+        $report->id_dorder = $iddorder;
+        $report->id_merchant = $idmerchant;
+        $report->isi_report = $req->masalah;
+        $report->bukti_report = "";
+        $report->save();
+        $nama = $report->id_report.".".$req->file("gambar")->getClientOriginalExtension();
+        $req->file("gambar")->storeAs("images_bukti_report", $nama, "public");
+        $report->bukti_report = $nama;
+        $report->save();
+
+        $dorder->status = "reported";
+        $dorder->save();
+
+        $status = new statusorder;
+        $status->id_dorder = $iddorder;
+        $status->status = "reported";
+        $status->save();
+
+        return redirect()->back();
     }
 }
 

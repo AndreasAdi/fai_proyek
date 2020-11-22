@@ -43,12 +43,12 @@
                             <td>
                                 <form action="{{url("admin/konfirmasi/$item->id_horder")}}" method='GET'>
                                     @csrf
-                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#no{{$item->id_horder}}">
                                         Konfirmasi
                                       </button>
 
                                       <!-- Modal -->
-                                      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                      <div class="modal fade" id="no{{$item->id_horder}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                           <div class="modal-content">
                                             <div class="modal-header">

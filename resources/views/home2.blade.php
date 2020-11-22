@@ -32,7 +32,16 @@ home
 
 @endsection
 @section('isi')
-
+@isset($dataNotifikasi)
+    @foreach ($dataNotifikasi as $item)
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ $item->isi }}
+        <a class="float-right" href="{{url('user/markAsRead/'.$item->id_notifikasi)}}">Mark As Read</a>
+        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endforeach
+    
+@endisset
 <div class="container mt-5">
 
     <form class="d-flex mx-auto mb-5 col-6" method="POST" action="{{url('barang/searchBarang')}}">

@@ -7,7 +7,7 @@
                 @method('POST')
                 @csrf
                 <div class="input-group mb-3">
-                    <input type="date" class="form-control" placeholder="Pick A Date" name='filterTanggal aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input type="date" class="form-control" placeholder="Pick A Date" name='filterTanggal' aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <div class="input-group-append">
                       <button class="btn btn-outline-success" type="submit">Filter</button>
                     </div>

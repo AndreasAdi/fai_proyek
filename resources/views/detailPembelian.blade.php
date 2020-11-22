@@ -52,7 +52,8 @@
 
                             </td>
                             <td>
-                                {{$item->status}}
+                                {{$item->status}} <br>
+                                Resi Pengiriman : {{$item->resi_pengiriman}}
                                 @if ($item->status == "sudah dikirim")
                                 <br><br>
                                     <form method="GET" action='{{url("/user/terima/$item->id_dorder")}}'>
@@ -86,9 +87,10 @@
                                     <form method="POST" action='{{url("/user/review/$item->id_merchant/$item->id_dorder")}}'>
                                         @csrf
 
-                                        <button type="button" class="btn-success" data-toggle="modal" data-target="#no{{$item->id_dorder}}">
+                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#no{{$item->id_dorder}}">
                                             Review
                                           </button>
+                                          
 
                                           <!-- Modal -->
                                           <div class="modal fade" id="no{{$item->id_dorder}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -113,7 +115,41 @@
                                                 </div>
                                               </div>
                                             </div>
-                                    </form>
+                                          </div>
+                                          </form>
+                                          <form method="POST" action='{{url("/user/report/$item->id_merchant/$item->id_dorder")}}' enctype="multipart/form-data">
+                                            @csrf
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#noreport{{$item->id_dorder}}">
+                                              Report / Komplain Merchant
+                                            </button>
+                                            <div class="modal fade" id="noreport{{$item->id_dorder}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                              <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalCenterTitle">Report Merchant</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                      <h5>Report Merchant</h5>
+                                                      <label>Masalah yang anda temui?</label><br>
+                                                      <select name="masalah" class="form-control" id="">
+                                                        <option value="Produk tidak lengkap/kurang">Produk tidak lengkap/kurang</option>
+                                                        <option value="Produk rusak">Produk rusak</option>
+                                                        <option value="Produk tidak sesuai deskripsi">Produk tidak sesuai deskripsi</option>
+                                                      </select>
+                                                      <label>Bukti Report</label><br>
+                                                      <input type="file" name="gambar" class="form-control">
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                      <button type="submit" class="btn btn-danger">Report</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                          
+                                    
                                 @endif
                             </td>
                         </tr>

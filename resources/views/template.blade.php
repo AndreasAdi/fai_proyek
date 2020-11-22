@@ -66,6 +66,9 @@
                     <li>
                         <a class="nav-link" href="{{url('admin/konfirmasi')}}">Konfirmasi Pembayaran</a>
                     </li>
+                    <li>
+                        <a class="nav-link" href="{{url('admin/konfirmasiReport')}}">Konfirmasi Report</a>
+                    </li>
                     @else
                             @if (session()->get("isMerchant")==true)
                             {{-- nanti di hide kalau loginnya bukan akun merchant--}}

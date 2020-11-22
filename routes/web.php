@@ -54,10 +54,13 @@ Route::prefix('user')->group(function(){
     Route::post('/bayar/{idhorder}','user@bayar');
     Route::get('/terima/{iddorder}','user@terima');
     Route::post('/review/{idmerchant}/{iddorder}','user@review');
+    Route::post('/report/{idmerchant}/{iddorder}','user@report');
     Route::get('/penjualan','user@penjualan');
     Route::post('/kirim/{iddorder}','user@kirim');
     Route::post('/filterDaftarPembelian',"user@filterPembelian");
     Route::post('/searchChat',"user@searchChat");
+    Route::post('/useVoucher',"user@useVoucher");
+    Route::any('/markAsRead/{idnotifikasi}',"user@markAsRead");
 });
 
 Route::prefix('barang')->group(function(){
@@ -85,6 +88,9 @@ Route::prefix('admin')->group(function(){
     Route::get('/listSale','saleController@loadListSale');
     Route::get('/konfirmasi','saleController@konfirmasi');
     Route::get('/konfirmasi/{idhorder}','saleController@konfirmasiOrder');
+    Route::get('/konfirmasiReport','saleController@konfirmasiReport');
+    Route::get('/konfirmasiReport/{idreport}/{idhorder}','saleController@konfirmReport');
+    Route::get('/rejectReport/{idreport}/{idhorder}','saleController@rejectReport');
 });
 
 Route::prefix('voucher')->group(function(){
