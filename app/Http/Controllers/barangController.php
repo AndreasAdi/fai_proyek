@@ -7,6 +7,7 @@ use App\Models\kategoribarang;
 use App\Models\merchant;
 use App\Models\wishlist;
 use App\Models\alamatpengiriman;
+use App\Models\reviewmerchant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -79,7 +80,7 @@ class barangController extends Controller
             ->paginate(6);
         }
 
-        //dd($dataSearch);
+            //dd($dataSearch);
         return view('searchBarang',[
             'dataBarang'=>$dataSearch
         ]);
@@ -192,6 +193,18 @@ class barangController extends Controller
     }
     public function loadItem(){
         $idMerchant=merchant::where('id_user',Session::get('userId'))->first();
+        $countReview = reviewmerchant::where('id_merchant', $idMerchant->id_merchant)->count();
+        $Review =reviewmerchant::where('id_merchant', $idMerchant->id_merchant)->get();
+        $jumlahReview = 0;
+        foreach ($Review as $key => $value) {
+            $jumlahReview = $jumlahReview + $value->score;
+        }
+        $ratarata = $jumlahReview / $countReview;
+        //dd($ratarata);
+        $idMerchant=merchant::where('id_merchant',Session::get('userId'))->first();
+        $idMerchant->rating_merchant = $ratarata;
+        $idMerchant->save();
+        $dataItem=barang::where('id_merchant',$idMerchant->id_merchant)->get();
 
         $dataItem=barang::withTrashed()->where('id_merchant',$idMerchant->id_merchant)->get();
 

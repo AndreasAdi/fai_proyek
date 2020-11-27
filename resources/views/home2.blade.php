@@ -33,14 +33,17 @@ home
 @endsection
 @section('isi')
 @isset($dataNotifikasi)
-    @foreach ($dataNotifikasi as $item)
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ $item->isi }}
-        <a class="float-right" href="{{url('user/markAsRead/'.$item->id_notifikasi)}}">Mark As Read</a>
-        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+    <div class="dropdown show w-25 ml-5 mt-3">
+    <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Notifikasi
+    </a>
+  
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        @foreach ($dataNotifikasi as $item)
+            <a class="dropdown-item" href="{{url('user/markAsRead/'.$item->id_notifikasi)}}">{{ $item->isi }}</a>
+        @endforeach
     </div>
-    @endforeach
-    
+  </div>
 @endisset
 <div class="container mt-5">
 

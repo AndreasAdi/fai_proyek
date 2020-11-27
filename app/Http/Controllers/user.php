@@ -23,6 +23,7 @@ use App\Models\statusorder;
 use App\Models\wishlist;
 use App\Models\notifikasi;
 use App\Models\report;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -120,6 +121,17 @@ class user extends Controller
     public function loadtoko($id){
         $idMerchant=merchant::where('id_merchant',$id)->first();
         //dd($idMerchant);
+        $countReview = reviewmerchant::where('id_merchant', $idMerchant->id_merchant)->count();
+        $Review =reviewmerchant::where('id_merchant', $idMerchant->id_merchant)->get();
+        $jumlahReview = 0;
+        foreach ($Review as $key => $value) {
+            $jumlahReview = $jumlahReview + $value->score;
+        }
+        $ratarata = $jumlahReview / $countReview;
+        //dd($ratarata);
+        $idMerchant=merchant::where('id_merchant',$id)->first();
+        $idMerchant->rating_merchant = $ratarata;
+        $idMerchant->save();
         $dataItem=barang::where('id_merchant',$idMerchant->id_merchant)->get();
 
         //$dataItem=json_decode(json_encode($dataItem),true);
@@ -164,6 +176,7 @@ class user extends Controller
                 return redirect()->back()->with('error','User Tidak Ditemukan, Silahkan Cek Kembali Email dan Password Anda');
             }
         }else{
+            Session::put("userId","admin");
             Session::put("isAdmin",true);
             return redirect('admin/home');
         }
@@ -171,19 +184,34 @@ class user extends Controller
     }
     public function loadListVoucher(){
         $listVoucher=voucher::all();
-        return view('listVoucherUser',['listVoucher'=>$listVoucher]);
+        $count = $listVoucher->count();
+        $kategori= [];
+        for ($i=0; $i < $count; $i++) { 
+            $kategori[] = kategoribarang::where('id_kategori', $listVoucher[$i]->id_kategori)->first()->nama_kategori;
+        }
+        return view('listVoucherUser',['listVoucher'=>$listVoucher, 'kategori'=>$kategori]);
     }
     public function home(Request $req){
-        $userLogin=Session::get("userId");
-        if($req->session()->get('isMerchant')===false){
-            $dataBarang=barang::paginate(6);
-        }else{
-            $dataMechant=merchant::where("id_user",$req->session()->get("userId"))->first();
-            $dataBarang=barang::where("id_merchant","!=",$dataMechant->id_merchant)->paginate(6);
+        if (Session::has("userId")) {
+            $userLogin=Session::get("userId");
+            if($req->session()->get('isMerchant')===false){
+                $dataBarang=barang::paginate(6);
+            }else{
+                $dataMechant=merchant::where("id_user",$req->session()->get("userId"))->first();
+                $dataBarang=barang::where("id_merchant","!=",$dataMechant->id_merchant)->paginate(6);
+            }
+            $dataCategori= kategoribarang::all();
+            $dataNotifikasi = notifikasi::where('id_user',$userLogin)->where('status','unread')->get();
+            return view("home2",['dataBarang'=>$dataBarang,'dataKategori'=>$dataCategori,'dataNotifikasi'=>$dataNotifikasi]);
         }
-        $dataCategori= kategoribarang::all();
-        $dataNotifikasi = notifikasi::where('id_user',$userLogin)->where('status','unread')->get();
-        return view("home2",['dataBarang'=>$dataBarang,'dataKategori'=>$dataCategori,'dataNotifikasi'=>$dataNotifikasi]);
+        else {
+            $dataBarang=barang::paginate(6);
+            $dataCategori= kategoribarang::all();
+            return view("home2",['dataBarang'=>$dataBarang,'dataKategori'=>$dataCategori]);
+        }
+    }
+    public function home2(Request $req){
+        
     }
 
 
@@ -452,17 +480,17 @@ class user extends Controller
         return view('penjualan', ['dorder'=>$dorder, 'datahorder'=>$datahorder]);
     }
     public function kirim(Request $request,$iddorder) {
-        $validateData = $request->validate(
-            [
-                'nomor_resi' => 'required',
-            ],
-            [
-                "nomor_resi.required" =>"Resi Tidak Boleh Kosong",
-            ]
-        );
+        // $validateData = $request->validate(
+        //     [
+        //         'nomor_resi' => 'required',
+        //     ],
+        //     [
+        //         "nomor_resi.required" =>"Resi Tidak Boleh Kosong",
+        //     ]
+        // );
         $dorder = dorder::find($iddorder);
         $dorder->status = "sudah dikirim";
-        $dorder->resi_pengiriman = $request->nomor_resi;
+        // $dorder->resi_pengiriman = $request->nomor_resi;
         $dorder->save();
 
         $status = new statusorder;
@@ -537,13 +565,32 @@ class user extends Controller
     }
 
     public function filterPembelian(Request $request){
-        $strToDate= strtotime($request->filterTanggal);
-        $date=date('Y-m-d 00:00:00',$strToDate);
-        $filterResult=horder::where('created_at',$date)->where('id_user',Session::get('userId'))->get();
+        $strToDateAwal= strtotime($request->filterTanggalAwal);
+        $strToDateAkhir= strtotime($request->filterTanggalAkhir);
+        $dateAwal=date('Y-m-d 00:00:00',$strToDateAwal);
+        $dateAkhir=date('Y-m-d 00:00:00',$strToDateAkhir);
+        $filterResult=horder::whereBetween('created_at',[$dateAwal, $dateAkhir])->where('id_user',Session::get('userId'))->get();
 
         return view('pembelian',[
             "horder"=>$filterResult
             ]);
+    }
+    public function filterPenjualan(Request $request){
+        $strToDateAwal= strtotime($request->filterTanggalAwal);
+        $strToDateAkhir= strtotime($request->filterTanggalAkhir);
+        $dateAwal=date('Y-m-d 00:00:00',$strToDateAwal);
+        $dateAkhir=date('Y-m-d 00:00:00',$strToDateAkhir);
+        $merchant = merchant::where('id_user', Session::get('userId'))->first();
+        $merchant = $merchant->id_merchant;
+        $filterResult=dorder::whereBetween('created_at',[$dateAwal, $dateAkhir])->where('id_merchant', $merchant)->get();
+        $count = count($filterResult);
+        $datahorder = [];
+        for ($i=0; $i < $count; $i++) {
+            $datahorder[] = horder::where('id_horder',$filterResult[$i]->id_horder)->first();
+        }
+        return view('penjualan',[
+            "dorder"=>$filterResult, 'datahorder'=>$datahorder
+        ]);
     }
 
     public function searchChat(Request $request){
@@ -577,15 +624,19 @@ class user extends Controller
         $dataCart = Session::get("cart_$userLogin");
 
         $kodeVoucher = $req->codevoucher;
-        $voucher = voucher::find($kodeVoucher);
+        $voucher = voucher::where('kode_voucher',$kodeVoucher)->first();
         if ($voucher) {
             //dd($dataCart);
             $cek = false;
             foreach ($dataCart as $key => $value) {
                 $idKategori = barang::where('id_barang', $value['idBarang'])->first()->id_kategori;
+                $curdate=strtotime(Carbon::now()->format('Y-m-d'));
+                $mydate=strtotime($voucher->masa_berlaku);
                 if ($idKategori == $voucher->id_kategori) {
-                    $dataCart[$key]['harga'] = $value['harga'] - $voucher->diskon;
-                    $cek = true;
+                    if ($mydate > $curdate) {
+                        $dataCart[$key]['harga'] = $value['harga'] - $voucher->diskon;
+                        $cek = true;
+                    }
                 }
             }
             if ($cek) {
@@ -606,7 +657,7 @@ class user extends Controller
         $notifikasi->status = "read";
         $notifikasi->save();
 
-        return redirect()->back();
+        return redirect("/user/home");
     }
     public function report($idmerchant, $iddorder, Request $req) {
         $validateData = $req->validate(
@@ -640,6 +691,33 @@ class user extends Controller
         $status->save();
 
         return redirect()->back();
+    }
+    public function reportPenjualan() {
+        $userLogin=Session::get("userId");
+        $dataMonth = [];
+        for ($i=0; $i < 12; $i++) { 
+            $dataMonth[] = DB::table('dorder')
+                    ->join('merchant', 'dorder.id_merchant', '=', 'merchant.id_merchant')
+                    ->where('merchant.id_user', $userLogin)
+                    ->whereYear('dorder.created_at', 2020)
+                    ->whereMonth('dorder.created_at', $i+1)
+                    ->count();
+        }
+        return view("reportPenjualan")->with(compact('dataMonth'));
+    }
+    public function prosesReportPenjualan(Request $req) {
+        $tahun = $req->tahun;
+        $userLogin=Session::get("userId");
+        $dataMonth = [];
+        for ($i=0; $i < 12; $i++) { 
+            $dataMonth[] = DB::table('dorder')
+                    ->join('merchant', 'dorder.id_merchant', '=', 'merchant.id_merchant')
+                    ->where('merchant.id_user', $userLogin)
+                    ->whereYear('dorder.created_at', $tahun)
+                    ->whereMonth('dorder.created_at', $i+1)
+                    ->count();
+        }
+        return view("reportPenjualan")->with(compact('dataMonth'));
     }
 }
 

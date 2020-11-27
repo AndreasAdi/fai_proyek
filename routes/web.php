@@ -18,21 +18,23 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::get('/', function () {
+Route::get('/', 'user@home');
+Route::get('/login', function () {
     return view('loginBaru');
 });
-
 Route::get('/a', function () {
     return view('verifyEmail');
 });
+Route::post('/user/prosesRegister', 'user@register');
+Route::post('/user/ceklogin', 'user@login');
+Route::post('/user/cekregister', 'user@sendEmail');
+Route::view('/user/verifikasi', 'verifyEmail');
+Route::view('/user/register', 'register');
+Route::get('/user/loadtoko/{id}','user@loadtoko');
+Route::get('/user/reviewMerchant/{idmerchant}','user@reviewMerchant');
 
-Route::prefix('user')->group(function(){
-    Route::view('/register', 'register');
+Route::group(['prefix' => 'user',  'middleware' => 'AuthLogin'], function() {
     Route::get('/home','user@home');
-    Route::post('/cekregister', 'user@sendEmail');
-    Route::view('/verifikasi', 'verifyEmail');
-    Route::post('/prosesRegister', 'user@register');
-    Route::post('/ceklogin', 'user@login');
     Route::view('/regisMerchant','registerMerchant');
     Route::post('/prosesRegisterMerchant', 'user@prosesRegisterMerchant');
     Route::get('/prosesLogout','user@prosesLogout');
@@ -40,8 +42,6 @@ Route::prefix('user')->group(function(){
     Route::get('/loadDetailChat/{id_chatroom}','user@loadDetailChat');
     Route::post('/insertDetail','user@sendChat');
     Route::get('/loadChatroom','user@loadChatroom');
-    Route::get('/loadtoko/{id}','user@loadtoko');
-    Route::get('/reviewMerchant/{idmerchant}','user@reviewMerchant');
     Route::get('/listVoucher','user@loadListVoucher');
     Route::get('/wishlist','user@loadwishlist');
     Route::get('/listSale','user@loadListSale');
@@ -58,16 +58,19 @@ Route::prefix('user')->group(function(){
     Route::get('/penjualan','user@penjualan');
     Route::post('/kirim/{iddorder}','user@kirim');
     Route::post('/filterDaftarPembelian',"user@filterPembelian");
+    Route::post('/filterDaftarPenjualan',"user@filterPenjualan");
     Route::post('/searchChat',"user@searchChat");
     Route::post('/useVoucher',"user@useVoucher");
-    Route::any('/markAsRead/{idnotifikasi}',"user@markAsRead");
+    Route::get('/markAsRead/{idnotifikasi}',"user@markAsRead");
+    Route::get('/reportPenjualan','user@reportPenjualan');
+    Route::post('/prosesReportPenjualan','user@prosesReportPenjualan');
 });
+Route::get('/barang/detailBarang/{id}','barangController@detail');
+Route::post('barang/searchBarang','barangController@searchBarang');
 
-Route::prefix('barang')->group(function(){
+Route::group(['prefix' => 'barang',  'middleware' => 'AuthLogin'], function() {
     Route::get('/addItem',"barangController@loadPageTambahBarang");
     Route::post('/prosesTambahBarang', "barangController@prosesTambahBarang");
-    Route::get('/detailBarang/{id}','barangController@detail');
-    Route::post('/searchBarang','barangController@searchBarang');
     Route::get('/cart',"barangController@loadCart");
     Route::get('/yourItem',"barangController@loadItem");
     Route::get('/editBarang/{id}','barangController@editBarang');
@@ -82,7 +85,7 @@ Route::prefix('barang')->group(function(){
     Route::post('/filterBarang',"barangController@Filter");
 });
 
-Route::prefix('admin')->group(function(){
+Route::group(['prefix' => 'admin',  'middleware' => 'AuthLogin'], function() {
     Route::view('/home','adminHome');
     Route::get('/listVoucher','VoucherController@loadListVoucher');
     Route::get('/listSale','saleController@loadListSale');
@@ -91,16 +94,20 @@ Route::prefix('admin')->group(function(){
     Route::get('/konfirmasiReport','saleController@konfirmasiReport');
     Route::get('/konfirmasiReport/{idreport}/{idhorder}','saleController@konfirmReport');
     Route::get('/rejectReport/{idreport}/{idhorder}','saleController@rejectReport');
+    Route::get('/addKategori','kategoriController@addKategori');
+    Route::post('/TambahKategori','kategoriController@tambahKategori');
+    Route::get('/listKategori','kategoriController@loadListKategori');
+    Route::get('/deleteKategori/{idkategori}','kategoriController@deleteKategori');
 });
 
-Route::prefix('voucher')->group(function(){
+Route::group(['prefix' => 'voucher',  'middleware' => 'AuthLogin'], function() {
     Route::get('/addVoucher','VoucherController@loadAddVoucher');
     Route::patch('/AktifkanVoucher/{id_voucher}','VoucherController@aktifkanVoucher');
     Route::delete('/NonAktifkanVoucher/{id_voucher}','VoucherController@deleteVoucher');
     Route::post('/TambahVoucher','VoucherController@makeVoucher');
 });
 
-Route::prefix('sale')->group(function(){
+Route::group(['prefix' => 'sale',  'middleware' => 'AuthLogin'], function() {
     Route::get('/addSale','saleController@loadAddSale');
     Route::patch('/AktifkanSale/{id_sale}','saleController@aktifkanSale');
     Route::delete('/NonAktifkanSale/{id_sale}','saleController@deleteSale');

@@ -53,7 +53,6 @@
                             </td>
                             <td>
                                 {{$item->status}} <br>
-                                Resi Pengiriman : {{$item->resi_pengiriman}}
                                 @if ($item->status == "sudah dikirim")
                                 <br><br>
                                     <form method="GET" action='{{url("/user/terima/$item->id_dorder")}}'>
@@ -148,7 +147,8 @@
                                                   </div>
                                                 </div>
                                               </div>
-                                          
+                                            </div>
+                                          </form>
                                     
                                 @endif
                             </td>

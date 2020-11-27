@@ -6,8 +6,11 @@
             <form action='{{url("user/filterDaftarPembelian")}}' method="POST">
                 @method('POST')
                 @csrf
+                <h5>Filter Tanggal (Awal & Akhir)</h5>
                 <div class="input-group mb-3">
-                    <input type="date" class="form-control" placeholder="Pick A Date" name='filterTanggal' aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    
+                    <input type="date" class="form-control" placeholder="Pick A Date" name='filterTanggalAwal' aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input type="date" class="form-control" placeholder="Pick A Date" name='filterTanggalAkhir' aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <div class="input-group-append">
                       <button class="btn btn-outline-success" type="submit">Filter</button>
                     </div>

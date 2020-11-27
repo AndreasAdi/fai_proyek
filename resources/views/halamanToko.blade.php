@@ -12,7 +12,7 @@
 
 <div>
         @if ($dataMerchant->rating_merchant >0)
-        <h4>Rating <br>{{$dataMerchant->rating_merchant}}
+        <h4>Rating <br>{{number_format($dataMerchant->rating_merchant, 1)}}
             @for ($i = 0; $i < $dataMerchant->rating_merchant; $i++)
             <i style="color: gold" class="fas fa-star icon"></i>
             @endfor

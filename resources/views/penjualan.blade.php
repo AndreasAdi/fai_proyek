@@ -3,6 +3,22 @@
 <div class="container mt-5  text-success">
     <h1>Daftar Penjualan</h1>
     @include('alert')
+    <div class="clearfix">
+        <form action='{{url("user/filterDaftarPenjualan")}}' method="POST">
+            @method('POST')
+            @csrf
+            <h5>Filter Tanggal (Awal & Akhir)</h5>
+            <div class="input-group mb-3">
+                
+                <input type="date" class="form-control" placeholder="Pick A Date" name='filterTanggalAwal' aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <input type="date" class="form-control" placeholder="Pick A Date" name='filterTanggalAkhir' aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-success" type="submit">Filter</button>
+                </div>
+            </div>
+        </form>
+        <a href={{url("user/penjualan")}}><button class="btn btn-success mb-2 form-control">Reset</button></a>
+    </div>
     <div class="d-flex flex-row">
         <table class="table table-striped">
             <thead>
@@ -73,7 +89,7 @@
                                             <h3>Kirim Barang</h3>
                                             <form action="{{url("/user/kirim/$item->id_dorder")}}" method="POST">
                                                 @csrf
-                                                Nomor Resi : <input class="form-control" type="text" name="nomor_resi" id="">
+                                                {{-- Nomor Resi : <input class="form-control" type="text" name="nomor_resi" id=""> --}}
                                                 <button type="submit" class="btn btn-success">Kirim</button>
                                             </form>
                                           @endif

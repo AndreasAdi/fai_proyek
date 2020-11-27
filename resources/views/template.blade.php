@@ -13,15 +13,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" />
     <style>
         @yield('style');
-
     </style>
     <title>@yield('judul')</title>
+    
 </head>
 
 <body>
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-success shadow">
         <div class="container-fluid">
-            @if (session()->get("isAdmin"))
+            @if (session()->has("userId"))
+                @if (session()->get("isAdmin"))
                 <a class="navbar-brand" href="{{url('admin/home')}}">
                     <h3> E-Store</h3>
                 </a>
@@ -63,6 +64,18 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-item dropdown float-right">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                            aria-expanded="false">
+                            Menu Kategori
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li> <a href="{{url('admin/addKategori')}}" class="dropdown-item">Add Kategori</a></li>
+                            <li>
+                                <a class="dropdown-item" href="{{url('admin/listKategori')}}">Lihat Kategori</a>
+                            </li>
+                        </ul>
+                    </li>
                     <li>
                         <a class="nav-link" href="{{url('admin/konfirmasi')}}">Konfirmasi Pembayaran</a>
                     </li>
@@ -83,6 +96,9 @@
                                         <li> <a class="dropdown-item" href="{{url('barang/yourItem')}}">Your Item</a></li>
                                         <li>
                                             <a class="dropdown-item" href="{{url('user/penjualan')}}">Daftar Penjualan</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{{url('user/reportPenjualan')}}">Laporan Penjualan</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -157,11 +173,24 @@
 
                 </ul>
             </div>
-
             <div class="form-inline my-2 my-lg-0">
 
                 <a href="{{url('user/prosesLogout')}}" class="btn btn-danger">Logout</a>
             </div>
+            
+            @else 
+                <a class="navbar-brand" href="{{url('/')}}">
+                    <h3> E-Store</h3>
+                </a>
+                <div class="form-inline my-2 my-lg-0">
+                    <a href="{{url('/login')}}" class="btn btn-danger">Login</a>
+                </div>
+            
+                
+            @endif
+            
+
+            
         </div>
     </nav>
     @yield('isi')
@@ -174,6 +203,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.min.js"
         integrity="sha384-5h4UG+6GOuV9qXh6HqOLwZMY4mnLPraeTrjT5v07o347pj6IkfuoASuGBhfDsp3d" crossorigin="anonymous">
     </script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
     @yield('script')
 
