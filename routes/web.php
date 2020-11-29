@@ -65,7 +65,7 @@ Route::group(['prefix' => 'user',  'middleware' => 'AuthLogin'], function() {
     Route::get('/reportPenjualan','user@reportPenjualan');
     Route::post('/prosesReportPenjualan','user@prosesReportPenjualan');
 });
-Route::get('/barang/detailBarang/{id}','barangController@detail');
+Route::get('/barang/detailBarang/{id}/{status}','barangController@detail');
 Route::post('barang/searchBarang','barangController@searchBarang');
 
 Route::group(['prefix' => 'barang',  'middleware' => 'AuthLogin'], function() {

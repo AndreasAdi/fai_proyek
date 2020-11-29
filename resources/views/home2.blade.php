@@ -37,7 +37,7 @@ home
     <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Notifikasi
     </a>
-  
+
     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         @foreach ($dataNotifikasi as $item)
             <a class="dropdown-item" href="{{url('user/markAsRead/'.$item->id_notifikasi)}}">{{ $item->isi }}</a>
@@ -81,7 +81,7 @@ home
                 <div class="card-body">
                 <p class="card-text text-truncate">{{$item->nama_barang}}</p>
                 <p class="card-text"><b>Rp. {{number_format($item->harga),2,",","."}}</b></p>
-                <a href="{{url("barang/detailBarang/$item->id_barang")}}" class="btn btn-block btn-success">Lihat Barang</a>
+                <a href="{{url("barang/detailBarang/$item->id_barang/normal")}}" class="btn btn-block btn-success">Lihat Barang</a>
                 </div>
             </div>
         @endforeach

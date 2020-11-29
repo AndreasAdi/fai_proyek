@@ -13,10 +13,10 @@
                     Berlaku Sampai Dengan
                 </th>
                 <th>
-                    Action
+                    Kategori
                 </th>
                 <th>
-                    Deskripsi
+                    Action
                 </th>
             </thead>
             <tbody>
@@ -30,10 +30,14 @@
                                 {{$item->tanggal_habis}}
                             </td>
                             <td>
-                                <a href="{{url("user/loadPageSale/$item->id_kategori")}}" class="btn btn-primary">Lihat Sale</a>
+                                @foreach ($kategori as $itemkat)
+                                    @if ($itemkat->id_kategori==$item->id_kategori)
+                                        {{$itemkat->nama_kategori}}
+                                    @endif
+                                @endforeach
                             </td>
                             <td>
-                                <a href="#" class="btn btn-success">Lihat Deskripsi</a>
+                                <a href="{{url("user/loadPageSale/$item->id_kategori")}}" class="btn btn-primary">Lihat Sale</a>
                             </td>
                         </tr>
                     @endforeach

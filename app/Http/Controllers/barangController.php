@@ -54,17 +54,25 @@ class barangController extends Controller
         }
     }
 
-    public function detail ($id){
+    public function detail ($id,$status){
         $userLogin=Session::get("userId");
         $barang = DB::table('barang')->where("id_barang",$id)
         ->Join('merchant', 'barang.id_merchant', '=', 'merchant.id_merchant')->first();
         $wishlist = wishlist::where('id_user',$userLogin)->where('id_barang',$id)->get();
         if (count($wishlist)==0){
             //dd($wishlist);
-            return view("detailBarang",["barang" =>$barang]);
+            if($status=="sale"){
+                return view("detailBarang",["barang" =>$barang,"status"=>"sale"]);
+            }else{
+                return view("detailBarang",["barang" =>$barang,"status"=>"normal"]);
+            }
         }
         else if(count($wishlist)==1){
-            return view("detailBarang",["barang" =>$barang,"wishlist"=>$wishlist]);
+            if($status=="sale"){
+                return view("detailBarang",["barang" =>$barang,"status"=>"sale","wishlist"=>$wishlist]);
+            }else{
+                return view("detailBarang",["barang" =>$barang,"status"=>"normal","wishlist"=>$wishlist]);
+            }
         }
     }
 
@@ -88,6 +96,7 @@ class barangController extends Controller
 
     public function AddToCart(Request $request){
         $userLogin=Session::get("userId");
+        $status=$request->status;
         if($request->jumlah<=$request->stok){
             if(!Session::has("cart_$userLogin")){
                 $cart=array(
@@ -110,7 +119,11 @@ class barangController extends Controller
                             $existingCart[$key]['jumlah']=$item['jumlah']+$request->jumlah;
                             $itemKembar=true;
                         }else{
-                            return redirect("barang/detailBarang/$request->idBarang")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+                            if($status=="sale"){
+                                return redirect("barang/detailBarang/$request->idBarang/sale")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+                            }else{
+                                return redirect("barang/detailBarang/$request->idBarang/normal")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+                            }
                         }
                     }
                 }
@@ -127,9 +140,19 @@ class barangController extends Controller
                 }
                 Session::put("cart_$userLogin",$existingCart);
             }
-            return redirect("barang/detailBarang/$request->idBarang")->with('success','Berhasil Menambahkan Barang Kedalam Cart');
+            if($status=="sale"){
+                return redirect("barang/detailBarang/$request->idBarang/sale")->with('success','Berhasil Menambahkan Barang Kedalam Cart');
+            }else{
+                return redirect("barang/detailBarang/$request->idBarang/normal")->with('success','Berhasil Menambahkan Barang Kedalam Cart');
+            }
+
         }else{
-            return redirect("barang/detailBarang/$request->idBarang")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+            if($status=="sale"){
+                return redirect("barang/detailBarang/$request->idBarang/sale")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+            }else{
+                return redirect("barang/detailBarang/$request->idBarang/normal")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+            }
+
         }
     }
     public function removeItemCart($id){

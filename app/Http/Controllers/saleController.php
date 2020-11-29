@@ -39,7 +39,8 @@ class saleController extends Controller
 
     public function loadListSale(){
         $listSale=sale::withTrashed()->get();
-        return view('listSaleAdmin',['listSale'=>$listSale]);
+        $kategori=kategoribarang::all();
+        return view('listSaleAdmin',['listSale'=>$listSale,"kategori"=>$kategori]);
     }
 
     public function deleteSale($id_sale){
@@ -63,7 +64,7 @@ class saleController extends Controller
     }
     public function konfirmasi() {
         $horder = horder::where('status', 'sudah dibayar')->get();
-        
+
         return view('konfirmasiAdmin', ['horder'=> $horder]);
     }
     public function konfirmasiOrder($idhorder) {
@@ -77,18 +78,18 @@ class saleController extends Controller
         $notifikasi->status = "unread";
         $notifikasi->save();
 
-        
+
 
         dorder::where('id_horder', $idhorder)
           ->update(['status' => 'sudah dikonfirmasi']);
-        
+
         $dorder = dorder::where('id_horder', $idhorder)->get();
         foreach ($dorder as $key => $value) {
             $statusorder = new statusorder;
             $statusorder->id_dorder = $value->id_dorder;
             $statusorder->status = "sudah dikonfirmasi";
             $statusorder->save();
-            
+
             $idpenjual = merchant::where('id_merchant', $value['id_merchant'])->first()->id_user;
             $notifikasi = new notifikasi;
             $notifikasi->id_user = $idpenjual;
@@ -121,18 +122,18 @@ class saleController extends Controller
         $notifikasi->status = "unread";
         $notifikasi->save();
 
-        
+
 
         dorder::where('id_horder', $idhorder)
           ->update(['status' => 'report sudah dikonfirmasi']);
-        
+
         $dorder = dorder::where('id_horder', $idhorder)->get();
         foreach ($dorder as $key => $value) {
             $statusorder = new statusorder;
             $statusorder->id_dorder = $value->id_dorder;
             $statusorder->status = "report sudah dikonfirmasi";
             $statusorder->save();
-            
+
             $idpenjual = merchant::where('id_merchant', $value['id_merchant'])->first()->id_user;
             $notifikasi = new notifikasi;
             $notifikasi->id_user = $idpenjual;
@@ -155,18 +156,18 @@ class saleController extends Controller
         $notifikasi->isi = "Report pesanan rejected";
         $notifikasi->status = "unread";
         $notifikasi->save();
-        
+
 
         dorder::where('id_horder', $idhorder)
           ->update(['status' => 'report rejected']);
-        
+
         $dorder = dorder::where('id_horder', $idhorder)->get();
         foreach ($dorder as $key => $value) {
             $statusorder = new statusorder;
             $statusorder->id_dorder = $value->id_dorder;
             $statusorder->status = "report rejected";
             $statusorder->save();
-            
+
             $idpenjual = merchant::where('id_merchant', $value['id_merchant'])->first()->id_user;
             $notifikasi = new notifikasi;
             $notifikasi->id_user = $idpenjual;
