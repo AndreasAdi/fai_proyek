@@ -1,4 +1,7 @@
 @extends('template')
+@section('judul')
+Detail Pembelian
+@endsection
 @section('isi')
 <div class="container mt-5  text-success">
     <h1>Detail Pembelian</h1>
@@ -89,7 +92,7 @@
                                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#no{{$item->id_dorder}}">
                                             Review
                                           </button>
-
+                                          
 
                                           <!-- Modal -->
                                           <div class="modal fade" id="no{{$item->id_dorder}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -149,7 +152,7 @@
                                               </div>
                                             </div>
                                           </form>
-
+                                    
                                 @endif
                             </td>
                         </tr>

@@ -8,6 +8,7 @@ use App\Models\merchant;
 use App\Models\wishlist;
 use App\Models\alamatpengiriman;
 use App\Models\reviewmerchant;
+use App\Models\notifikasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -45,7 +46,7 @@ class barangController extends Controller
         $insertNewItem->save();
         if($insertNewItem){
             $nama = $insertNewItem->id_barang.".".$request->file("gambar")->getClientOriginalExtension();
-            $request->file("gambar")->storeAs("images", $nama, "public");
+            $path = $request->file("gambar")->storeAs("images", $nama, "public");
             $insertNewItem->gambar_barang = $nama;
             $insertNewItem->save();
             return redirect()->back()->with('success','Berhasil Menambah barang');
@@ -141,7 +142,7 @@ class barangController extends Controller
                             $existingCart[$key]['jumlah']=$item['jumlah']+$request->jumlah;
                             $itemKembar=true;
                         }else{
-                            if($status=="sale"){
+                           if($status=="sale"){
                                 return redirect("barang/detailBarang/$request->idBarang/sale")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
                             }else{
                                 return redirect("barang/detailBarang/$request->idBarang/normal")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
@@ -167,14 +168,12 @@ class barangController extends Controller
             }else{
                 return redirect("barang/detailBarang/$request->idBarang/normal")->with('success','Berhasil Menambahkan Barang Kedalam Cart');
             }
-
         }else{
             if($status=="sale"){
                 return redirect("barang/detailBarang/$request->idBarang/sale")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
             }else{
                 return redirect("barang/detailBarang/$request->idBarang/normal")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
             }
-
         }
     }
     public function removeItemCart($id){
@@ -197,12 +196,11 @@ class barangController extends Controller
         Session::put("cart_$userLogin",$cartUser);
         return redirect("barang/cart")->with('success','Berhasil Edit Barang Dari Cart');
     }
-    public function AddToWishlist(Request $request,$id_barang){
+    public function AddToWishlist($id_barang){
         $userLogin=Session::get("userId");
         $addwishlist= new wishlist;
         $addwishlist->id_user = $userLogin;
         $addwishlist->id_barang = $id_barang;
-        $addwishlist->status=$request->status;
         $success = $addwishlist->save();
 
         if ($success){
@@ -242,12 +240,20 @@ class barangController extends Controller
         $countReview = reviewmerchant::where('id_merchant', $idMerchant->id_merchant)->count();
         $Review =reviewmerchant::where('id_merchant', $idMerchant->id_merchant)->get();
         $jumlahReview = 0;
+        $ratarata = 0;
         foreach ($Review as $key => $value) {
             $jumlahReview = $jumlahReview + $value->score;
         }
-        $ratarata = $jumlahReview / $countReview;
+        if ($countReview>0){
+                $ratarata = $jumlahReview / $countReview;
+        }
+        else if($countReview<=0){
+             $ratarata = $jumlahReview;
+        }
+    
         //dd($ratarata);
-        $idMerchant=merchant::where('id_merchant',Session::get('userId'))->first();
+        $idMerchant=merchant::where('id_user',Session::get('userId'))->first();
+
         $idMerchant->rating_merchant = $ratarata;
         $idMerchant->save();
         $dataItem=barang::where('id_merchant',$idMerchant->id_merchant)->get();
@@ -311,8 +317,7 @@ class barangController extends Controller
     }
 
     public function Filter(Request $request){
-
-        $min = $request->hargamin;
+             $min = $request->hargamin;
         $max = $request->hargamax;
 
         if($request->hargamax==null){
@@ -325,6 +330,8 @@ class barangController extends Controller
 
         $filterResult=barang::where('id_kategori',$request->selectedKategori)->where('id_merchant',"!=",Session::get('MerchantId'))->whereBetween('harga',[$min,$max])->paginate(6);
         $dataCategori= kategoribarang::all();
-        return view("home2",['dataBarang'=>$filterResult,'dataKategori'=>$dataCategori]);
+         $userLogin=Session::get("userId");
+          $dataNotifikasi = notifikasi::where('id_user',$userLogin)->where('status','unread')->get();
+        return view("home2",['dataBarang'=>$filterResult,'dataKategori'=>$dataCategori,'dataNotifikasi'=>$dataNotifikasi]);
     }
 }

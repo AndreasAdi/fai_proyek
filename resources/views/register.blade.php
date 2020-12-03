@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Login V3</title>
+  <title>Register</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -108,7 +108,10 @@
           {{-- <a class="txt1" href="#">
                                 Forgot Password?
                             </a> --}}
-          <a href="{{url('/')}}" class="mt-5" style="color: white;">Already Sign Up</a>
+          <a href="{{url('/login')}}" class="mt-5" style="color: white;">Already Sign Up</a>
+          <br>
+            <a href="{{url('/')}}" class="mt-5" style="color: white;">Go To Home</a>
+
         </div>
 
         {{-- </form> --}}

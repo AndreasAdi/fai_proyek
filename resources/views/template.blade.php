@@ -11,6 +11,7 @@
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/fontawesome.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" />
+     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
     <style>
         @yield('style');
     </style>
@@ -163,9 +164,9 @@
                                 <li>
                                     <a class="nav-link" href="{{url('user/regisMerchant')}}">Register As A Merchant</a>
                                 </li>
-                                <li>
-                                    <a class="nav-link" href="{{url('user/pembelian')}}">Daftar Pembelian</a>
-                                </li>
+                                <!--<li>-->
+                                <!--    <a class="nav-link" href="{{url('user/pembelian')}}">Daftar Pembelian</a>-->
+                                <!--</li>-->
                             @endif
                         @endif
                     <li> <a href="{{url('barang/cart')}}" class="nav-link ml-auto">Cart</a></li>
@@ -183,7 +184,7 @@
                     <h3> E-Store</h3>
                 </a>
                 <div class="form-inline my-2 my-lg-0">
-                    <a href="{{url('/login')}}" class="btn btn-danger">Login</a>
+                    <a href="{{url('/login')}}" class="btn btn-primary">Login</a>
                 </div>
             
                 
@@ -205,7 +206,12 @@
     </script>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
+  <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+    @stack('js')
+
     @yield('script')
+    
 
 </body>
 

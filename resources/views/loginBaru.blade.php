@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Login V3</title>
+    <title>Login</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -47,7 +47,7 @@
 </head>
 
 <body>
-
+   @include('alert')
     <div class="limiter">
         <div class="container-login100" style="background-image: url('assets/LoginAssets/images/bg-01.jpg');">
             <div class="wrap-login100">
@@ -88,6 +88,8 @@
                                 Forgot Password?
                             </a> --}}
                             <a href="{{url('user/register')}}" class="mt-5" style="color: white;">Create Account</a>
+                                    <br>
+            <a href="{{url('/')}}" class="mt-5" style="color: white;">Go To Home</a>  
                         </div>
                     
                 {{-- </form> --}}

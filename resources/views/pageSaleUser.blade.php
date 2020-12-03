@@ -1,6 +1,6 @@
 @extends('template')
 @section('judul')
-home
+Sale
 @endsection
 @section('style')
 .pagination > li > a,

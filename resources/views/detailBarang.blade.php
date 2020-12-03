@@ -1,4 +1,7 @@
 @extends('template')
+@section('judul')
+Detail Barang
+@endsection
 @section('isi')
 
 <div class="container mt-5">
@@ -26,13 +29,12 @@
                 <input type="hidden" value="{{$barang->stok}}" name='stok'>
                 <h4>{{$barang->nama_barang}}</h4>
                 <hr>
-                @if ($status=="sale")
+                    @if ($status=="sale")
                     <del><h3>Rp. {{number_format($barang->harga),2,",","."}}</h3></del> <br>
                     <h3>Rp. {{number_format($barang->harga_sale),2,",","."}}</h3>
                 @else
                     <h3>Rp. {{number_format($barang->harga),2,",","."}}</h3>
                 @endif
-
                 <hr>
                     <b>Sisa Stock : {{$barang->stok}}</b>
                 <hr>
@@ -43,13 +45,9 @@
                   </div>
                 <hr>
                 @if (isset($wishlist))
-                    @if ($status=="sale")
-                        <a class="btn btn-danger mb-5" href="{{url("barang/RemoveFromWishlist/".$barang->id_barang)}}"> <i class="far fa-heart"></i> Remove From WishLists</a>
-                    @else
-                        <a class="btn btn-danger mb-5" href="{{url("barang/RemoveFromWishlist/".$barang->id_barang)}}"> <i class="far fa-heart"></i> Remove From WishLists</a>
-                    @endif
+                <a class="btn btn-danger mb-5" href="{{url("barang/RemoveFromWishlist/".$barang->id_barang)}}"> <i class="far fa-heart"></i> Remove From WishLists</a>
                 @else
-                    <a class="btn btn-success mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}"><i class="far fa-heart"></i> Add to Wishlist</a>
+                <a class="btn btn-success mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}"><i class="far fa-heart"></i> Add to Wishlist</a>
                 @endif
 
                 <a class="btn btn-success mb-5" href="{{url("user/makeChatroom/$barang->id_merchant")}}"><i class="far fa-comment"></i> Chat Merchant</a>

@@ -1,4 +1,7 @@
 @extends('template')
+@section('judul')
+Toko Home
+@endsection
 @section('isi')
 @include('alert')
 @section('style')

@@ -36,7 +36,7 @@ class VoucherController extends Controller
     }
     public function loadListVoucher(){
         $listVoucher=voucher::withTrashed()->get();
-        return view('VoucherAdmin',['listVoucher'=>$listVoucher]);
+        return view('voucherAdmin',['listVoucher'=>$listVoucher]);
     }
     public function deleteVoucher($id_voucher){
         $deleteVoucher=voucher::findOrFail($id_voucher);

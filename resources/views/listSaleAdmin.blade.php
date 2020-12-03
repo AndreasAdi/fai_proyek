@@ -1,11 +1,13 @@
 @extends('template')
+@section('judul')
+Admin List Sale
+@endsection
 @section('isi')
 
 <div class="container mt-5  text-success">
     <h1>List Sale</h1>
     @include('alert')
-    <div class="d-flex flex-row">
-        <table class="table table-striped">
+        <table class="table table-striped" id="table">
             <thead>
                 <th>
                     Nama
@@ -41,7 +43,7 @@
                                 {{$item->tanggal_habis}}
                             </td>
                             <td>
-                                @foreach ($kategori as $itemkat)
+                                 @foreach ($kategori as $itemkat)
                                     @if ($itemkat->id_kategori==$item->id_kategori)
                                         {{$itemkat->nama_kategori}}
                                     @endif
@@ -87,7 +89,12 @@
                 @endif
             </tbody>
         </table><br>
-    </div>
+
 </div>
 
 @endsection
+@push('js')
+<script>
+$("#table").dataTable();
+</script>
+@endpush

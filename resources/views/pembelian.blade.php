@@ -1,5 +1,37 @@
 @extends('template')
+@section('judul')
+History Pembelian
+@endsection
 @section('isi')
+@section('style')
+.pagination > li > a,
+.pagination > li > span {
+    color: green;
+}
+
+.pagination > .active > a,
+.pagination > .active > a:focus,
+.pagination > .active > a:hover,
+.pagination > .active > span,
+.pagination > .active > span:focus,
+.pagination > .active > span:hover {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #198754; //your color
+    border-color: #198754; //your color
+}
+.page-link:hover{
+    z-index: 1;
+    color: #198754;
+    border-color: #198754; //your color
+}
+
+@endsection
 <div class="container mt-5  text-success">
     <h1>Daftar Pembelian</h1>
         <div class="clearfix">
@@ -18,8 +50,8 @@
             </form>
             <a href={{url("user/pembelian")}}><button class="btn btn-success mb-2 form-control">Reset</button></a>
         </div>
-    <div class="d-flex flex-row">
-        <table class="table table-striped">
+ 
+        <table class="table table-striped" id="table">
             <thead>
                 <th>
                     Id Order
@@ -43,7 +75,6 @@
             <tbody>
                 @if (isset($horder))
                     @foreach ($horder as $item)
-
                         <tr>
                             <td>
                                 {{$item->id_horder}}
@@ -70,6 +101,15 @@
                 @endif
             </tbody>
         </table><br>
-    </div>
+    
+
 </div>
 @endsection
+
+@push('js')
+<script>
+$("#table").dataTable();
+</script>
+@endpush
+
+

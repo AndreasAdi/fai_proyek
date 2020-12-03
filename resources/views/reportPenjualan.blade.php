@@ -1,4 +1,7 @@
 @extends('template')
+@section('judul')
+Report Penjualan
+@endsection
 @section('isi')
 @isset($dataMonth)
 <script>
@@ -7,7 +10,7 @@
         animationEnabled: true,
         theme: "light2", // "light1", "light2", "dark1", "dark2"
         title:{
-            text: "Orders"
+            text: "Number of Orders"
         },
         axisY: {
             title: "Number of Orders"
@@ -34,7 +37,37 @@
         }]
     });
     chart.render();
-    
+    var chart2 = new CanvasJS.Chart("chartContainer2", {
+        animationEnabled: true,
+        theme: "light2", // "light1", "light2", "dark1", "dark2"
+        title:{
+            text: "Ammount of Orders"
+        },
+        axisY: {
+            title: "Ammount of Orders"
+        },
+        data: [{        
+            type: "column",  
+            //showInLegend: true, 
+            // legendMarkerColor: "grey",
+            // legendText: "Last 12 Months",
+            dataPoints: [
+                { y: <?php echo $dataMonth2[0]; ?>, label: "Jan" },
+                { y: <?php echo $dataMonth2[1]; ?>,  label: "Feb" },
+                { y: <?php echo $dataMonth2[2]; ?>,  label: "Mar" },
+                { y: <?php echo $dataMonth2[3]; ?>,  label: "Apr" },
+                { y: <?php echo $dataMonth2[4]; ?>,  label: "May" },
+                { y: <?php echo $dataMonth2[5]; ?>,  label: "Jun" },
+                { y: <?php echo $dataMonth2[6]; ?>,  label: "Jul" },
+                { y: <?php echo $dataMonth2[7]; ?>,  label: "Aug" },
+                { y: <?php echo $dataMonth2[8]; ?>,  label: "Sep" },
+                { y: <?php echo $dataMonth2[9]; ?>,  label: "Oct" },
+                { y: <?php echo $dataMonth2[10]; ?>,  label: "Nov" },
+                { y: <?php echo $dataMonth2[11]; ?>,  label: "Des" },
+            ]
+        }]
+    });
+    chart2.render();
     }
 </script>
 @endisset
@@ -64,7 +97,9 @@
     </select>
     <button type="submit" class="btn btn-success mt-2">Cetak</button>
     </form>
-    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+    <div id="chartContainer" style="height: 370px; width: 100%;"></div><br><br>
+    <div id="chartContainer2" style="height: 370px; width: 100%;"></div>
 </div>
+<br><br><br>
 
 @endsection

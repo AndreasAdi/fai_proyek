@@ -1,5 +1,37 @@
 @extends('template')
+@section('judul')
+Penjualan
+@endsection
 @section('isi')
+@section('style')
+.pagination > li > a,
+.pagination > li > span {
+    color: green;
+}
+
+.pagination > .active > a,
+.pagination > .active > a:focus,
+.pagination > .active > a:hover,
+.pagination > .active > span,
+.pagination > .active > span:focus,
+.pagination > .active > span:hover {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #198754; //your color
+    border-color: #198754; //your color
+}
+.page-link:hover{
+    z-index: 1;
+    color: #198754;
+    border-color: #198754; //your color
+}
+
+@endsection
 <div class="container mt-5  text-success">
     <h1>Daftar Penjualan</h1>
     @include('alert')
@@ -20,7 +52,7 @@
         <a href={{url("user/penjualan")}}><button class="btn btn-success mb-2 form-control">Reset</button></a>
     </div>
     <div class="d-flex flex-row">
-        <table class="table table-striped">
+        <table class="table table-striped" id="table">
             <thead>
                 <th>
                     Nama Pembeli
@@ -106,6 +138,14 @@
                 @endif
             </tbody>
         </table><br>
+        
     </div>
+
 </div>
 @endsection
+
+@push('js')
+<script>
+$("#table").dataTable();
+</script>
+@endpush

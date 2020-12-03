@@ -35,11 +35,6 @@ border-color: #198754; //your color
 
 @endsection
 @section('isi')
-@isset($dataNotifikasi)
-    <div class="dropdown show w-25 ml-5 mt-3">
-    <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Notifikasi
-    </a>
 
 <div>
     <div class="d-flex flex-row">
@@ -67,13 +62,13 @@ border-color: #198754; //your color
                 <b class="ml-3">Harga Minimum</b>
                 <div class="input-group mb-3 p-3">
                     <span class="input-group-text">Rp</span>
-                <input type="number" class="form-control" name="hargamin" min="0" value="{{old('hargamin')}}">
+                    <input type="number" class="form-control" name="hargamin" min="0">
                   </div>
 
                   <b class="ml-3">Harga Maximum</b>
                   <div class="input-group mb-3 p-3">
                       <span class="input-group-text">Rp</span>
-                      <input type="number" class="form-control" name="hargamax" max="999999999" value="{{old('hargamaxs')}}>
+                      <input type="number" class="form-control" name="hargamax" min ="0" max="999999999">
                     </div>
 
                     <div class="p-3">

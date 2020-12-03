@@ -1,4 +1,7 @@
 @extends('template')
+@section('judul')
+Cart
+@endsection
 @section('isi')
 @include('alert')
 <div class="container mt-5  text-success">

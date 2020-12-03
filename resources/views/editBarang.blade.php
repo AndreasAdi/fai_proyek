@@ -1,6 +1,6 @@
 @extends('template')
 @section('judul')
-Tambah Barang
+Edit Barang
 @endsection
 @section('isi')
 @include('alert')

@@ -1,0 +1,22 @@
+[29-Nov-2020 21:07:43 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 4
+[29-Nov-2020 21:17:22 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 3
+[29-Nov-2020 21:29:13 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 3
+[29-Nov-2020 21:31:02 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 3
+[29-Nov-2020 21:32:02 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 3
+[29-Nov-2020 21:34:42 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 3
+[29-Nov-2020 21:41:30 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 6
+[29-Nov-2020 21:48:29 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 6
+[29-Nov-2020 21:50:48 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 6
+[29-Nov-2020 21:51:50 Asia/Jakarta] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/proq3228/public_html/symlink.php on line 12
+[29-Nov-2020 21:51:54 Asia/Jakarta] PHP Parse error:  syntax error, unexpected '}', expecting ',' or ';' in /home/proq3228/public_html/symlink.php on line 12
+[29-Nov-2020 21:52:08 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 6
+[29-Nov-2020 22:13:01 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 6
+[29-Nov-2020 22:17:33 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 6
+[29-Nov-2020 22:17:33 Asia/Jakarta] PHP Warning:  readlink(): No such file or directory in /home/proq3228/public_html/symlink.php on line 8
+[29-Nov-2020 22:18:28 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 6
+[29-Nov-2020 22:19:11 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 6
+[29-Nov-2020 22:19:11 Asia/Jakarta] PHP Warning:  readlink(): No such file or directory in /home/proq3228/public_html/symlink.php on line 8
+[29-Nov-2020 22:27:31 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 6
+[29-Nov-2020 22:28:09 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 6
+[29-Nov-2020 22:28:56 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 6
+[29-Nov-2020 22:29:19 Asia/Jakarta] PHP Warning:  symlink() has been disabled for security reasons in /home/proq3228/public_html/symlink.php on line 6

@@ -1,10 +1,12 @@
 @extends('template')
+@section('judul')
+List Sale
+@endsection
 @section('isi')
 
 <div class="container mt-5  text-success">
     <h1>Your Voucher</h1>
-    <div class="d-flex flex-row">
-        <table class="table table-striped">
+        <table class="table table-striped" id="table">
             <thead>
                 <th>
                     Nama
@@ -52,7 +54,11 @@
                 @endif
             </tbody>
         </table><br>
-    </div>
 </div>
 
 @endsection
+@push('js')
+<script>
+$("#table").dataTable();
+</script>
+@endpush

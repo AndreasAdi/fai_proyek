@@ -1,4 +1,7 @@
 @extends('template')
+@section('judul')
+List Item
+@endsection
 @section('isi')
 @include('alert')
 @section('style')

@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 //     return view('login');
 // });
 
+Route::get('/storagelink', function() {
+    Artisan::call('storage:link');
+});
 
 Route::get('/', 'user@home');
 Route::get('/login', function () {
@@ -57,8 +60,8 @@ Route::group(['prefix' => 'user',  'middleware' => 'AuthLogin'], function() {
     Route::post('/report/{idmerchant}/{iddorder}','user@report');
     Route::get('/penjualan','user@penjualan');
     Route::post('/kirim/{iddorder}','user@kirim');
-    Route::post('/filterDaftarPembelian',"user@filterPembelian");
-    Route::post('/filterDaftarPenjualan',"user@filterPenjualan");
+    Route::any('/filterDaftarPembelian',"user@filterPembelian");
+    Route::any('/filterDaftarPenjualan',"user@filterPenjualan");
     Route::post('/searchChat',"user@searchChat");
     Route::post('/useVoucher',"user@useVoucher");
     Route::get('/markAsRead/{idnotifikasi}',"user@markAsRead");
@@ -74,16 +77,18 @@ Route::group(['prefix' => 'barang',  'middleware' => 'AuthLogin'], function() {
     Route::get('/cart',"barangController@loadCart");
     Route::get('/yourItem',"barangController@loadItem");
     Route::get('/editBarang/{id}','barangController@editBarang');
-    Route::get('/addToWishlist/{id_barang}/{status}','barangController@AddToWishlist');
-    Route::get('/RemoveFromWishlist/{id_barang}/{status}','barangController@RemoveFromWishlist');
+    Route::get('/addToWishlist/{id_barang}','barangController@AddToWishlist');
+    Route::get('/RemoveFromWishlist/{id_barang}','barangController@RemoveFromWishlist');
     Route::patch('/prosesEditBarang','barangController@prosesEditBarang');
     Route::post('/addToCart',"barangController@AddToCart");
     Route::delete('/NonAktifBarang/{id}','barangController@deleteBarang');
     Route::patch('/aktifkanBarang/{id}','barangController@aktifkanBarang');
     Route::get('/removeItemCart/{id}',"barangController@removeItemCart");
     Route::get('/editItemCart/{id}',"barangController@editItemCart");
-    Route::post('/filterBarang',"barangController@Filter");
+   
 });
+
+ Route::post('barang/filterBarang',"barangController@Filter");
 
 Route::group(['prefix' => 'admin',  'middleware' => 'AuthLogin'], function() {
     Route::view('/home','adminHome');
@@ -92,8 +97,8 @@ Route::group(['prefix' => 'admin',  'middleware' => 'AuthLogin'], function() {
     Route::get('/konfirmasi','saleController@konfirmasi');
     Route::get('/konfirmasi/{idhorder}','saleController@konfirmasiOrder');
     Route::get('/konfirmasiReport','saleController@konfirmasiReport');
-    Route::get('/konfirmasiReport/{idreport}/{idhorder}','saleController@konfirmReport');
-    Route::get('/rejectReport/{idreport}/{idhorder}','saleController@rejectReport');
+    Route::get('/konfirmasiReport/{idreport}/{iddorder}','saleController@konfirmReport');
+    Route::get('/rejectReport/{idreport}/{iddorder}','saleController@rejectReport');
     Route::get('/addKategori','kategoriController@addKategori');
     Route::post('/TambahKategori','kategoriController@tambahKategori');
     Route::get('/listKategori','kategoriController@loadListKategori');

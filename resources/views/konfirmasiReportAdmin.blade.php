@@ -1,11 +1,13 @@
 @extends('template')
+@section('judul')
+Konfirmasi Report
+@endsection
 @section('isi')
 
 <div class="container mt-5  text-success">
     <h1>List Report</h1>
     @include('alert')
-    <div class="d-flex flex-row">
-        <table class="table table-striped">
+        <table class="table table-striped" id="table">
             <thead>
                 <th>
                     Id Horder
@@ -46,7 +48,7 @@
                                 <img src="{{asset("/storage/images_bukti_report/".$item->bukti_report)}}" width="300px">
                             </td>
                             <td>
-                                <form action="{{url("admin/konfirmasiReport/$item->id_report/$item->id_horder")}}" method='GET'>
+                                <form action="{{url("admin/konfirmasiReport/$item->id_report/$item->id_dorder)")}}" method='GET'>
                                     @csrf
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#no{{$item->id_report}}">
                                         Konfirmasi
@@ -72,7 +74,7 @@
                                         </div>
                                       </div>
                                 </form>
-                                <form action="{{url("admin/rejectReport/$item->id_report/$item->id_horder")}}" method='GET'>
+                                <form action="{{url("admin/rejectReport/$item->id_report/$item->id_dorder")}}" method='GET'>
                                     @csrf
                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#noreject{{$item->id_report}}">
                                         Reject
@@ -115,7 +117,11 @@
                 @endif
             </tbody>
         </table><br>
-    </div>
 </div>
 
 @endsection
+@push('js')
+<script>
+$("#table").dataTable();
+</script>
+@endpush

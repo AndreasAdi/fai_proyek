@@ -1,11 +1,13 @@
 @extends('template')
+@section('judul')
+Admin Voucher
+@endsection
 @section('isi')
 
 <div class="container mt-5  text-success">
     <h1>List Voucher</h1>
     @include('alert')
-    <div class="d-flex flex-row">
-        <table class="table table-striped">
+        <table class="table table-striped" id="table">
             <thead>
                 <th>
                     Nama
@@ -94,7 +96,11 @@
                 @endif
             </tbody>
         </table><br>
-    </div>
 </div>
 
 @endsection
+@push('js')
+<script>
+$("#table").dataTable();
+</script>
+@endpush

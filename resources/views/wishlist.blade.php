@@ -1,4 +1,7 @@
 @extends('template')
+@section('judul')
+Wishlist
+@endsection
 @section('isi')
 
 <div class="container mt-5  text-success">

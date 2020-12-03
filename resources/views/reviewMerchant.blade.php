@@ -1,4 +1,7 @@
 @extends('template')
+@section('judul')
+Review Merchant
+@endsection
 @section('isi')
 @include('alert')
 @section('style')

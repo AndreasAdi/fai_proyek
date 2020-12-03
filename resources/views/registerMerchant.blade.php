@@ -1,4 +1,7 @@
 @extends("template")
+@section('judul')
+Register Merchant
+@endsection
 @section('isi')
 @include('alert')
 <form action="{{url('user/prosesRegisterMerchant')}}" method="POST">

@@ -186,7 +186,7 @@ class user extends Controller
         $listVoucher=voucher::all();
         $count = $listVoucher->count();
         $kategori= [];
-        for ($i=0; $i < $count; $i++) {
+        for ($i=0; $i < $count; $i++) { 
             $kategori[] = kategoribarang::where('id_kategori', $listVoucher[$i]->id_kategori)->first()->nama_kategori;
         }
         return view('listVoucherUser',['listVoucher'=>$listVoucher, 'kategori'=>$kategori]);
@@ -211,7 +211,7 @@ class user extends Controller
         }
     }
     public function home2(Request $req){
-
+        
     }
 
 
@@ -624,7 +624,8 @@ class user extends Controller
         $userLogin=Session::get("userId");
         $dataCart = Session::get("cart_$userLogin");
 
-        $kodeVoucher = $req->codevoucher;
+        $kodeVoucher1 = $req->codevoucher;
+        $kodeVoucher = str_replace(' ', '', $kodeVoucher1);
         $voucher = voucher::where('kode_voucher',$kodeVoucher)->first();
         if ($voucher) {
             //dd($dataCart);
@@ -646,8 +647,8 @@ class user extends Controller
             }
             else {
                 return redirect()->back()->with('error','Kode Voucher Tidak Berlaku');
-            }
-
+            }       
+            
         }
         else {
             return redirect()->back()->with('error','Kode Voucher tidak ditemukan');
@@ -670,7 +671,7 @@ class user extends Controller
             ]
         );
         $dorder = dorder::where('id_dorder',$iddorder)->first();
-
+        
         $report = new report;
         $report->id_horder = $dorder->id_horder;
         $report->id_dorder = $iddorder;
@@ -696,7 +697,7 @@ class user extends Controller
     public function reportPenjualan() {
         $userLogin=Session::get("userId");
         $dataMonth = [];
-        for ($i=0; $i < 12; $i++) {
+        for ($i=0; $i < 12; $i++) { 
             $dataMonth[] = DB::table('dorder')
                     ->join('merchant', 'dorder.id_merchant', '=', 'merchant.id_merchant')
                     ->where('merchant.id_user', $userLogin)
@@ -704,13 +705,28 @@ class user extends Controller
                     ->whereMonth('dorder.created_at', $i+1)
                     ->count();
         }
-        return view("reportPenjualan")->with(compact('dataMonth'));
+        $dataMonth2 = [];
+        for ($i=0; $i < 12; $i++) {
+            
+            $data = DB::table('dorder')
+                    ->join('merchant', 'dorder.id_merchant', '=', 'merchant.id_merchant')
+                    ->where('merchant.id_user', $userLogin)
+                    ->whereYear('dorder.created_at', 2020)
+                    ->whereMonth('dorder.created_at', $i+1)
+                    ->get();
+            $jumlahtotal = 0;   
+            foreach ($data as $key => $value) {
+                $jumlahtotal = $jumlahtotal + $value->jumlah_total;
+            }
+            $dataMonth2[] = $jumlahtotal;
+        }
+        return view("reportPenjualan")->with(compact('dataMonth','dataMonth2'));
     }
     public function prosesReportPenjualan(Request $req) {
         $tahun = $req->tahun;
         $userLogin=Session::get("userId");
         $dataMonth = [];
-        for ($i=0; $i < 12; $i++) {
+        for ($i=0; $i < 12; $i++) { 
             $dataMonth[] = DB::table('dorder')
                     ->join('merchant', 'dorder.id_merchant', '=', 'merchant.id_merchant')
                     ->where('merchant.id_user', $userLogin)
@@ -718,7 +734,22 @@ class user extends Controller
                     ->whereMonth('dorder.created_at', $i+1)
                     ->count();
         }
-        return view("reportPenjualan")->with(compact('dataMonth'));
+        $dataMonth2 = [];
+        for ($i=0; $i < 12; $i++) {
+            
+            $data = DB::table('dorder')
+                    ->join('merchant', 'dorder.id_merchant', '=', 'merchant.id_merchant')
+                    ->where('merchant.id_user', $userLogin)
+                    ->whereYear('dorder.created_at', $tahun)
+                    ->whereMonth('dorder.created_at', $i+1)
+                    ->get();
+            $jumlahtotal = 0;   
+            foreach ($data as $key => $value) {
+                $jumlahtotal = $jumlahtotal + $value->jumlah_total;
+            }
+            $dataMonth2[] = $jumlahtotal;
+        }
+        return view("reportPenjualan")->with(compact('dataMonth','dataMonth2'));
     }
 }
 

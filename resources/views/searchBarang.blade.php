@@ -1,6 +1,6 @@
 @extends('template')
 @section('judul')
-home
+Search Item
 @endsection
 @section('style')
 .pagination > li > a,
@@ -56,7 +56,6 @@ home
                 @else
                     <a href="{{url("barang/detailBarang/$item->id_barang/sale")}}" class="btn btn-block btn-success">Lihat Barang</a>
                 @endif
-
                 </div>
             </div>
         @endforeach
