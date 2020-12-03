@@ -250,7 +250,19 @@ class barangController extends Controller
     }
 
     public function Filter(Request $request){
-        $filterResult=barang::where('id_kategori',$request->selectedKategori)->where('id_merchant',"!=",Session::get('MerchantId'))->paginate(6);
+
+        $min = $request->hargamin;
+        $max = $request->hargamax;
+
+        if($request->hargamax==null){
+            $max =99999999;
+        }
+
+        if($request->hargamin==null){
+            $min =0;
+        }
+
+        $filterResult=barang::where('id_kategori',$request->selectedKategori)->where('id_merchant',"!=",Session::get('MerchantId'))->whereBetween('harga',[$min,$max])->paginate(6);
         $dataCategori= kategoribarang::all();
         return view("home2",['dataBarang'=>$filterResult,'dataKategori'=>$dataCategori]);
     }
