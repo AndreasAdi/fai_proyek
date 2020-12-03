@@ -13,6 +13,9 @@
                     Jumlah
                 </th>
                 <th>
+                    Gambar
+                </th>
+                <th>
                     Harga
                 </th>
                 <th>
@@ -40,17 +43,20 @@
                                <input type="number" min='0' class='w-25' size="3" maxlength='3' value="{{$item['jumlah']}}" name="jumlah">
                             </td>
                             <td>
+                                <img src="{{asset("/storage/images/".$item['gambar'])}}" width="200px">
+                             </td>
+                            <td>
                                 Rp. {{number_format($item['harga']),2,",","."}}
                             </td>
                             <td>
-                                Rp. {{number_format($item['harga']*$item['jumlah']),2,",","."}}
+                                Rp. {{number_format($item['harga']*$item['jumlah'] + 20000 * $item['jumlah']),2,",","."}}
                             </td>
                             <td>
                                 <a href="{{url("barang/removeItemCart/$key")}}" class='btn btn-danger'>Remove From Cart</a>
                                 <button class="btn btn-warning" class='submit'>Edit</button>
                             </td>
                             @php
-                                $total=$total+$item['harga']*$item['jumlah'];
+                                $total=$total+$item['harga']*$item['jumlah'] + 20000 * $item['jumlah'];
                             @endphp
                         </tr>
                     </form>
@@ -60,10 +66,20 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
+                        <td>Biaya Pengiriman Flat Rp. 20.000,00 Per Barang</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td>Total: Rp. {{number_format($total),2,",","."}}</td>
                     </tr>
                 @else
                     <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -81,7 +97,13 @@
 
 
     </div>
-
+    <h3>Use Voucher</h3>
+    <form action="{{url('user/useVoucher')}}" method="POST">
+        @csrf
+        Code Voucher : <input class="form-control" type="text" name="codevoucher" id="">
+        <button class="btn btn-success mt-2">Use Voucher</button>
+    </form>
+    <br><br>
     <form action="{{url('user/checkOut')}}" method="POST">
         @csrf
     <!-- Button trigger modal -->

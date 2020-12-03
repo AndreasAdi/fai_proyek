@@ -2,7 +2,8 @@
 @section('isi')
 
 <div class="container mt-5  text-success">
-    <h1>Your Voucher</h1>
+    <h1>List Kategori</h1>
+    @include('alert')
     <div class="d-flex flex-row">
         <table class="table table-striped">
             <thead>
@@ -10,34 +11,26 @@
                     Nama
                 </th>
                 <th>
-                    Berlaku Sampai Dengan
-                </th>
-                <th>
-                    Kategori
+                    Id Kategori
                 </th>
                 <th>
                     Action
                 </th>
             </thead>
             <tbody>
-                @if (isset($listSale))
-                    @foreach ($listSale as $item)
+                @if (isset($listKategori))
+                    @foreach ($listKategori as $item)
                         <tr>
                             <td>
-                                {{$item->nama_sales}}
+                                {{$item->nama_kategori}}
                             </td>
                             <td>
-                                {{$item->tanggal_habis}}
+                                {{$item->id_kategori}}
                             </td>
                             <td>
-                                @foreach ($kategori as $itemkat)
-                                    @if ($itemkat->id_kategori==$item->id_kategori)
-                                        {{$itemkat->nama_kategori}}
-                                    @endif
-                                @endforeach
-                            </td>
-                            <td>
-                                <a href="{{url("user/loadPageSale/$item->id_kategori")}}" class="btn btn-primary">Lihat Sale</a>
+                                <form action="{{url("admin/deleteKategori/$item->id_kategori")}}" method='GET'>
+                                    <button class="btn btn-danger" type="submit">Delete</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
@@ -46,9 +39,10 @@
                         <td></td>
                         <td></td>
                         <td>
-                            <h2>Tidak Ada Sale</h2>
+                            <h2>Tidak Ada Kategori</h2>
                         </td>
                     </tr>
+
                 @endif
             </tbody>
         </table><br>

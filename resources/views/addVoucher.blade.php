@@ -15,6 +15,10 @@ Tambah Voucher
             <label class="form-label">Nama Voucher</label>
             <input class="form-control" type="text"  name="namaVoucher" id="">
         </div>
+        <div class="mb-3">
+            <label class="form-label">Code Voucher</label>
+            <input class="form-control" type="text"  name="kodeVoucher" id="">
+        </div>
 
         <div class="mb-3">
             <label class="form-label">Diskon</label>

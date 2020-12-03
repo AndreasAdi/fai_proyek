@@ -41,7 +41,11 @@
                                 {{$item->tanggal_habis}}
                             </td>
                             <td>
-                                {{$item->id_kategori}}
+                                @foreach ($kategori as $itemkat)
+                                    @if ($itemkat->id_kategori==$item->id_kategori)
+                                        {{$itemkat->nama_kategori}}
+                                    @endif
+                                @endforeach
                             </td>
                             <td>
                                 @if ($item->deleted_at==null)

@@ -10,7 +10,10 @@
                     Nama
                 </th>
                 <th>
-                    Id Voucher
+                    Kode Voucher
+                </th>
+                <th>
+                    Kategori Barang
                 </th>
                 <th>
                     Diskon
@@ -18,19 +21,19 @@
                 <th>
                     Berlaku Sampai Dengan
                 </th>
-                <th>
-                    Deskripsi
-                </th>
             </thead>
             <tbody>
                 @if (isset($listVoucher))
-                    @foreach ($listVoucher as $item)
+                    @foreach ($listVoucher as $key => $item)
                         <tr>
                             <td>
                                 {{$item->nama_voucher}}
                             </td>
                             <td>
-                                {{$item->id_voucher}}
+                                {{$item->kode_voucher}}
+                            </td>
+                            <td>
+                                {{$kategori[$key]}}
                             </td>
                             <td>
                                 Rp. {{number_format($item->diskon),2,",","."}}
@@ -38,13 +41,11 @@
                             <td>
                                 {{$item->masa_berlaku}}
                             </td>
-                            <td>
-                                <a href="#" class="btn btn-success">Lihat Deskripsi</a>
-                            </td>
                         </tr>
                     @endforeach
                 @else
                     <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

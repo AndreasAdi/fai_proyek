@@ -9,17 +9,30 @@
             @method('POST')
             @csrf
             <div class="mx-auto" style="height: 400px;width:400px;">
+                <input type="hidden" name='gambar' value="{{$barang->gambar_barang}}">
                 <img style="height: 400px;width:400px; object-fit: contain;" src="{{asset("/storage/images/".$barang->gambar_barang)}}" alt="">
             </div>
             <div class="m-3">
+                @if ($status=="sale")
+                    <input type="hidden" value="{{$barang->harga_sale}}" name='harga'>
+                    <input type="hidden" value="sale" name='status'>
+                @else
+                    <input type="hidden" value="normal" name='status'>
+                    <input type="hidden" value="{{$barang->harga}}" name='harga'>
+                @endif
                 <input type="hidden" name="idBarang" value="{{$barang->id_barang}}">
                 <input type="hidden" name="idMerchant" value="{{$barang->id_merchant}}">
                 <input type="hidden" name='nama' value="{{$barang->nama_barang}}">
-                <input type="hidden" value="{{$barang->harga}}" name='harga'>
                 <input type="hidden" value="{{$barang->stok}}" name='stok'>
                 <h4>{{$barang->nama_barang}}</h4>
                 <hr>
+                @if ($status=="sale")
+                    <del><h3>Rp. {{number_format($barang->harga),2,",","."}}</h3></del> <br>
+                    <h3>Rp. {{number_format($barang->harga_sale),2,",","."}}</h3>
+                @else
                     <h3>Rp. {{number_format($barang->harga),2,",","."}}</h3>
+                @endif
+
                 <hr>
                     <b>Sisa Stock : {{$barang->stok}}</b>
                 <hr>
@@ -30,9 +43,13 @@
                   </div>
                 <hr>
                 @if (isset($wishlist))
-                <a class="btn btn-danger mb-5" href="{{url("barang/RemoveFromWishlist/".$barang->id_barang)}}"> <i class="far fa-heart"></i> Remove From WishLists</a>
+                    @if ($status=="sale")
+                        <a class="btn btn-danger mb-5" href="{{url("barang/RemoveFromWishlist/".$barang->id_barang)}}"> <i class="far fa-heart"></i> Remove From WishLists</a>
+                    @else
+                        <a class="btn btn-danger mb-5" href="{{url("barang/RemoveFromWishlist/".$barang->id_barang)}}"> <i class="far fa-heart"></i> Remove From WishLists</a>
+                    @endif
                 @else
-                <a class="btn btn-success mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}"><i class="far fa-heart"></i> Add to Wishlist</a>
+                    <a class="btn btn-success mb-5" href="{{url("barang/addToWishlist/".$barang->id_barang)}}"><i class="far fa-heart"></i> Add to Wishlist</a>
                 @endif
 
                 <a class="btn btn-success mb-5" href="{{url("user/makeChatroom/$barang->id_merchant")}}"><i class="far fa-comment"></i> Chat Merchant</a>

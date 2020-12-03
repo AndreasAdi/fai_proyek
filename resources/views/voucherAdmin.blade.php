@@ -14,6 +14,9 @@
                     Id Voucher
                 </th>
                 <th>
+                    Kode Voucher
+                </th>
+                <th>
                     Diskon
                 </th>
                 <th>
@@ -38,6 +41,9 @@
                             </td>
                             <td>
                                 {{$item->id_voucher}}
+                            </td>
+                            <td>
+                                {{$item->kode_voucher}}
                             </td>
                             <td>
                                 Rp. {{number_format($item->diskon),2,",","."}}

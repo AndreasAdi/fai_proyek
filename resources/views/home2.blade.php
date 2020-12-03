@@ -35,6 +35,11 @@ border-color: #198754; //your color
 
 @endsection
 @section('isi')
+@isset($dataNotifikasi)
+    <div class="dropdown show w-25 ml-5 mt-3">
+    <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Notifikasi
+    </a>
 
 <div>
     <div class="d-flex flex-row">

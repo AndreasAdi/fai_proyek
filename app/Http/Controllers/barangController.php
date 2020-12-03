@@ -7,6 +7,7 @@ use App\Models\kategoribarang;
 use App\Models\merchant;
 use App\Models\wishlist;
 use App\Models\alamatpengiriman;
+use App\Models\reviewmerchant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -53,40 +54,71 @@ class barangController extends Controller
         }
     }
 
-    public function detail ($id){
+    public function detail ($id,$status){
         $userLogin=Session::get("userId");
         $barang = DB::table('barang')->where("id_barang",$id)
         ->Join('merchant', 'barang.id_merchant', '=', 'merchant.id_merchant')->first();
         $wishlist = wishlist::where('id_user',$userLogin)->where('id_barang',$id)->get();
         if (count($wishlist)==0){
             //dd($wishlist);
-            return view("detailBarang",["barang" =>$barang]);
+            if($status=="sale"){
+                return view("detailBarang",["barang" =>$barang,"status"=>"sale"]);
+            }else{
+                return view("detailBarang",["barang" =>$barang,"status"=>"normal"]);
+            }
         }
         else if(count($wishlist)==1){
-            return view("detailBarang",["barang" =>$barang,"wishlist"=>$wishlist]);
+            if($status=="sale"){
+                return view("detailBarang",["barang" =>$barang,"status"=>"sale","wishlist"=>$wishlist]);
+            }else{
+                return view("detailBarang",["barang" =>$barang,"status"=>"normal","wishlist"=>$wishlist]);
+            }
         }
     }
 
     public function searchBarang(Request $request){
-        if(Session::get("isMerchant")===false){
-            $dataSearch=barang::query()->
-            where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")
-            ->paginate(6);
-        }else{
-            $dataSearch=barang::query()->
-            where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")->
-            where('id_merchant',"!=",Session::get('MerchantId'))
-            ->paginate(6);
-        }
+        $status=$request->status;
 
-        //dd($dataSearch);
-        return view('searchBarang',[
-            'dataBarang'=>$dataSearch
-        ]);
+        if($status=='normal'){
+            if(Session::get("isMerchant")===false){
+                $dataSearch=barang::query()->
+                where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")
+                ->paginate(6);
+            }else{
+                $dataSearch=barang::query()->
+                where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")->
+                where('id_merchant',"!=",Session::get('MerchantId'))
+                ->paginate(6);
+            }
+            return view('searchBarang',[
+                'dataBarang'=>$dataSearch,
+                "status"=>"normal"
+            ]);
+        }else if($status=="sale"){
+            $id_kategori=$request->kategori;
+            if(Session::get("isMerchant")===false){
+                $dataSearch=barang::query()->
+                where(DB::raw("UPPER(nama_barang)"),"like", "%".\strtoupper($request->searchKeyword)."%")->
+                where("id_kategori",$id_kategori)
+                ->paginate(6);
+            }else{
+                $dataSearch=barang::query()->
+                where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")->
+                where("id_kategori",$id_kategori)->
+                where('id_merchant',"!=",Session::get('MerchantId'))
+                ->paginate(6);
+            }
+            return view('pageSaleUser',[
+                'listBarangSale'=>$dataSearch,
+                "status"=>"sale",
+                "id_kategori"=>$id_kategori
+            ]);
+        }
     }
 
     public function AddToCart(Request $request){
         $userLogin=Session::get("userId");
+        $status=$request->status;
         if($request->jumlah<=$request->stok){
             if(!Session::has("cart_$userLogin")){
                 $cart=array(
@@ -94,6 +126,7 @@ class barangController extends Controller
                         "idBarang"=>$request->idBarang,
                         "idMerchant"=>$request->idMerchant,
                         "jumlah"=>$request->jumlah,
+                        "gambar"=>$request->gambar,
                         "namaBarang"=>$request->nama,
                         "harga"=>$request->harga
                 ]);
@@ -108,7 +141,11 @@ class barangController extends Controller
                             $existingCart[$key]['jumlah']=$item['jumlah']+$request->jumlah;
                             $itemKembar=true;
                         }else{
-                            return redirect("barang/detailBarang/$request->idBarang")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+                            if($status=="sale"){
+                                return redirect("barang/detailBarang/$request->idBarang/sale")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+                            }else{
+                                return redirect("barang/detailBarang/$request->idBarang/normal")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+                            }
                         }
                     }
                 }
@@ -117,6 +154,7 @@ class barangController extends Controller
                         "idBarang"=>$request->idBarang,
                         "idMerchant"=>$request->idMerchant,
                         "jumlah"=>$request->jumlah,
+                        "gambar"=>$request->gambar,
                         "namaBarang"=>$request->nama,
                         "harga"=>$request->harga
                     );
@@ -124,9 +162,19 @@ class barangController extends Controller
                 }
                 Session::put("cart_$userLogin",$existingCart);
             }
-            return redirect("barang/detailBarang/$request->idBarang")->with('success','Berhasil Menambahkan Barang Kedalam Cart');
+            if($status=="sale"){
+                return redirect("barang/detailBarang/$request->idBarang/sale")->with('success','Berhasil Menambahkan Barang Kedalam Cart');
+            }else{
+                return redirect("barang/detailBarang/$request->idBarang/normal")->with('success','Berhasil Menambahkan Barang Kedalam Cart');
+            }
+
         }else{
-            return redirect("barang/detailBarang/$request->idBarang")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+            if($status=="sale"){
+                return redirect("barang/detailBarang/$request->idBarang/sale")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+            }else{
+                return redirect("barang/detailBarang/$request->idBarang/normal")->with('error','Jumlah Permintaan Anda Lebih Besar Dari Stok');
+            }
+
         }
     }
     public function removeItemCart($id){
@@ -149,11 +197,12 @@ class barangController extends Controller
         Session::put("cart_$userLogin",$cartUser);
         return redirect("barang/cart")->with('success','Berhasil Edit Barang Dari Cart');
     }
-    public function AddToWishlist($id_barang){
+    public function AddToWishlist(Request $request,$id_barang){
         $userLogin=Session::get("userId");
         $addwishlist= new wishlist;
         $addwishlist->id_user = $userLogin;
         $addwishlist->id_barang = $id_barang;
+        $addwishlist->status=$request->status;
         $success = $addwishlist->save();
 
         if ($success){
@@ -190,6 +239,18 @@ class barangController extends Controller
     }
     public function loadItem(){
         $idMerchant=merchant::where('id_user',Session::get('userId'))->first();
+        $countReview = reviewmerchant::where('id_merchant', $idMerchant->id_merchant)->count();
+        $Review =reviewmerchant::where('id_merchant', $idMerchant->id_merchant)->get();
+        $jumlahReview = 0;
+        foreach ($Review as $key => $value) {
+            $jumlahReview = $jumlahReview + $value->score;
+        }
+        $ratarata = $jumlahReview / $countReview;
+        //dd($ratarata);
+        $idMerchant=merchant::where('id_merchant',Session::get('userId'))->first();
+        $idMerchant->rating_merchant = $ratarata;
+        $idMerchant->save();
+        $dataItem=barang::where('id_merchant',$idMerchant->id_merchant)->get();
 
         $dataItem=barang::withTrashed()->where('id_merchant',$idMerchant->id_merchant)->get();
 

@@ -9,7 +9,10 @@ class dorder extends Model
     protected $table='dorder';
     protected $primaryKey='id_dorder';
     protected $keyType='integer';
-    public $timestamps=false;
+    public $timestamps=true;
+    const CREATED_AT='created_at';
+    const UPDATED_AT='updated_at';
+    const DELETED_AT='deleted_at';
     public $incrementing=true;
 
     function horder() {

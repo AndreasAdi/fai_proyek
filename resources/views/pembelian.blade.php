@@ -2,6 +2,22 @@
 @section('isi')
 <div class="container mt-5  text-success">
     <h1>Daftar Pembelian</h1>
+        <div class="clearfix">
+            <form action='{{url("user/filterDaftarPembelian")}}' method="POST">
+                @method('POST')
+                @csrf
+                <h5>Filter Tanggal (Awal & Akhir)</h5>
+                <div class="input-group mb-3">
+                    
+                    <input type="date" class="form-control" placeholder="Pick A Date" name='filterTanggalAwal' aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input type="date" class="form-control" placeholder="Pick A Date" name='filterTanggalAkhir' aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-success" type="submit">Filter</button>
+                    </div>
+                </div>
+            </form>
+            <a href={{url("user/pembelian")}}><button class="btn btn-success mb-2 form-control">Reset</button></a>
+        </div>
     <div class="d-flex flex-row">
         <table class="table table-striped">
             <thead>
@@ -15,7 +31,10 @@
                     Total Harga
                 </th>
                 <th>
-                    Status
+                    Tanggal Pemesanan
+                </th>
+                <th>
+                    Status Pembayaran
                 </th>
                 <th>
                     Action
@@ -24,7 +43,7 @@
             <tbody>
                 @if (isset($horder))
                     @foreach ($horder as $item)
-                        
+
                         <tr>
                             <td>
                                 {{$item->id_horder}}
@@ -33,7 +52,10 @@
                                 {{$item->alamat}}
                             </td>
                             <td>
-                                {{$item->jumlah_total}}
+                                Rp. {{number_format($item->jumlah_total),2,",","."}}
+                            </td>
+                            <td>
+                                {{$item->created_at}}
                             </td>
                             <td>
                                 {{$item->status}}
