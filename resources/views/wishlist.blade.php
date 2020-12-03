@@ -11,7 +11,7 @@
                     <div class="card-body">
                     <p class="card-text text-truncate">{{$item['nama_barang']}}</p>
                     <p class="card-text"><b>Rp. {{number_format($item['harga']),2,",","."}}</b></p>
-                    <a href="{{url("barang/detailBarang/".$item['id_barang'])}}" class="btn btn-block btn-success">Lihat Barang</a>
+                    <a href="{{url("barang/detailBarang/".$item['id_barang']."/normal")}}" class="btn btn-block btn-success">Lihat Barang</a>
                     </div>
                 </div>
             @endforeach

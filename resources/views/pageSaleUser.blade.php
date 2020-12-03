@@ -38,6 +38,8 @@ home
     <form class="d-flex mx-auto mb-5 col-6" method="POST" action="{{url('barang/searchBarang')}}">
         @method('POST')
         @csrf
+        <input type="hidden" name="status" value="sale"/>
+        <input type="hidden" name="kategori" value="{{$id_kategori}}"/>
         <input class="form-control mr-2 align-middle" name='searchKeyword' type="search" placeholder="Ketikan Nama Barang Di Sini..." aria-label="Search">
         <button class="btn btn-success" type="submit">Cari</button>
     </form>

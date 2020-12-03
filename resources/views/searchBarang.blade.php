@@ -38,6 +38,7 @@ home
     <form class="d-flex mx-auto mb-5 col-6" method="POST" action="{{url('barang/searchBarang')}}">
         @method('POST')
         @csrf
+        <input type="hidden" name="status" value="normal"/>
         <input class="form-control mr-2 align-middle" type="search" name="searchKeyword" placeholder="Ketikan Nama Barang Di Sini..." aria-label="Search">
         <button class="btn btn-success" type="submit">Cari</button>
       </form>
@@ -50,7 +51,12 @@ home
                 <div class="card-body">
                 <p class="card-text text-truncate">{{$item->nama_barang}}</p>
                 <p class="card-text"><b>Rp. {{number_format($item->harga),2,",","."}}</b></p>
-                <a href="{{url("barang/detailBarang/$item->id_barang")}}" class="btn btn-block btn-success">Lihat Barang</a>
+                @if ($status=="normal")
+                    <a href="{{url("barang/detailBarang/$item->id_barang/normal")}}" class="btn btn-block btn-success">Lihat Barang</a>
+                @else
+                    <a href="{{url("barang/detailBarang/$item->id_barang/sale")}}" class="btn btn-block btn-success">Lihat Barang</a>
+                @endif
+
                 </div>
             </div>
         @endforeach

@@ -77,21 +77,43 @@ class barangController extends Controller
     }
 
     public function searchBarang(Request $request){
-        if(Session::get("isMerchant")===false){
-            $dataSearch=barang::query()->
-            where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")
-            ->paginate(6);
-        }else{
-            $dataSearch=barang::query()->
-            where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")->
-            where('id_merchant',"!=",Session::get('MerchantId'))
-            ->paginate(6);
-        }
+        $status=$request->status;
 
-            //dd($dataSearch);
-        return view('searchBarang',[
-            'dataBarang'=>$dataSearch
-        ]);
+        if($status=='normal'){
+            if(Session::get("isMerchant")===false){
+                $dataSearch=barang::query()->
+                where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")
+                ->paginate(6);
+            }else{
+                $dataSearch=barang::query()->
+                where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")->
+                where('id_merchant',"!=",Session::get('MerchantId'))
+                ->paginate(6);
+            }
+            return view('searchBarang',[
+                'dataBarang'=>$dataSearch,
+                "status"=>"normal"
+            ]);
+        }else if($status=="sale"){
+            $id_kategori=$request->kategori;
+            if(Session::get("isMerchant")===false){
+                $dataSearch=barang::query()->
+                where(DB::raw("UPPER(nama_barang)"),"like", "%".\strtoupper($request->searchKeyword)."%")->
+                where("id_kategori",$id_kategori)
+                ->paginate(6);
+            }else{
+                $dataSearch=barang::query()->
+                where(DB::raw("UPPER(nama_barang)"), "like", "%".\strtoupper($request->searchKeyword)."%")->
+                where("id_kategori",$id_kategori)->
+                where('id_merchant',"!=",Session::get('MerchantId'))
+                ->paginate(6);
+            }
+            return view('pageSaleUser',[
+                'listBarangSale'=>$dataSearch,
+                "status"=>"sale",
+                "id_kategori"=>$id_kategori
+            ]);
+        }
     }
 
     public function AddToCart(Request $request){
@@ -175,11 +197,12 @@ class barangController extends Controller
         Session::put("cart_$userLogin",$cartUser);
         return redirect("barang/cart")->with('success','Berhasil Edit Barang Dari Cart');
     }
-    public function AddToWishlist($id_barang){
+    public function AddToWishlist(Request $request,$id_barang){
         $userLogin=Session::get("userId");
         $addwishlist= new wishlist;
         $addwishlist->id_user = $userLogin;
         $addwishlist->id_barang = $id_barang;
+        $addwishlist->status=$request->status;
         $success = $addwishlist->save();
 
         if ($success){

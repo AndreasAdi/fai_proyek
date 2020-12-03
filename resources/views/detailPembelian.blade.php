@@ -45,7 +45,7 @@
                                 {{$item->jumlah_barang}}
                             </td>
                             <td>
-                                <a href='{{url("barang/detailBarang/$item->id_barang")}}'><img src="{{asset("/storage/images/".$barang[$key]->gambar_barang)}}" width="200px"></a>
+                                <a href='{{url("barang/detailBarang/$item->id_barang/normal")}}'><img src="{{asset("/storage/images/".$barang[$key]->gambar_barang)}}" width="200px"></a>
                             </td>
                             <td>
                                 Rp. {{number_format($item->jumlah_total),2,",","."}}
@@ -89,7 +89,7 @@
                                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#no{{$item->id_dorder}}">
                                             Review
                                           </button>
-                                          
+
 
                                           <!-- Modal -->
                                           <div class="modal fade" id="no{{$item->id_dorder}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -149,7 +149,7 @@
                                               </div>
                                             </div>
                                           </form>
-                                    
+
                                 @endif
                             </td>
                         </tr>

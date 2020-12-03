@@ -74,8 +74,8 @@ Route::group(['prefix' => 'barang',  'middleware' => 'AuthLogin'], function() {
     Route::get('/cart',"barangController@loadCart");
     Route::get('/yourItem',"barangController@loadItem");
     Route::get('/editBarang/{id}','barangController@editBarang');
-    Route::get('/addToWishlist/{id_barang}','barangController@AddToWishlist');
-    Route::get('/RemoveFromWishlist/{id_barang}','barangController@RemoveFromWishlist');
+    Route::get('/addToWishlist/{id_barang}/{status}','barangController@AddToWishlist');
+    Route::get('/RemoveFromWishlist/{id_barang}/{status}','barangController@RemoveFromWishlist');
     Route::patch('/prosesEditBarang','barangController@prosesEditBarang');
     Route::post('/addToCart',"barangController@AddToCart");
     Route::delete('/NonAktifBarang/{id}','barangController@deleteBarang');

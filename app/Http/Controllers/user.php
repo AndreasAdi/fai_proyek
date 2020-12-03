@@ -331,7 +331,7 @@ class user extends Controller
     }
     public function loadPageSale($id_kategori){
         $barangSale=barang::where('id_kategori',$id_kategori)->paginate(6);
-        return view('pageSaleUser',['listBarangSale'=>$barangSale]);
+        return view('pageSaleUser',['listBarangSale'=>$barangSale,"id_kategori"=>$id_kategori]);
     }
     public function checkOut(Request $request) {
         $userLogin=Session::get("userId");
